@@ -31,16 +31,19 @@ class Scraper:
   Scrape oui.sncf website looking for available TGVmax seats
   """
 
-  def __init__(self, origin: str, destination: str, departure_date: str, tgvmax_number: str, birthdate: str) -> None:
+  def __init__(self, origin: str, destination: str, departure_date: str, departure_hour: str, tgvmax_number: str, birthdate: str) -> None:
+    # format validation
+    self.validate_departure_date(departure_date)
+    self.validate_departure_hour(departure_hour)
+    self.validate_birthdate(birthdate)
+    self.validate_tgvmax_number(tgvmax_number)
+    # instantiate properties
     self.origin = origin
     self.destination = destination
     self.departure_date = departure_date
+    self.departure_hour = departure_hour
     self.tgvmax_number = tgvmax_number
     self.birthdate = birthdate
-    # format validation
-    self.validate_departure_date(departure_date)
-    self.validate_birthdate(birthdate)
-    self.validate_tgvmax_number(tgvmax_number)
 
   def scrape_tgvmax_seats(self) -> List[str]:
     """
@@ -78,8 +81,12 @@ class Scraper:
       date_picker_button = driver.find_element_by_id(sncf_ids['DATE_PICKER_BUTTON_ID'])
       date_picker_button.click()
       time.sleep(1)
-      departure_time_button = driver.find_element_by_id(sncf_ids['DEPARTURE_TIME_BUTTON_ID'] + self.departure_date)
-      departure_time_button.click()
+      departure_day_button = driver.find_element_by_id(sncf_ids['DEPARTURE_DAY_BUTTON_ID'] + self.departure_date)
+      departure_day_button.click()
+      time.sleep(1)
+      departure_hour_select = driver.find_element_by_id(sncf_ids['DEPARTURE_HOUR_SELECTOR_ID'])
+      departure_hour_select = Select(departure_hour_select)
+      departure_hour_select.select_by_value(self.departure_hour)
       time.sleep(1)
       date_picker_submit_button = driver.find_element_by_id(sncf_ids['DATE_PICKER_SUBMIT_BUTTON_ID'])
       date_picker_submit_button.click()
@@ -205,6 +212,18 @@ class Scraper:
       str_max_date: str = datetime.strftime(max_date, '%d-%m-%Y')
       raise ValueError(f'Date de départ ({departure_date}) invalide. ' +
                        f'Merci d\'indiquer une date comprise entre {str_today} et {str_max_date}')
+
+  @staticmethod
+  def validate_departure_hour(departure_hour: str):
+    """
+    validate departure_hour format
+    """
+    try:
+      hour: int = int(departure_hour)
+      if not 0 <= hour <= 23:
+        raise ValueError
+    except ValueError:
+      raise ValueError(f'Heure de départ ({departure_hour}) invalide. Merci de sélectionner un entier entre 0 et 23')
 
   def validate_birthdate(self, birthdate: str) -> None:
     """

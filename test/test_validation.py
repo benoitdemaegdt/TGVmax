@@ -51,6 +51,31 @@ class ValidationTest(unittest.TestCase):
     except:
       self.fail('test_validation_departure_date_004 failed unexpectedly')
 
+  def test_validation_departure_hour_001(self):
+    """
+    Invalid format - not a string
+    """
+    with self.assertRaises(ValueError) as message:
+      Scraper.validate_departure_hour('hey')
+    self.assertEqual(str(message.exception), 'Heure de départ (hey) invalide. Merci de sélectionner un entier entre 0 et 23')
+
+  def test_validation_departure_hour_002(self):
+    """
+    Invalid format - out of range
+    """
+    with self.assertRaises(ValueError) as message:
+      Scraper.validate_departure_hour('24')
+    self.assertEqual(str(message.exception), 'Heure de départ (24) invalide. Merci de sélectionner un entier entre 0 et 23')
+
+  def test_validation_departure_hour_003(self):
+    """
+    Valid hour
+    """
+    try:
+      Scraper.validate_departure_hour('12')
+    except:
+      self.fail('test_validation_departure_hour_003 failed unexpectedly')
+
   def test_validation_birthdate_001(self):
     """
     Invalid format: 'hey'

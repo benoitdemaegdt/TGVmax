@@ -5,7 +5,7 @@ from src.core.scraper import Scraper
 from src.core.notifier import Notifier
 
 try:
-  scraper = Scraper('<ORIGIN>', '<DESTINATION>', '<DATE>', '<TGVMAX_NUMBER>', '<BIRTHDATE>')
+  scraper = Scraper('<ORIGIN>', '<DESTINATION>', '<DATE>', '<HOUR>', '<TGVMAX_NUMBER>', '<BIRTHDATE>')
   tgvmax_seats = scraper.scrape_tgvmax_seats()
   if tgvmax_seats != []:
     notifier = Notifier('<ORIGIN>', '<DESTINATION>', '<DATE>')
