@@ -56,7 +56,7 @@ class ValidationTest(unittest.TestCase):
     Invalid format: 'hey'
     """
     with self.assertRaises(ValueError) as message:
-      Scraper.validate_birthdate('hey')
+      Scraper.validate_birthdate(Scraper, 'hey')
     self.assertEqual(str(message.exception), 'Date de naissance (hey) invalide. Merci de respecter le format jj-mm-aaaa')
 
   def test_validation_birthdate_002(self):
@@ -66,7 +66,7 @@ class ValidationTest(unittest.TestCase):
     today = datetime.date.today()
     departure_date = datetime.datetime.strftime(today + datetime.timedelta(days = 1), '%d-%m')
     with self.assertRaises(ValueError) as message:
-      Scraper.validate_birthdate(departure_date)
+      Scraper.validate_birthdate(Scraper, departure_date)
     self.assertEqual(str(message.exception), f'Date de naissance ({departure_date}) invalide. Merci de respecter le format jj-mm-aaaa')
 
   def test_validation_birthdate_003(self):
@@ -78,7 +78,7 @@ class ValidationTest(unittest.TestCase):
     birthday = datetime.datetime.strptime('03-08-1978', '%d-%m-%Y').date()
     age = today.year - birthday.year - ((today.month, today.day) < (birthday.month, birthday.day))
     with self.assertRaises(ValueError) as message:
-      Scraper.validate_birthdate(birthdate)
+      Scraper.validate_birthdate(Scraper, birthdate)
     self.assertEqual(str(message.exception), f'Date de naissance ({birthdate} ; {age} ans) invalide. Vous devez avoir entre 16 et 27 ans pour créer une alerte TGVmax.')
 
   def test_validation_birthdate_004(self):
@@ -88,7 +88,7 @@ class ValidationTest(unittest.TestCase):
     today = datetime.date.today()
     birthdate = datetime.datetime.strftime(today - datetime.timedelta(days = 6570), '%d-%m-%Y')
     try:
-      Scraper.validate_birthdate(birthdate)
+      Scraper.validate_birthdate(Scraper, birthdate)
     except:
       self.fail('test_validation_birthdate_004 failed unexpectedly')
 

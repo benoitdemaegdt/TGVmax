@@ -30,6 +30,7 @@ Another solution is to build a web scraper that will periodically go to oui.sncf
 
 ### Install locally
 1/ Install Python (version >= 3.6.5)
+
 2/ Create a python virtual environment
 ```
 python3 -m venv env

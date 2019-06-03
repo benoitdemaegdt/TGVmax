@@ -56,8 +56,8 @@ class ParserTest(unittest.TestCase):
     """
     with self.assertRaises(Exception) as message:
       today = datetime.date.today()
-      departure_date = datetime.datetime.strftime(today + datetime.timedelta(days = 1), '%d-%m-%Y')
-      birthdate = datetime.datetime.strftime(today - datetime.timedelta(days = 20*365), '%d-%m-%Y')
+      departure_date = datetime.datetime.strftime(today + datetime.timedelta(days=1), '%d-%m-%Y')
+      birthdate = datetime.datetime.strftime(today - datetime.timedelta(days=20*365), '%d-%m-%Y')
       scraper = Scraper('paris', 'lyon part dieu', departure_date, '000035432', birthdate)
       scraper.find_tgvmax_seats(result_with_fake_id)
     self.assertEqual(str(message.exception), f'Aucun train entre paris et lyon part dieu le {departure_date}.')
