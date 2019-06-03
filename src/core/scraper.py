@@ -42,7 +42,6 @@ class Scraper:
     self.validate_birthdate(birthdate)
     self.validate_tgvmax_number(tgvmax_number)
 
-
   def scrape_tgvmax_seats(self) -> List[str]:
     """
     1. fill form on oui.sncf
@@ -90,7 +89,8 @@ class Scraper:
       passenger_age_select = driver.find_element_by_id(sncf_ids['PASSENGER_AGE_SELECTOR_ID'])
       self._scroll_to_element(driver, passenger_age_select)
       passenger_age_select = Select(passenger_age_select)
-      passenger_age_select.select_by_value(sncf_ids['PASSENGER_AGE_SELECTOR_VALUE'])
+      passenger_age_select.select_by_value(sncf_ids['PASSENGER_AGE_SELECTOR_VALUE_12_25' if self.get_age(self.birthdate) < 26
+                                                    else 'PASSENGER_AGE_SELECTOR_VALUE_26_59'])
 
       passenger_discount_card_select = driver.find_element_by_id(sncf_ids['PASSENGER_DISCOUNT_CARD_SELECTOR_ID'])
       passenger_discount_card_select = Select(passenger_discount_card_select)
@@ -206,8 +206,7 @@ class Scraper:
       raise ValueError(f'Date de départ ({departure_date}) invalide. ' +
                        f'Merci d\'indiquer une date comprise entre {str_today} et {str_max_date}')
 
-  @staticmethod
-  def validate_birthdate(birthdate: str) -> None:
+  def validate_birthdate(self, birthdate: str) -> None:
     """
     validate birthdate format and logic
     """
@@ -217,9 +216,7 @@ class Scraper:
     except ValueError:
       raise ValueError(f'Date de naissance ({birthdate}) invalide. Merci de respecter le format jj-mm-aaaa')
     # validate logic : this year - 27 <= birthyear <= this year - 16
-    today: date = date.today()
-    birthday: date = datetime.strptime(birthdate, '%d-%m-%Y').date()
-    age: int = today.year - birthday.year - ((today.month, today.day) < (birthday.month, birthday.day))
+    age: int = self.get_age(birthdate)
     is_valid: bool = 16 <= age <= 27
     if not is_valid:
       raise ValueError(f'Date de naissance ({birthdate} ; {age} ans) invalide. ' +
@@ -249,3 +246,13 @@ class Scraper:
     """
     splitted_hour: List[str] = sncf_hour.split()
     return splitted_hour[0] + "h" + splitted_hour[2]
+
+  @staticmethod
+  def get_age(birthdate: str) -> int:
+    """
+    get age from a birthdate : 03-03-2000 -> 19
+    """
+    today: date = date.today()
+    birthday: date = datetime.strptime(birthdate, '%d-%m-%Y').date()
+    age: int = today.year - birthday.year - ((today.month, today.day) < (birthday.month, birthday.day))
+    return age
