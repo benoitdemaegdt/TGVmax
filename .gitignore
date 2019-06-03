@@ -1,0 +1,9 @@
+# python things
+__pycache__/
+env
+
+# selenium things
+geckodriver.log
+
+# vscode things
+.vscode
