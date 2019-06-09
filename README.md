@@ -35,14 +35,22 @@ Another solution is to build a web scraper that will periodically go to oui.sncf
 ```
 python3 -m venv env
 ```
+It should create an `env` directory at the root of the project. This directory will contain all the python packages needed for running the application.
+
 3/ activate the virtual environment
 ```
 source env/bin/activate
 ```
+You should see a `(env)` at the beginning of each line of your CLI.
+
 4/ Install dependencies using pip3 :
 ```
 pip3 install -r requirements.txt
 ```
+
+5/ Download the latest release of [Firefox geckodriver](https://github.com/mozilla/geckodriver/releases)
+
+Unzip the file and move it to `./env/bin`. Selenium will be able to find it and start a browser session.
 
 ### Launch the app
 First, you have to edit the `app.py` file with the travel you want the bot to look for.
