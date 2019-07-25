@@ -56,22 +56,22 @@ This request returns :
 ```json
 [
   {
-    date: '2019-07-19',
-    price: 7200,
-    hours: [ '06:12' ],
-    convertedPrice: 7200
+    "date": "2019-07-19",
+    "price": 7200,
+    "hours": [ "06:12" ],
+    "convertedPrice": 7200
   },
   {
-    date: '2019-07-20',
-    price: 0,
-    hours: [ '18:37', '19:37', '20:37' ],
-    convertedPrice: 0
+    "date": "2019-07-20",
+    "price": 0,
+    "hours": [ "18:37", "19:37", "20:37" ],
+    "convertedPrice": 0
   },
   {
-    date: '2019-07-21',
-    price: 0,
-    hours: [ '08:37', '10:37', '15:07', '18:19', '18:37', '19:37' ],
-    convertedPrice: 0
+    "date": "2019-07-21",
+    "price": 0,
+    "hours": [ "08:37", "10:37", "15:07", "18:19", "18:37", "19:37" ],
+    "convertedPrice": 0
   }
 ]
 ```
