@@ -6,3 +6,11 @@ export interface ITrain {
   arrivalDate: string;
   minPrice: number;
 }
+
+/**
+ * Availability interface
+ */
+export interface IAvailability {
+  isTgvmaxAvailable: boolean;
+  hours: string[];
+}

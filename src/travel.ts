@@ -1,7 +1,8 @@
-import { get, map, pick } from 'lodash';
+import { filter, get, map, pick } from 'lodash';
+import * as moment from 'moment';
 import * as request from 'superagent';
 import Config from './config';
-import { ITrain } from './types';
+import { IAvailability, ITrain } from './types';
 
 /**
  * This class is about fetching data from oui.sncf
@@ -23,33 +24,64 @@ export class Travel {
   private readonly destination: string;
 
   /**
-   * travel date
+   * earliest train on which we want to set up an alert
    */
-  private readonly date: string;
+  private readonly fromTime: string;
+
+  /**
+   * latest train on which we want to set up an alert
+   */
+  private readonly toTime: string;
 
   /**
    * TGVmax number
    */
   private readonly tgvmaxNumber: string;
 
-  constructor(origin: string, destination: string, date: string, tgvmaxNumber: string) {
+  constructor(origin: string, destination: string, fromTime: string, toTime: string, tgvmaxNumber: string) {
     this.url = `${Config.baseUrl}/proposition/rest/travels/outward/train/next`;
     this.origin = origin;
     this.destination = destination;
-    this.date = date;
+    this.fromTime = fromTime;
+    this.toTime = toTime;
     this.tgvmaxNumber = tgvmaxNumber;
   }
 
   /**
-   * The oui.sncf API returns trains (approximately) 5 by 5.
-   * This function returns the min price of all the trains leaving between the travel date and the end of the day
+   * Check if there is a tgvmax seat available on a train :
+   * - leaving train station : origin
+   * - going to train station : destination
+   * - leaving between fromTime and toTime
    */
-  public async getAllMinPrices(): Promise<ITrain[]> {
+  public async isTgvmaxAvailable(): Promise<IAvailability> {
+    const tgvmax: ITrain[] = await this.getTgvmax();
+    /**
+     * If previous call returns an empty array, there is no TGVmax available
+     */
+    if (tgvmax.length === 0) {
+      return {
+        isTgvmaxAvailable: false,
+        hours: [],
+      };
+    }
+
+    return {
+      isTgvmaxAvailable: true,
+      hours: tgvmax.map((train: ITrain) => moment(train.departureDate).format('HH:mm')),
+    };
+  }
+
+  /**
+   * The oui.sncf API returns trains (approximately) 5 by 5.
+   * This function returns trains leaving between the travel date and the end of the day
+   * with at least one TGVmax seat available
+   */
+  private async getTgvmax(): Promise<ITrain[]> {
     const trains: ITrain[] = [];
     /**
      * init with response from a first API call
      */
-    trains.push(...await this.getMinPrices(this.date));
+    trains.push(...await this.getMinPrices(this.fromTime));
     /**
      * keep calling the API until we receive a single train (last one)
      */
@@ -63,7 +95,12 @@ export class Travel {
       trains.push(...nexTrains);
     }
 
-    return trains;
+    /**
+     * Only return trains leaving in the good time range with a TGVmax seat available
+     */
+    return filter(trains, (train: ITrain) => {
+      return train.minPrice === 0 && moment(train.departureDate).isBefore(moment(this.toTime));
+    });
   }
 
   /**
@@ -91,7 +128,7 @@ export class Travel {
             },
           },
           schedule: {
-            outward: this.date,
+            outward: time,
           },
           travelClass: 'SECOND',
           passengers: [
@@ -109,8 +146,9 @@ export class Travel {
         },
       },
     );
+
     /**
-     * filter out everything except trains details
+     * filter out the noise (everything except trains details)
      */
     const body: {travelProposals: ITrain[]} = get(response, 'body') as {travelProposals: ITrain[]};
     const travelProposals: ITrain[] = get(body, ['travelProposals']);
@@ -118,8 +156,8 @@ export class Travel {
     /**
      * filter out useless trains details
      */
-    return map(travelProposals, (trainDetails: ITrain) => {
-      return pick(trainDetails, ['departureDate', 'arrivalDate', 'minPrice']);
+    return map(travelProposals, (train: ITrain) => {
+      return pick(train, ['departureDate', 'arrivalDate', 'minPrice']);
     });
   }
 }

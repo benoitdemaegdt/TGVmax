@@ -1,19 +1,19 @@
 import { Travel } from './travel';
-import { ITrain } from './types';
+import { IAvailability } from './types';
 
 /**
  * step 1 : instantiate your travel
  * Note that you can find few train station code in data/trainStations.json
  */
-const travel: Travel = new Travel('<ORIGIN_CODE>', '<DESTINATION_CODE>', '<DATE>', '<TGVMAX_NUMBER>');
+const travel: Travel = new Travel('<ORIGIN_CODE>', '<DESTINATION_CODE>', '<FROM_DATE>', '<TO_DATE>', '<TGVMAX_NUMBER>');
 // example :
-// const travel: Travel = new Travel('FRPAR', 'FRLYS', '2019-07-30T05:00:00', 'HC000054321');
+// const travel: Travel = new Travel('FRPAR', 'FRNIT', '2019-07-31T05:00:00', '2019-07-31T15:23:00', 'HC000054321');
 
 /**
  * step 2 : get min price of all trains of the day
  */
 (async(): Promise<void> => {
-  const a: ITrain[] = await travel.getAllMinPrices();
+  const a: IAvailability = await travel.isTgvmaxAvailable();
   console.log(a); // tslint:disable-line
 })()
 .catch((err: Error) => {

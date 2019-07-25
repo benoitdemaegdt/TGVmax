@@ -218,4 +218,4 @@ npm install
 npm start
 ```
 
-It should print the minimum price of each train in your terminal (0 if a TGVmax seat is available).
+It should print the TGVmax availability with the hours (if applicable).
