@@ -1,9 +1,5 @@
-# python things
-__pycache__/
-env
-
-# selenium things
-geckodriver.log
+# node things
+node_modules
 
 # vscode things
 .vscode

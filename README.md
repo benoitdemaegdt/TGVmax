@@ -24,48 +24,198 @@ However, this dataset is only updated once a day, around 2PM. That's an issue, b
 So far, this option looks like a dead-end.
 
 ### solution 2 : web scraping
-Another solution is to build a web scraper that will periodically go to oui.sncf, fill the form and extract TGVmax availabilities. This project is an attempt to do that.
+Another solution is to build a web scraper that will periodically go to oui.sncf, fill the form and extract TGVmax availabilities.
+
+This solution was partly implemented in this project. You can find the code [here](https://github.com/benoitdemaegdt/TGVmax/releases/tag/0.1.0).
+
+However, this is not very convenient and raises quite a lot of problems :
+- difficult to maintain (if one id changes, it doesn't work anymore)
+- it is extremely slow (oui.sncf uses a huge amount of scripts which slow down selenium)
+- it isn't robust (it can easily fail for quite a lot of different reasons)
+
+This solution could work better with some efforts put on error handling. However solution 3 looks much simpler and more robust.
+
+### solution 3 : reverse engineering oui.sncf
+When a user clicks on "find" after filling a travel form, oui.sncf fetches the needed data from its servers using API calls.
+Everyone can see and analyze those API calls using the network tab of a browser console.
+
+Once the interesting API calls are identified, another program can run the exact same queries and fetch the data in order to find available TGVmax seats.
+
+So which API endpoints should be called ?
+
+#### Option 1 : the calendar endpoint
+
+This endpoint is used to fetch the data needed when displaying the calendar with the lowest price per day between two dates.
+
+Example : get the lowest price per day for trains from Paris to Marseille between 19/07/2019 and 21/07/2019
+```
+GET https://www.oui.sncf/apim/calendar/train/v4/FRPAR/FRMRS/2019-07-19/2019-07-21/12-HAPPY_CARD/2/fr?extendedToLocality=true&additionalFields=hours&currency=EUR
+```
+
+This request returns :
+```json
+[
+  {
+    date: '2019-07-19',
+    price: 7200,
+    hours: [ '06:12' ],
+    convertedPrice: 7200
+  },
+  {
+    date: '2019-07-20',
+    price: 0,
+    hours: [ '18:37', '19:37', '20:37' ],
+    convertedPrice: 0
+  },
+  {
+    date: '2019-07-21',
+    price: 0,
+    hours: [ '08:37', '10:37', '15:07', '18:19', '18:37', '19:37' ],
+    convertedPrice: 0
+  }
+]
+```
+From this response, we know that :
+- there is no TGVmax seat available on 2019-07-19 (lowest price is 72€00)
+- there are 3 TGVmax seats available on 2019-07-20 (trains leaving Paris at 18:37 ; 19:37 and 20:37)
+- there are 6 TGVmax seats available on 2019-07-21 (trains leaving Paris at 08:37 ; 10:37 ; 15:07 ; ...)
+
+This is awesome ... Except that for some reasons, this endpoint does not return accurate data. This is also an issue on the oui.sncf application. Sometime the calendar displays 0€00 for a day, but in fact there is no TGVmax seat that can be booked for this day.
+
+#### Option 2 : the travel endpoint
+
+This endpoint is used to fetch the data needed when displaying the price of each train.
+
+Example : get the price of trains traveling from Paris to Marseille on the 23/07/2019.
+
+```
+POST https://www.oui.sncf/proposition/rest/travels/outward/train
+with body :
+{
+  "wish": {
+    "mainJourney": {
+      "origin": {
+        "code": "FRPAR",
+      },
+      "destination": {
+        "code": "FRMRS",
+      },
+    },
+    "schedule": {
+      "outward": "2019-07-23T06:00:00",
+    },
+    "travelClass": "SECOND",
+    "passengers": [
+      {
+        "typology": "YOUNG",
+        "discountCard": {
+          "code": "HAPPY_CARD",
+          "number": "HC000036781",
+          "dateOfBirth": "1995-08-03"
+        },
+      }
+    ],
+    "salesMarket": "fr-FR",
+  }
+}
+```
+
+This request returns a huge amount of useless data. After removing a lot of fields, it looks like :
+```json
+{
+  "travelProposals": [
+    {
+      "departureDate": "2019-07-23T06:07:00",
+      "arrivalDate": "2019-07-23T09:42:00",
+      "minPrice": 69,
+    },
+    {
+      "departureDate": "2019-07-23T06:12:00",
+      "arrivalDate": "2019-07-23T09:26:00",
+      "minPrice": 45,
+    },
+    {
+      "departureDate": "2019-07-23T08:37:00",
+      "arrivalDate": "2019-07-23T11:59:00",
+      "minPrice": 0,
+    }
+  ]
+}
+```
+
+This is accurate and usefull data. However the API only returns 5 trains by 5 trains. So we need to call the API several times to get all the data.
+
+Even if oui.sncf calls it a REST API, the pagination design is far from being RESTful. In order to get the next trains, one should call this URL with this body :
+
+```
+POST https://www.oui.sncf/proposition/rest/travels/outward/train/next
+with body :
+{
+  "context": {
+      "paginationContext": {
+          "travelSchedule": {
+              "departureDate": "2019-07-23T08:37:00",
+          }
+      }
+  },
+  "wish": {
+    "mainJourney": {
+      "origin": {
+        "code": "FRPAR",
+      },
+      "destination": {
+        "code": "FRMRS",
+      },
+    },
+    "schedule": {
+      "outward": "2019-07-23T06:00:00",
+    },
+    "travelClass": "SECOND",
+    "passengers": [
+      {
+        "typology": "YOUNG",
+        "discountCard": {
+          "code": "HAPPY_CARD",
+          "number": "HC000036781",
+          "dateOfBirth": "1995-08-03"
+        },
+      }
+    ],
+    "salesMarket": "fr-FR",
+  }
+}
+```
+
+It returns the same data format than before.
+
+oui.sncf uses a custom "code" to reference a train station.
+These codes can be found using following URL :
+
+```
+GET https://www.oui.sncf/booking/autocomplete-d2d?uc=fr-FR&searchField=origin&searchTerm=<YOUR_TRAIN_STATION>
+```
+
+exemple :
+```
+GET https://www.oui.sncf/booking/autocomplete-d2d?uc=fr-FR&searchField=origin&searchTerm=lyon
+```
 
 ## How to use this project ?
 
-### Install locally
-1/ Install Python (version >= 3.6.5)
+### Prerequisites
 
-2/ Create a python virtual environment
-```
-python3 -m venv env
-```
-It should create an `env` directory at the root of the project. This directory will contain all the python packages needed for running the application.
+1/ Install [NodeJS (version >= 10.16.0)]((https://nodejs.org/))
 
-3/ activate the virtual environment
-```
-source env/bin/activate
-```
-You should see a `(env)` at the beginning of each line of your CLI.
-
-4/ Install dependencies using pip3 :
-```
-pip3 install -r requirements.txt
+2/ Install NodeJS dependancies
+```bash
+npm install
 ```
 
-5/ Download the latest release of [Firefox geckodriver](https://github.com/mozilla/geckodriver/releases)
+3/ Open src/index.ts and enter your travel details
 
-Unzip the file and move it to `./env/bin`. Selenium will be able to find it and start a browser session.
-
-### Launch the app
-First, you have to edit the `app.py` file with the travel you want the bot to look for.
-If you want to activate the notification feature, you also have to create the two env variables described in `config.py`.
-When this is done, you can run the app with the command :
-```
-python3 app.py
-```
-### Launch tests
-unit tests :
-```
-python3 -m unittest
+4/ Run
+```bash
+npm start
 ```
 
-linter :
-```
-find src -iname "*.py" | xargs pylint
-```
+It should print the minimum price of each train in your terminal (0 if a TGVmax seat is available).

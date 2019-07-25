@@ -1,0 +1,34 @@
+{
+  "name": "tgvmax",
+  "version": "0.0.1",
+  "description": "find a tgvmax seat",
+  "scripts": {
+    "clean": "rm -fR ./node_modules",
+    "lint": "npx tslint ./src/*.ts{,x} ./src/**/*.ts{,x} --project tsconfig.json",
+    "start": "npx ts-node ./src/index.ts",
+    "pretest": "npm run lint",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/benoitdemaegdt/TGVmax.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/benoitdemaegdt/TGVmax/issues"
+  },
+  "homepage": "https://github.com/benoitdemaegdt/TGVmax#readme",
+  "dependencies": {
+    "lodash": "^4.17.15",
+    "superagent": "^5.1.0"
+  },
+  "devDependencies": {
+    "@types/lodash": "^4.14.136",
+    "@types/node": "^12.6.8",
+    "@types/superagent": "^4.1.3",
+    "ts-node": "^8.3.0",
+    "tslint": "^5.18.0",
+    "typescript": "^3.5.3"
+  }
+}
