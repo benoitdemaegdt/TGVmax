@@ -10,17 +10,25 @@ describe('Travel', () => {
   let fakeServer: nock.Scope;
   /**
    * Create fake server before running all tests in "Travel" section
+   * This intercepts every HTTP calls to https://www.oui.sncf
    */
   before(() => {
     fakeServer = nock(Config.baseUrl);
   });
 
   /**
-   * Clear fake server after running all tests in "Travel" section
+   * Clean all interceptors after each test
+   * This avoid interceptors to interfere with each others
+   */
+  afterEach(() => {
+    nock.cleanAll();
+  });
+
+  /**
+   * Restore the HTTP interceptor to the normal unmocked behaviour after running all tests
    */
   after(() => {
-    nock.cleanAll();
-    nock.enableNetConnect();
+    nock.restore();
   });
 
   it('should not find any TGVmax seat available', async() => {
