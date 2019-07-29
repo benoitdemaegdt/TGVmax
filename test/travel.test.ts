@@ -123,7 +123,7 @@ describe('Travel', () => {
     chai.expect(tgvmaxAvailability.hours).to.deep.equal([moment(fromTime).add(4, 'hours').format('HH:mm')]);
   });
 
-  it('should find exactly six TGVmax seats available', async() => {
+  it('should find exactly 2 TGVmax seats available', async() => {
     /**
      * init travel
      */
@@ -199,5 +199,34 @@ describe('Travel', () => {
       moment(fromTime).add(1, 'hours').format('HH:mm'),
       moment(fromTime).add(3, 'hours').format('HH:mm'),
     ]);
+  });
+
+  it('should get an error 500 while calling oui.sncf API', async() => {
+    /**
+     * init travel
+     */
+    const origin: string = 'FRPAR';
+    const destination: string = 'FRLYS';
+    const fromTime: string = moment(new Date()).add(1, 'days').startOf('day').toISOString();
+    const toTime: string = moment(fromTime).add(10, 'hours').toISOString();
+    const tgvmaxNumber: string = 'HC000054321';
+    const travel: Travel = new Travel(origin, destination, fromTime, toTime, tgvmaxNumber);
+
+    /**
+     * create oui.sncf fake server
+     */
+    fakeServer
+    .post('/proposition/rest/travels/outward/train/next')
+    .reply(500);
+
+    /**
+     * Test function : isTgvmaxAvailable
+     * It should two TGVmax seats
+     */
+    try {
+      await travel.isTgvmaxAvailable();
+    } catch (e) {
+      chai.expect(e.status).to.equal(500);
+    }
   });
 });
