@@ -206,12 +206,23 @@ GET https://www.oui.sncf/booking/autocomplete-d2d?uc=fr-FR&searchField=origin&se
 
 1/ Install [NodeJS (version >= 10.16.0)]((https://nodejs.org/))
 
+2/ Install database [PostgreSQL](https://www.postgresql.org/)
+
+### Start applicaion
+
+1/ Launch your local PostgreSQL server.
+
 2/ Install NodeJS dependancies
 ```bash
 npm install
 ```
 
 3/ Open src/index.ts and enter your travel details
+- origin train station code
+- destination train station code
+- earliest departure time
+- latest departure time
+- tgvmax number
 
 4/ Run
 ```bash

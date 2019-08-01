@@ -1,5 +1,5 @@
 import { filter, get, map, pick } from 'lodash';
-import * as moment from 'moment';
+import * as moment from 'moment-timezone';
 import * as request from 'superagent';
 import Config from './config';
 import { IAvailability, ITrain } from './types';
@@ -8,11 +8,6 @@ import { IAvailability, ITrain } from './types';
  * This class is about fetching data from oui.sncf
  */
 export class Travel {
-  /**
-   * url used to fetch data
-   */
-  private readonly url: string;
-
   /**
    * departure station
    */
@@ -39,7 +34,6 @@ export class Travel {
   private readonly tgvmaxNumber: string;
 
   constructor(origin: string, destination: string, fromTime: string, toTime: string, tgvmaxNumber: string) {
-    this.url = `${Config.baseUrl}/proposition/rest/travels/outward/train/next`;
     this.origin = origin;
     this.destination = destination;
     this.fromTime = fromTime;
@@ -109,7 +103,7 @@ export class Travel {
    */
   private async getMinPrices(time: string): Promise<ITrain[]> {
     const response: request.Response = await request
-      .post(this.url)
+      .post(`${Config.baseUrl}/proposition/rest/travels/outward/train/next`)
       .send({
         context: {
           paginationContext: {

@@ -7,8 +7,14 @@ export class Config {
    */
   public baseUrl: string;
 
+  /**
+   * database url
+   */
+  public dbUrl: string;
+
   constructor() {
     this.baseUrl = 'https://www.oui.sncf';
+    this.dbUrl = 'postgres://postgres:@localhost:5432/tgvmax';
   }
 }
 
