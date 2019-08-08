@@ -1,5 +1,5 @@
 {
-  "name": "tgvmax",
+  "name": "tgvmax-server",
   "version": "0.0.1",
   "description": "find a tgvmax seat",
   "scripts": {
@@ -13,7 +13,7 @@
     "type": "git",
     "url": "git+https://github.com/benoitdemaegdt/TGVmax.git"
   },
-  "author": "",
+  "author": "benoitdemaegdt",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/benoitdemaegdt/TGVmax/issues"
