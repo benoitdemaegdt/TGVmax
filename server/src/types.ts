@@ -26,3 +26,27 @@ export interface ITravel {
   tgvmax_number: string;
   email: Date;
 }
+
+/**
+ * User interface
+ */
+export interface IUser {
+  email: string;
+  password: string;
+  tgvmaxNumber: string;
+}
+
+/**
+ * TravelAlert interface
+ */
+export interface ITravelAlert {
+  id: string;
+  userId: string;
+  origin: string;
+  destination: string;
+  fromTime: string;
+  toTime: string;
+  status: string;
+  lastCheck: string;
+  createdAt: string;
+}
