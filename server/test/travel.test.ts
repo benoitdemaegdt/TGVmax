@@ -1,6 +1,6 @@
 import * as chai from 'chai';
 import 'mocha';
-import * as moment from 'moment';
+import * as moment from 'moment-timezone';
 import * as nock from 'nock';
 import Config from '../src/config';
 import { Travel } from '../src/travel';

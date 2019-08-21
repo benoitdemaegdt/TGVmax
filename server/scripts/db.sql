@@ -11,7 +11,7 @@ CREATE TABLE "users" (
   id              UUID PRIMARY KEY NOT NULL DEFAULT uuid_generate_v4(),
   email           VARCHAR(80) UNIQUE NOT NULL,
   password        VARCHAR(80) NOT NULL,
-  tgvmax_number   VARCHAR(11) NOT NULL,
+  tgvmax_number   VARCHAR(11) UNIQUE NOT NULL,
   created_at      TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT (NOW() AT TIME ZONE 'utc')
 );
 
@@ -23,15 +23,15 @@ INSERT INTO users (email, password, tgvmax_number)
 CREATE TYPE status AS ENUM ('in_progress', 'found', 'not_found');
 
 -- create table "travels"
-CREATE TABLE "travels" (
-  id              UUID NOT NULL DEFAULT uuid_generate_v4(),
+CREATE TABLE "travel_alerts" (
+  id              UUID PRIMARY KEY NOT NULL DEFAULT uuid_generate_v4(),
   user_id         UUID NOT NULL,
   origin          VARCHAR(80) NOT NULL,
   destination     VARCHAR(80) NOT NULL,
   from_time       TIMESTAMP WITHOUT TIME ZONE NOT NULL,
   to_time         TIMESTAMP WITHOUT TIME ZONE NOT NULL,
-  status          status NOT NULL,
-  last_check      TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+  status          status NOT NULL DEFAULT 'in_progress',
+  last_check      TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT (NOW() AT TIME ZONE 'utc'),
   created_at      TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT (NOW() AT TIME ZONE 'utc')
 );
 
