@@ -1,6 +1,7 @@
 import * as Ajv from 'ajv';
 import { Context } from 'koa';
 import * as Router from 'koa-router';
+import { isEmpty } from 'lodash';
 import TravelAlertController from '../controllers/TravelAlertController';
 import { HttpStatus } from '../Enum';
 import { validate } from '../middlewares/validate';
@@ -51,10 +52,10 @@ class TravelAlertRouter {
   private readonly getTravelAlert = async(ctx: Context): Promise<void> => {
     const params: { userId: string; travelAlertId: string } = ctx.params as { userId: string; travelAlertId: string };
 
-    const travelAlert: ITravelAlert = await TravelAlertController.getTravelAlert(params.userId, params.travelAlertId);
+    const travelAlert: ITravelAlert[] = await TravelAlertController.getTravelAlert(params.userId, params.travelAlertId);
 
     ctx.body = travelAlert;
-    ctx.status = HttpStatus.OK;
+    ctx.status = isEmpty(travelAlert) ? HttpStatus.NOT_FOUND : HttpStatus.OK;
   }
 
   /**
@@ -66,7 +67,7 @@ class TravelAlertRouter {
     const travelAlerts: ITravelAlert[] = await TravelAlertController.getAllTravelAlerts(params.userId);
 
     ctx.body = travelAlerts;
-    ctx.status = HttpStatus.OK;
+    ctx.status = ctx.status = isEmpty(travelAlerts) ? HttpStatus.NOT_FOUND : HttpStatus.OK;
   }
 
   /**

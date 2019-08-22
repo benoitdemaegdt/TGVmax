@@ -104,7 +104,7 @@ describe('TravelAlertRouter', () => {
     });
   });
 
-  it('GET /api/v1/users/:userId/travels/:travelId 200 OK', async() => {
+  it('GET /api/v1/users/:userId/travels/:travelAlertId 200 OK', async() => {
     /**
      * A travelAlert is linked to a user
      * so I first need to insert a user in db and get its id
@@ -138,9 +138,20 @@ describe('TravelAlertRouter', () => {
     .get(`/api/v1/users/${res1.body.id}/travels/${res2.body.id}`)
     .expect(HttpStatus.OK);
 
-    chai.expect(res3.body.origin).to.equal('FRPAR');
-    chai.expect(res3.body.destination).to.equal('FRLYS');
-    chai.expect(res3.body.status).to.equal('in_progress');
+    chai.expect(res3.body[0].origin).to.equal('FRPAR');
+    chai.expect(res3.body[0].destination).to.equal('FRLYS');
+    chai.expect(res3.body[0].status).to.equal('in_progress');
+  });
+
+  it('GET /api/v1/users/:userId/travels/:travelAlertId 404 NOT FOUND', async() => {
+    /**
+     * test route GET with random userId and travelAlertId uuid
+     */
+    const res: request.Response = await request(server)
+    .get('/api/v1/users/d96d3fdc-530d-4ac6-9530-70f7b6ec6e4a/travels/d96d3fdc-530d-4ac6-9530-70f7b6ec6e4a')
+    .expect(HttpStatus.NOT_FOUND);
+
+    chai.expect(res.body).to.deep.equal([]);
   });
 
   it('GET /api/v1/users/:userId/travels 200 OK', async() => {
@@ -191,7 +202,18 @@ describe('TravelAlertRouter', () => {
     chai.expect(res4.body[1].id).to.equal(res3.body.id);
   });
 
-  it('DELETE /api/v1/users/:userId/travels/:travelId 200 OK', async() => {
+  it('GET /api/v1/users/:userId/travels 404 NOT FOUND', async() => {
+    /**
+     * test route GET with random userId uuid
+     */
+    const res: request.Response = await request(server)
+    .get('/api/v1/users/d96d3fdc-530d-4ac6-9530-70f7b6ec6e4a/travels')
+    .expect(HttpStatus.NOT_FOUND);
+
+    chai.expect(res.body).to.deep.equal([]);
+  });
+
+  it('DELETE /api/v1/users/:userId/travels/:travelAlertId 200 OK', async() => {
     /**
      * A travelAlert is linked to a user
      * so I first need to insert a user in db and get its id
