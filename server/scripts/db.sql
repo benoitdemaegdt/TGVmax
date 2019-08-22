@@ -8,7 +8,7 @@ CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 -- create table "users"
 CREATE TABLE "users" (
-  id              UUID PRIMARY KEY NOT NULL DEFAULT uuid_generate_v4(),
+  id              UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   email           VARCHAR(80) UNIQUE NOT NULL,
   password        VARCHAR(80) NOT NULL,
   tgvmax_number   VARCHAR(11) UNIQUE NOT NULL,
@@ -24,8 +24,8 @@ CREATE TYPE status AS ENUM ('in_progress', 'found', 'not_found');
 
 -- create table "travels"
 CREATE TABLE "travel_alerts" (
-  id              UUID PRIMARY KEY NOT NULL DEFAULT uuid_generate_v4(),
-  user_id         UUID NOT NULL,
+  id              UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  user_id         UUID REFERENCES users (id),
   origin          VARCHAR(80) NOT NULL,
   destination     VARCHAR(80) NOT NULL,
   from_time       TIMESTAMP WITHOUT TIME ZONE NOT NULL,

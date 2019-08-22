@@ -69,6 +69,26 @@ describe('TravelAlertRouter', () => {
     chai.expect(insertedDoc[0].status).to.equal('in_progress');
   });
 
+  it('POST /api/v1/users/:userId/travels 404 NOT FOUND', async() => {
+    /**
+     * this is a random :userId uuid
+     */
+    return request(server)
+    .post('/api/v1/users/d96d3fdc-530d-4ac6-9530-70f7b6ec6e4a/travels')
+    .send({
+      origin: 'FRPAR',
+      destination: 'FRLYS',
+      fromTime: '2019-09-13T01:00:00.283185Z',
+      toTime: '2019-09-13T13:00:00.283185Z',
+    })
+    .expect(HttpStatus.NOT_FOUND)
+    .expect((res: request.Response) => {
+      chai.expect(res.body.statusCode).to.equal(HttpStatus.NOT_FOUND);
+      chai.expect(res.body.detail)
+        .to.equal('Key (user_id)=(d96d3fdc-530d-4ac6-9530-70f7b6ec6e4a) is not present in table "users".');
+    });
+  });
+
   it('POST /api/v1/users/:userId/travels 400 BAD REQUEST', async() => {
     return request(server)
     .post('/api/v1/users/userId2/travels')
