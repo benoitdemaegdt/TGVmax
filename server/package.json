@@ -24,7 +24,7 @@
     "ajv": "^6.10.2",
     "koa": "^2.8.1",
     "koa-bodyparser": "^4.2.1",
-    "koa-helmet": "^4.2.0",
+    "koa-helmet": "^5.1.0",
     "koa-logger": "^3.2.1",
     "koa-router": "^7.4.0",
     "lodash": "^4.17.15",
