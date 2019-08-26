@@ -1,5 +1,5 @@
 <template>
-  <nav>
+  <nav class='mb-5'>
     <!-- Start of app navbar (large screen) -->
     <v-app-bar app>
       <!-- hamburger menu -->
@@ -49,7 +49,7 @@ export default {
       drawer: false,
       navigation: [
           { icon: 'home', title: 'Accueil', path: '/' },
-          { icon: 'add_alert', title: 'Alerte', path: '/alert' },
+          { icon: 'add_alert', title: 'Alertes', path: '/alert' },
           { icon: 'near_me', title: 'Destination', path: '/destination' },
           { icon: 'email', title: 'Contact', path: '/contact' },
       ],

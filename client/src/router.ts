@@ -18,7 +18,7 @@ export default new Router({
     },
     {
       path: '/alert',
-      name: 'Alerte',
+      name: 'Alertes',
       component: Alert,
     },
     {
