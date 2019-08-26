@@ -25,9 +25,10 @@ export class DatabaseError extends Error {
    * list of postgre error code : https://www.postgresql.org/docs/9.6/errcodes-appendix.html
    */
   private readonly getErrorCode = (pgErrorCode: string): number => {
-    // key xxx already exists
     if (pgErrorCode === '23505') {
-      return HttpStatus.UNPROCESSABLE_ENTITY;
+      return HttpStatus.UNPROCESSABLE_ENTITY; // duplicate unique key
+    } else if (pgErrorCode === '23503') {
+      return HttpStatus.NOT_FOUND; // link travel_alerts (user_id) <-> users (id) not found
     } else {
       return HttpStatus.INTERNAL_SERVER_ERROR;
     }

@@ -27,13 +27,11 @@ class TravelAlertController {
   /**
    * Get one user travelAlert from database
    */
-  public async getTravelAlert(userId: string, travelAlertId: string): Promise<ITravelAlert> {
-    const travelAlert: ITravelAlert[] = await Database.find<ITravelAlert>('travel_alerts', {
+  public async getTravelAlert(userId: string, travelAlertId: string): Promise<ITravelAlert[]> {
+    return Database.find<ITravelAlert>('travel_alerts', {
       user_id: userId,
       id: travelAlertId,
     });
-
-    return travelAlert[0];
   }
 
   /**
