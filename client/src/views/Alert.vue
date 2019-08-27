@@ -13,25 +13,30 @@
         <v-toolbar flat color='#E0E0E0'>
           <v-toolbar-title>Alertes en cours</v-toolbar-title>
           <v-spacer></v-spacer>
-          <v-btn color='primary' dark>Nouvelle alerte</v-btn>
+          <v-dialog v-model='dialog' persistent max-width='600px'>
+            <template v-slot:activator='{ on }'>
+              <v-btn color='primary' dark v-on='on'>Nouvelle Alerte</v-btn>
+            </template>
+            <alert-form @close:dialog='dialog = !dialog' @add:alert='addAlert'/>
+          </v-dialog>
         </v-toolbar>
       </template>
 
       <!-- human readable dates -->
-      <template v-slot:item.date="{ item }">
-        {{getDate(item.fromTime)}}
+      <template v-slot:item.date='{ item }'>
+        {{getFrenchDate(item.fromTime)}}
       </template>
 
-      <template v-slot:item.fromTime="{ item }">
+      <template v-slot:item.fromTime='{ item }'>
         {{getHour(item.fromTime)}}
       </template>
 
-      <template v-slot:item.toTime="{ item }">
+      <template v-slot:item.toTime='{ item }'>
         {{getHour(item.toTime)}}
       </template>
 
-      <template v-slot:item.lastCheck="{ item }">
-        {{getDate(item.lastCheck)}} à {{getHour(item.lastCheck)}}
+      <template v-slot:item.lastCheck='{ item }'>
+        {{getFrenchDate(item.lastCheck)}} à {{getHour(item.lastCheck)}}
       </template>
 
       <!-- add a column for deleting an alert -->
@@ -57,35 +62,53 @@
         {{alert.origin}}<br>{{alert.destination}}
       </v-card-title>
       <v-card-text class='primary white--text pt-3'>
-        {{getDate(alert.fromTime)}} : {{getHour(alert.fromTime)}} - {{getHour(alert.toTime)}}
+        {{getFrenchDate(alert.fromTime)}} : {{getHour(alert.fromTime)}} - {{getHour(alert.toTime)}}
       </v-card-text>
       <v-card-actions>
-        Dernière recherche : {{getDate(alert.lastCheck)}} à {{getHour(alert.lastCheck)}}
+        Dernière recherche : {{getFrenchDate(alert.lastCheck)}} à {{getHour(alert.lastCheck)}}
         <v-spacer></v-spacer>
         <v-btn icon>
           <v-icon medium @click='deleteAlert(alert)'>delete</v-icon>
         </v-btn>
       </v-card-actions>
     </v-card>
-    <v-btn class='hidden-md-and-up' fab dark large color='#757575' fixed right bottom>
-      <v-icon dark>add</v-icon>
-    </v-btn>
+
+    <!-- add an alert on mobile -->
+    <v-dialog v-model='dialog' persistent max-width='600px'>
+      <template v-slot:activator='{ on }'>
+        <v-btn class='hidden-md-and-up' fab dark large color='#757575' fixed right bottom @click='dialog = true'>
+          <v-icon dark>add</v-icon>
+        </v-btn>
+      </template>
+      <alert-form @close:dialog='dialog = !dialog' @add:alert='addAlert'/>
+    </v-dialog>
     <!-- End of mobile cards -->
   </div>
 </template>
 
 <script>
+import { getFrenchDate, getHour } from '@/helper/date.ts';
+import AlertForm from '@/components/AlertForm.vue';
+
 export default {
   name: 'Alert',
+  components: {
+    AlertForm,
+  },
+  created() {
+    this.getFrenchDate = getFrenchDate;
+    this.getHour = getHour;
+  },
   data() {
     return {
+      dialog: false,
       headers: [
         { text: 'Départ', value: 'origin' },
         { text: 'Arrivée', value: 'destination' },
         { text: 'Date', value: 'date' },
         { text: 'Heure min', value: 'fromTime' },
         { text: 'Heure max', value: 'toTime' },
-        { text: 'Dernière vérification', value: 'lastCheck' },
+        { text: 'Dernière recherche', value: 'lastCheck' },
         { text: 'Action', value: 'action' },
       ],
       alerts: [
@@ -121,77 +144,14 @@ export default {
       const index = this.alerts.indexOf(alert);
       this.alerts.splice(index, 1);
     },
-    getDate(isodate) {
-      const date = new Date(isodate);
-      const dayNumber = date.getDay();
-      const monthNumber = date.getMonth();
-      let day = '';
-      switch (dayNumber) {
-        case 1:
-          day = 'lundi';
-          break;
-        case 2:
-          day = 'mardi';
-          break;
-        case 3:
-          day = 'mercredi';
-          break;
-        case 4:
-          day = 'jeudi';
-          break;
-        case 5:
-          day = 'vendredi';
-          break;
-        case 6:
-          day = 'samedi';
-          break;
-        case 7:
-          day = 'dimanche';
-          break;
-      }
-      let month = '';
-      switch (monthNumber) {
-        case 0:
-          month = 'janvier';
-          break;
-        case 1:
-          month = 'février';
-          break;
-        case 2:
-          month = 'mars';
-          break;
-        case 3:
-          month = 'avril';
-          break;
-        case 4:
-          month = 'mai';
-          break;
-        case 5:
-          month = 'juin';
-          break;
-        case 6:
-          month = 'juillet';
-          break;
-        case 7:
-          month = 'août';
-          break;
-        case 8:
-          month = 'septembre';
-          break;
-        case 9:
-          month = 'octobre';
-          break;
-        case 10:
-          month = 'novembre';
-          break;
-        case 11:
-          month = 'décembre';
-          break;
-      }
-      return `${day} ${date.getDate()} ${month}`;
-    },
-    getHour(isodate) {
-      return isodate.slice(11, 16);
+    addAlert(alert) {
+      /**
+       * id will later be returned by the api
+       */
+      const lastId = this.alerts[this.alerts.length - 1].id;
+      const id = lastId + 1;
+      const newAlert = { ...alert, id };
+      this.alerts = [...this.alerts, newAlert];
     },
   },
 };

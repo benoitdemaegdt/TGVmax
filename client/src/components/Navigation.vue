@@ -20,7 +20,7 @@
     <!-- Start of mobile navbar (small screen) -->
     <v-navigation-drawer v-model= 'drawer' app>
       <!-- Mobile menu title -->
-      <v-toolbar flat>
+      <v-toolbar class='primary white--text' flat>
         <v-toolbar-title>Maxplorateur</v-toolbar-title>
       </v-toolbar>
       <v-divider></v-divider>
@@ -49,8 +49,8 @@ export default {
       drawer: false,
       navigation: [
           { icon: 'home', title: 'Accueil', path: '/' },
-          { icon: 'add_alert', title: 'Alertes', path: '/alert' },
-          { icon: 'near_me', title: 'Destination', path: '/destination' },
+          { icon: 'notifications', title: 'Alertes', path: '/alert' },
+          { icon: 'near_me', title: 'Destinations', path: '/destination' },
           { icon: 'email', title: 'Contact', path: '/contact' },
       ],
     };

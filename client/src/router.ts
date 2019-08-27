@@ -23,7 +23,7 @@ export default new Router({
     },
     {
       path: '/destination',
-      name: 'Destination',
+      name: 'Destinations',
       component: Destination,
     },
     {
