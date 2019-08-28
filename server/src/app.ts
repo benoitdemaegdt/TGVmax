@@ -3,8 +3,10 @@ import * as bodyParser from 'koa-bodyparser';
 import * as helmet from 'koa-helmet';
 import * as logger from 'koa-logger';
 import * as Router from 'koa-router';
+import * as serve from 'koa-static';
 import { HttpStatus } from './Enum';
 import { errorHandler } from './middlewares/errorHandler';
+import { historyApiFallback } from './middlewares/historyApiFallback';
 import TravelAlertRouter from './routes/TravelAlertRouter';
 import UserRouter from './routes/UserRouter';
 
@@ -29,6 +31,8 @@ class App {
       this.app.use(logger());
     }
     this.app.use(errorHandler());
+    this.app.use(historyApiFallback());
+    this.app.use(serve(`${__dirname}/../../client/dist`));
     this.app.use(helmet());
     this.app.use(bodyParser());
   }

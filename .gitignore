@@ -1,6 +1,5 @@
 .DS_Store
 node_modules
-/dist
 
 # vscode things
 .vscode
@@ -17,3 +16,6 @@ yarn-error.log*
 # coverage
 .nyc_output
 coverage
+
+# frontend build
+client/dist
