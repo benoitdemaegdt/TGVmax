@@ -9,7 +9,7 @@
     "clean": "rm -fR ./node_modules ./dist"
   },
   "dependencies": {
-    "core-js": "^2.6.5",
+    "core-js": "^2.6.9",
     "vue": "^2.6.10",
     "vue-router": "^3.0.3",
     "vuetify": "^2.0.11"
