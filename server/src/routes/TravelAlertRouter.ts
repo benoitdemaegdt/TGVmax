@@ -4,6 +4,7 @@ import * as Router from 'koa-router';
 import { isEmpty } from 'lodash';
 import TravelAlertController from '../controllers/TravelAlertController';
 import { HttpStatus } from '../Enum';
+import { NotFoundError } from '../errors/NotFoundError';
 import { validate } from '../middlewares/validate';
 import { travelAlertSchema } from '../schemas/travelAlertSchema';
 import { ITravelAlert } from '../types';
@@ -76,9 +77,13 @@ class TravelAlertRouter {
   private readonly deleteTravelAlert = async(ctx: Context): Promise<void> => {
     const params: { userId: string; travelAlertId: string } = ctx.params as { userId: string; travelAlertId: string };
 
-    await TravelAlertController.deleteTravelAlert(params.userId, params.travelAlertId);
+    const nbDeleted: number = await TravelAlertController.deleteTravelAlert(params.userId, params.travelAlertId);
 
-    ctx.status = HttpStatus.OK;
+    if (nbDeleted === 0) {
+      throw new NotFoundError('travelAlert not found');
+    } else {
+      ctx.status = HttpStatus.OK;
+    }
   }
 
   /**

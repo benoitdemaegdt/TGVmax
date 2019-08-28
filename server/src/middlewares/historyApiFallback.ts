@@ -12,7 +12,7 @@ export function historyApiFallback(options: object = {}): Middleware {
 
     /* tslint:disable */
     const headers: any = ctx.headers;
-
+    
     if (ctx.method !== 'GET') {
       return next(); // not rewriting because the method is not GET.
     } else if (!headers || typeof headers.accept !== 'string') {

@@ -165,12 +165,11 @@ export default {
     },
     handleSubmit() {
       if (this.$refs.alertForm.validate()) {
-        this.$emit('add:alert', {
+        this.$emit('add:travelAlert', {
           origin: this.origin,
           destination: this.destination,
           fromTime: this.getISOString(this.date, this.fromTime),
           toTime: this.getISOString(this.date, this.toTime),
-          lastCheck: new Date().toISOString(),
         });
         this.closeForm();
       }

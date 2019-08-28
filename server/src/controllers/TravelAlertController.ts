@@ -46,11 +46,13 @@ class TravelAlertController {
   /**
    * Delete TravelAlert
    */
-  public async deleteTravelAlert(userId: string, travelAlertId: string): Promise<QueryResult> {
-    return Database.delete('travel_alerts', {
+  public async deleteTravelAlert(userId: string, travelAlertId: string): Promise<number> {
+    const deleteOp: QueryResult = await Database.delete('travel_alerts', {
       id: travelAlertId,
       user_id: userId,
     });
+
+    return deleteOp.rowCount;
   }
 }
 

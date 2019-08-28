@@ -6,6 +6,7 @@
     :items='alerts'
     hide-default-footer
     disable-sort
+    disable-pagination
     class='elevation-1 hidden-sm-and-down'
     >
       <!-- add toolbar for the datatable -->
@@ -17,7 +18,7 @@
             <template v-slot:activator='{ on }'>
               <v-btn color='primary' dark v-on='on'>Nouvelle Alerte</v-btn>
             </template>
-            <alert-form @close:dialog='dialog = !dialog' @add:alert='addAlert'/>
+            <alert-form @close:dialog='dialog = !dialog' @add:travelAlert='addTravelAlert'/>
           </v-dialog>
         </v-toolbar>
       </template>
@@ -36,12 +37,13 @@
       </template>
 
       <template v-slot:item.lastCheck='{ item }'>
-        {{getFrenchDate(item.lastCheck)}} à {{getHour(item.lastCheck)}}
+        <div v-if='!item.lastCheck'>Prochainement</div>
+        <div v-else>{{getFrenchDate(item.lastCheck)}} à {{getHour(item.lastCheck)}}</div>
       </template>
 
       <!-- add a column for deleting an alert -->
       <template v-slot:item.action='{ item }'>
-        <v-icon medium @click='deleteAlert(item)'>
+        <v-icon medium @click='deleteTravelAlert(item)'>
           delete
         </v-icon>
       </template>
@@ -65,10 +67,11 @@
         {{getFrenchDate(alert.fromTime)}} : {{getHour(alert.fromTime)}} - {{getHour(alert.toTime)}}
       </v-card-text>
       <v-card-actions>
-        Dernière recherche : {{getFrenchDate(alert.lastCheck)}} à {{getHour(alert.lastCheck)}}
+        <div v-if='!alert.lastCheck'>Dernière recherche : prochainement</div>
+        <div v-else>Dernière recherche : {{getFrenchDate(alert.lastCheck)}} à {{getHour(alert.lastCheck)}}</div>
         <v-spacer></v-spacer>
         <v-btn icon>
-          <v-icon medium @click='deleteAlert(alert)'>delete</v-icon>
+          <v-icon medium @click='deleteTravelAlert(alert)'>delete</v-icon>
         </v-btn>
       </v-card-actions>
     </v-card>
@@ -80,7 +83,7 @@
           <v-icon dark>add</v-icon>
         </v-btn>
       </template>
-      <alert-form @close:dialog='dialog = !dialog' @add:alert='addAlert'/>
+      <alert-form @close:dialog='dialog = !dialog' @add:travelAlert='addTravelAlert'/>
     </v-dialog>
     <!-- End of mobile cards -->
   </div>
@@ -99,6 +102,9 @@ export default {
     this.getFrenchDate = getFrenchDate;
     this.getHour = getHour;
   },
+  mounted() {
+    this.getTravelAlerts();
+  },
   data() {
     return {
       dialog: false,
@@ -111,47 +117,56 @@ export default {
         { text: 'Dernière recherche', value: 'lastCheck' },
         { text: 'Action', value: 'action' },
       ],
-      alerts: [
-          {
-            id: 1,
-            origin: 'Paris (toutes gares intramuros)',
-            destination: 'Lyon (toutes gares intramuros)',
-            fromTime: '2019-09-20T06:00:00Z',
-            toTime: '2019-09-20T15:00:00Z',
-            lastCheck: '2019-09-10T06:55:00Z',
-          },
-          {
-            id: 2,
-            origin: 'Paris (toutes gares intramuros)',
-            destination: 'Marseille Saint-Charles',
-            fromTime: '2019-09-20T06:00:00Z',
-            toTime: '2019-09-20T15:00:00Z',
-            lastCheck: '2019-09-10T06:55:00Z',
-          },
-          {
-            id: 3,
-            origin: 'Lyon Part-Dieu',
-            destination: 'Montpellier Saint-Roch',
-            fromTime: '2019-09-20T06:00:00Z',
-            toTime: '2019-09-20T15:00:00Z',
-            lastCheck: '2019-09-10T06:55:00Z',
-          },
-      ],
+      alerts: [],
     };
   },
   methods: {
-    deleteAlert(alert) {
-      const index = this.alerts.indexOf(alert);
-      this.alerts.splice(index, 1);
+    async getTravelAlerts() {
+      try {
+        const response = await fetch(`http://localhost:3001/api/v1/users/${this.$store.state.userId}/travels`, {
+          headers: { 'accept': 'application/json; charset=UTF-8' },
+        });
+        if (!response.ok) {
+          throw new Error(response.statusText);
+        }
+        const body = await response.json();
+        this.alerts = body;
+      } catch (err) {
+        console.log(err);
+      }
     },
-    addAlert(alert) {
-      /**
-       * id will later be returned by the api
-       */
-      const lastId = this.alerts[this.alerts.length - 1].id;
-      const id = lastId + 1;
-      const newAlert = { ...alert, id };
-      this.alerts = [...this.alerts, newAlert];
+    async deleteTravelAlert(alert) {
+      try {
+        const id = alert.id;
+        const response = await fetch(`http://localhost:3001/api/v1/users/${this.$store.state.userId}/travels/${id}`, {
+          method: 'DELETE',
+          headers: { 'accept': 'application/json; charset=UTF-8' },
+        });
+        if (!response.ok) {
+          throw new Error(response.statusText);
+        }
+        const index = this.alerts.indexOf(alert);
+        this.alerts.splice(index, 1);
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    async addTravelAlert(alert) {
+      try {
+        const response = await fetch(`http://localhost:3001/api/v1/users/${this.$store.state.userId}/travels`, {
+          method: 'POST',
+          body: JSON.stringify(alert),
+          headers: { 'accept': 'application/json; charset=UTF-8' },
+        });
+        if (!response.ok) {
+          throw new Error(response.statusText);
+        }
+        const body = await response.json();
+        alert = {...alert, id: body.id };
+        this.alerts = [...this.alerts, alert];
+      } catch (err) {
+        console.log(err);
+      }
     },
   },
 };
