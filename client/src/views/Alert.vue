@@ -123,13 +123,8 @@ export default {
   methods: {
     async getTravelAlerts() {
       try {
-        const response = await fetch(`http://localhost:3001/api/v1/users/${this.$store.state.userId}/travels`, {
-          headers: { 'accept': 'application/json; charset=UTF-8' },
-        });
-        if (!response.ok) {
-          throw new Error(response.statusText);
-        }
-        const body = await response.json();
+        const response = await this.$http.get(`http://localhost:3001/api/v1/users/${this.$store.state.userId}/travels`);
+        const body = await response.data;
         this.alerts = body;
       } catch (err) {
         console.log(err);
@@ -138,13 +133,8 @@ export default {
     async deleteTravelAlert(alert) {
       try {
         const id = alert.id;
-        const response = await fetch(`http://localhost:3001/api/v1/users/${this.$store.state.userId}/travels/${id}`, {
-          method: 'DELETE',
-          headers: { 'accept': 'application/json; charset=UTF-8' },
-        });
-        if (!response.ok) {
-          throw new Error(response.statusText);
-        }
+        const response =
+          await this.$http.delete(`http://localhost:3001/api/v1/users/${this.$store.state.userId}/travels/${id}`);
         const index = this.alerts.indexOf(alert);
         this.alerts.splice(index, 1);
       } catch (err) {
@@ -153,15 +143,11 @@ export default {
     },
     async addTravelAlert(alert) {
       try {
-        const response = await fetch(`http://localhost:3001/api/v1/users/${this.$store.state.userId}/travels`, {
-          method: 'POST',
-          body: JSON.stringify(alert),
-          headers: { 'accept': 'application/json; charset=UTF-8' },
+        const response =
+          await this.$http.post(`http://localhost:3001/api/v1/users/${this.$store.state.userId}/travels`, {
+          ...alert,
         });
-        if (!response.ok) {
-          throw new Error(response.statusText);
-        }
-        const body = await response.json();
+        const body = await response.data;
         alert = {...alert, id: body.id };
         this.alerts = [...this.alerts, alert];
       } catch (err) {

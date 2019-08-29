@@ -9,6 +9,7 @@
     "clean": "rm -fR ./node_modules ./dist"
   },
   "dependencies": {
+    "axios": "^0.19.0",
     "core-js": "^2.6.9",
     "vue": "^2.6.10",
     "vue-router": "^3.0.3",
