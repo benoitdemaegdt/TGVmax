@@ -1,3 +1,4 @@
+import * as bcrypt from 'bcrypt';
 import { QueryResult } from 'pg';
 import Database from '../database/db';
 import { IUser } from '../types';
@@ -11,10 +12,10 @@ class UserController {
    * Add a user to database
    */
   public async addUser(user: IUser): Promise<string> {
-    // TODO: Bcrypt password
+    const salt: number = 8;
     const insertOp: QueryResult = await Database.insert('users', {
       email: user.email,
-      password: user.password,
+      password: bcrypt.hashSync(user.password, salt),
       tgvmax_number: user.tgvmaxNumber,
     });
 
