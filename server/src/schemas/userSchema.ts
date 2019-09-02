@@ -12,6 +12,7 @@ export const userSchema: object = {
       type: 'string',
       minLength: 11,
       maxLength: 11,
+      pattern: '^HC',
     },
   },
   required: ['email', 'password', 'tgvmaxNumber'],

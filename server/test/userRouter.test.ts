@@ -86,6 +86,21 @@ describe('UserRouter', () => {
     });
   });
 
+  it('POST /api/v1/users/ 400 BAD REQUEST (invalid pattern)', async() => {
+    return request(server)
+    .post('/api/v1/users')
+    .send({
+      email: 'jane.doe@yopmail.com',
+      password: 'this-is-my-fake-password',
+      tgvmaxNumber: 'AB000054321',
+    })
+    .expect(HttpStatus.BAD_REQUEST)
+    .then((response: request.Response) => {
+      chai.expect(response.body.statusCode).to.equal(HttpStatus.BAD_REQUEST);
+      chai.expect(response.body.message).to.equal('should match pattern "^HC"');
+    });
+  });
+
   it('POST /api/v1/users/ 422 UNPROCESSABLE ENTITY', async() => {
     return request(server)
     .post('/api/v1/users')
