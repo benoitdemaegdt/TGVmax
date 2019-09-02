@@ -1,10 +1,11 @@
 import * as chai from 'chai';
 import * as http from 'http';
 import 'mocha';
+import { ObjectId } from 'mongodb';
 import * as request from 'supertest';
 import App from '../src/app';
 import Config from '../src/config';
-import Database from '../src/database/db';
+import Database from '../src/database/database';
 import { HttpStatus } from '../src/Enum';
 
 describe('TravelAlertRouter', () => {
@@ -19,7 +20,7 @@ describe('TravelAlertRouter', () => {
   before(async() => {
     server = App.listen(Config.port);
 
-    return Promise.all([ Database.clear('travel_alerts'), Database.clear('users') ]);
+    return Promise.all([ Database.deleteAll('alerts'), Database.deleteAll('users') ]);
   });
 
   /**
@@ -44,7 +45,7 @@ describe('TravelAlertRouter', () => {
     .expect(HttpStatus.CREATED);
 
     const res2: request.Response = await request(server)
-    .post(`/api/v1/users/${res1.body.id}/travels`)
+    .post(`/api/v1/users/${res1.body._id}/travels`)
     .send({
       origin: 'FRPAR',
       destination: 'FRLYS',
@@ -54,27 +55,27 @@ describe('TravelAlertRouter', () => {
     .expect(HttpStatus.CREATED);
 
     chai.expect(res2.header).to.ownPropertyDescriptor('location');
-    chai.expect(res2.body).to.ownPropertyDescriptor('id');
+    chai.expect(res2.body).to.ownPropertyDescriptor('_id');
 
     /**
      * check that travel alert is actually on db
      */
-    interface t {origin: string; destination: string; status: string;}
-    const insertedDoc: t[] = await Database.find<t>('travel_alerts', {
-      id: res2.body.id,
+    interface t {origin: string; destination: string; status: string; }
+    const insertedDoc: t[] = await Database.find<t>('alerts', {
+      _id: new ObjectId(res2.body._id),
     });
 
     chai.expect(insertedDoc[0].origin).to.equal('FRPAR');
     chai.expect(insertedDoc[0].destination).to.equal('FRLYS');
-    chai.expect(insertedDoc[0].status).to.equal('in_progress');
+    chai.expect(insertedDoc[0].status).to.equal('pending');
   });
 
   it('POST /api/v1/users/:userId/travels 404 NOT FOUND', async() => {
     /**
-     * this is a random :userId uuid
+     * this is a random :userId
      */
     return request(server)
-    .post('/api/v1/users/d96d3fdc-530d-4ac6-9530-70f7b6ec6e4a/travels')
+    .post('/api/v1/users/5d6824a20aa16d3a91ef8aa5/travels')
     .send({
       origin: 'FRPAR',
       destination: 'FRLYS',
@@ -84,8 +85,8 @@ describe('TravelAlertRouter', () => {
     .expect(HttpStatus.NOT_FOUND)
     .expect((res: request.Response) => {
       chai.expect(res.body.statusCode).to.equal(HttpStatus.NOT_FOUND);
-      chai.expect(res.body.detail)
-        .to.equal('Key (user_id)=(d96d3fdc-530d-4ac6-9530-70f7b6ec6e4a) is not present in table "users".');
+      chai.expect(res.body.message)
+        .to.equal('user not found');
     });
   });
 
@@ -100,7 +101,7 @@ describe('TravelAlertRouter', () => {
     .expect(HttpStatus.BAD_REQUEST)
     .expect((res: request.Response) => {
       chai.expect(res.body.statusCode).to.equal(HttpStatus.BAD_REQUEST);
-      chai.expect(res.body.detail).to.equal("should have required property 'toTime'");
+      chai.expect(res.body.message).to.equal("should have required property 'toTime'");
     });
   });
 
@@ -122,7 +123,7 @@ describe('TravelAlertRouter', () => {
      * Add a travelAlert linked to this user
      */
     const res2: request.Response = await request(server)
-    .post(`/api/v1/users/${res1.body.id}/travels`)
+    .post(`/api/v1/users/${res1.body._id}/travels`)
     .send({
       origin: 'FRPAR',
       destination: 'FRLYS',
@@ -135,12 +136,12 @@ describe('TravelAlertRouter', () => {
      * test route GET
      */
     const res3: request.Response = await request(server)
-    .get(`/api/v1/users/${res1.body.id}/travels/${res2.body.id}`)
+    .get(`/api/v1/users/${res1.body._id}/travels/${res2.body._id}`)
     .expect(HttpStatus.OK);
 
     chai.expect(res3.body[0].origin).to.equal('FRPAR');
     chai.expect(res3.body[0].destination).to.equal('FRLYS');
-    chai.expect(res3.body[0].status).to.equal('in_progress');
+    chai.expect(res3.body[0].status).to.equal('pending');
   });
 
   it('GET /api/v1/users/:userId/travels/:travelAlertId 404 NOT FOUND', async() => {
@@ -148,7 +149,7 @@ describe('TravelAlertRouter', () => {
      * test route GET with random userId and travelAlertId uuid
      */
     const res: request.Response = await request(server)
-    .get('/api/v1/users/d96d3fdc-530d-4ac6-9530-70f7b6ec6e4a/travels/d96d3fdc-530d-4ac6-9530-70f7b6ec6e4a')
+    .get('/api/v1/users/5d6ad4a0ffdc444360854134/travels/5d6ad4a0ffdc444360854135')
     .expect(HttpStatus.NOT_FOUND);
 
     chai.expect(res.body).to.deep.equal([]);
@@ -172,7 +173,7 @@ describe('TravelAlertRouter', () => {
      * Add a travelAlert linked to this user
      */
     const res2: request.Response = await request(server)
-    .post(`/api/v1/users/${res1.body.id}/travels`)
+    .post(`/api/v1/users/${res1.body._id}/travels`)
     .send({
       origin: 'FRPAR',
       destination: 'FRLYS',
@@ -182,7 +183,7 @@ describe('TravelAlertRouter', () => {
     .expect(HttpStatus.CREATED);
 
     const res3: request.Response = await request(server)
-    .post(`/api/v1/users/${res1.body.id}/travels`)
+    .post(`/api/v1/users/${res1.body._id}/travels`)
     .send({
       origin: 'FRPAR',
       destination: 'FRNIT',
@@ -195,11 +196,11 @@ describe('TravelAlertRouter', () => {
      * test route GET
      */
     const res4: request.Response = await request(server)
-    .get(`/api/v1/users/${res1.body.id}/travels`)
+    .get(`/api/v1/users/${res1.body._id}/travels`)
     .expect(HttpStatus.OK);
 
-    chai.expect(res4.body[0].id).to.equal(res2.body.id);
-    chai.expect(res4.body[1].id).to.equal(res3.body.id);
+    chai.expect(res4.body[0]._id).to.equal(res2.body._id);
+    chai.expect(res4.body[1]._id).to.equal(res3.body._id);
   });
 
   it('GET /api/v1/users/:userId/travels 404 NOT FOUND', async() => {
@@ -207,7 +208,7 @@ describe('TravelAlertRouter', () => {
      * test route GET with random userId uuid
      */
     const res: request.Response = await request(server)
-    .get('/api/v1/users/d96d3fdc-530d-4ac6-9530-70f7b6ec6e4a/travels')
+    .get('/api/v1/users/5d6ad4a0ffdc444360854139/travels')
     .expect(HttpStatus.NOT_FOUND);
 
     chai.expect(res.body).to.deep.equal([]);
@@ -231,7 +232,7 @@ describe('TravelAlertRouter', () => {
      * Add a travelAlert linked to this user
      */
     const res2: request.Response = await request(server)
-    .post(`/api/v1/users/${res1.body.id}/travels`)
+    .post(`/api/v1/users/${res1.body._id}/travels`)
     .send({
       origin: 'FRPSL',
       destination: 'FRLYS',
@@ -243,21 +244,21 @@ describe('TravelAlertRouter', () => {
     /**
      * check that doc is actually in dd
      */
-    const doc1: {origin: string}[] = await Database.find<{origin: string}>('travel_alerts', {
-      id: res2.body.id,
+    const doc1: {origin: string}[] = await Database.find<{origin: string}>('alerts', {
+      _id: new ObjectId(res2.body._id),
     });
 
     chai.expect(doc1[0].origin).to.equal('FRPSL');
 
     await request(server)
-    .delete(`/api/v1/users/${res1.body.id}/travels/${res2.body.id}`)
+    .delete(`/api/v1/users/${res1.body._id}/travels/${res2.body._id}`)
     .expect(HttpStatus.OK);
 
     /**
      * check that doc does not exists anymore in dd
      */
-    const doc2: object[] = await Database.find<object>('travel_alerts', {
-      id: res2.body.id,
+    const doc2: object[] = await Database.find<object>('alerts', {
+      _id: new ObjectId(res2.body._id),
     });
 
     chai.expect(doc2).to.deep.equal([]);

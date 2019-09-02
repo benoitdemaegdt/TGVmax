@@ -38,3 +38,7 @@ CREATE TABLE "travel_alerts" (
 -- test : insert a row in table "travels"
 INSERT INTO travels (user_id, origin, destination, from_time, to_time, status, last_check)
     VALUES ('678de226-d67b-4902-af8a-933ba2f96da7', 'FRPAR', 'FRNIT', '2019-08-08 00:30:00.987273', '2019-07-30 22:30:00.987273', 'in_progress', '2019-07-31 15:30:00.987273');
+
+-- mongodb scripts
+db.getCollection('users').createIndex( { "email": 1 }, { unique: true } )
+db.getCollection('users').createIndex( { "tgvmaxNumber": 1 }, { unique: true } )

@@ -9,14 +9,8 @@ export class NotFoundError extends Error {
    */
   public readonly code: number;
 
-  /**
-   * details about the error
-   */
-  public readonly detail: string;
-
-  constructor(detail: string) {
-    super();
+  constructor(message: string) {
+    super(message);
     this.code = HttpStatus.NOT_FOUND;
-    this.detail = detail;
   }
 }

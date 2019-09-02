@@ -39,7 +39,7 @@ class UserRouter {
 
     ctx.set('Location', `${ctx.request.href}${userId}`);
     ctx.body = {
-      id: userId,
+      _id: userId,
     };
     ctx.status = HttpStatus.CREATED;
   }

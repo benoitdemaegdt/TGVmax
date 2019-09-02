@@ -12,14 +12,8 @@ export class ValidationError extends Error {
    */
   public readonly code: number;
 
-  /**
-   * details about the error (see example above)
-   */
-  public readonly detail: string;
-
-  constructor(detail: string) {
-    super();
+  constructor(message: string) {
+    super(message);
     this.code = HttpStatus.BAD_REQUEST;
-    this.detail = detail;
   }
 }

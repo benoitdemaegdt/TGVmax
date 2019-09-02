@@ -1,6 +1,7 @@
 import * as bcrypt from 'bcrypt';
-import { QueryResult } from 'pg';
-import Database from '../database/db';
+// import Database from '../database/db';
+import { DeleteWriteOpResultObject, InsertOneWriteOpResult, ObjectId } from 'mongodb';
+import Database from '../database/database';
 import { IUser } from '../types';
 
 /**
@@ -8,28 +9,31 @@ import { IUser } from '../types';
  */
 class UserController {
 
+  private readonly collectionUsers: string;
+
+  constructor() {
+    this.collectionUsers = 'users';
+  }
   /**
    * Add a user to database
    */
   public async addUser(user: IUser): Promise<string> {
     const salt: number = 8;
-    const insertOp: QueryResult = await Database.insert('users', {
+    const insertOp: InsertOneWriteOpResult = await Database.insertOne(this.collectionUsers, {
       email: user.email,
       password: bcrypt.hashSync(user.password, salt),
-      tgvmax_number: user.tgvmaxNumber,
+      tgvmaxNumber: user.tgvmaxNumber,
     });
 
-    const rows: {id: string}[] = insertOp.rows as {id: string}[];
-
-    return rows[0].id;
+    return insertOp.insertedId.toString();
   }
 
   /**
    * delete a user from database
    */
-  public async deleteUser(userId: string): Promise<QueryResult> {
-    return Database.delete('users', {
-      id: userId,
+  public async deleteUser(userId: string): Promise<DeleteWriteOpResultObject> {
+    return Database.deleteOne('users', {
+      _id: new ObjectId(userId),
     });
   }
 }

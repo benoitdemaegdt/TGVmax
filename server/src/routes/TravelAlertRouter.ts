@@ -1,7 +1,7 @@
 import * as Ajv from 'ajv';
 import { Context } from 'koa';
 import * as Router from 'koa-router';
-import { isEmpty } from 'lodash';
+import { isEmpty, isNil } from 'lodash';
 import TravelAlertController from '../controllers/TravelAlertController';
 import { HttpStatus } from '../Enum';
 import { NotFoundError } from '../errors/NotFoundError';
@@ -42,7 +42,7 @@ class TravelAlertRouter {
 
     ctx.set('Location', `${ctx.request.href}${travelAlertId}`);
     ctx.body = {
-      id: travelAlertId,
+      _id: travelAlertId,
     };
     ctx.status = HttpStatus.CREATED;
   }
@@ -77,9 +77,10 @@ class TravelAlertRouter {
   private readonly deleteTravelAlert = async(ctx: Context): Promise<void> => {
     const params: { userId: string; travelAlertId: string } = ctx.params as { userId: string; travelAlertId: string };
 
-    const nbDeleted: number = await TravelAlertController.deleteTravelAlert(params.userId, params.travelAlertId);
+    const nbDeleted: number | undefined =
+      await TravelAlertController.deleteTravelAlert(params.userId, params.travelAlertId);
 
-    if (nbDeleted === 0) {
+    if (isNil(nbDeleted) || nbDeleted === 0) {
       throw new NotFoundError('travelAlert not found');
     } else {
       ctx.status = HttpStatus.OK;

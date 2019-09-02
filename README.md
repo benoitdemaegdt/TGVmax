@@ -202,36 +202,49 @@ GET https://www.oui.sncf/booking/autocomplete-d2d?uc=fr-FR&searchField=origin&se
 
 ## How to use this project ?
 
+**Please note that this is a work in progress project. This README may not be up to date.**
+
 ### Prerequisites
 
 1/ Install [NodeJS (version >= 10.16.0)]((https://nodejs.org/))
 
-2/ Install database [PostgreSQL](https://www.postgresql.org/)
+2/ Install database [MongoDB](https://www.mongodb.com/download-center/community)
 
+### Database
+Launch your local MongoDB server.
+```bash
+mongod
+```
 ### Start applicaion
 
-1/ go to the `server` forlder
+1/ Go to the `server` folder
 ```bash
 cd ./server
 ```
 
-2/ Launch your local PostgreSQL server.
-
-3/ Install NodeJS dependancies
+2/ Install NodeJS dependancies
 ```bash
 npm install
 ```
 
-4/ Open src/index.ts and enter your travel details
-- origin train station code
-- destination train station code
-- earliest departure time
-- latest departure time
-- tgvmax number
-
-5/ Run
+3/ Run
 ```bash
 npm start
 ```
 
-It should print the TGVmax availability with the hours (if applicable).
+4/ Open a new terminal and go to the `client` folder
+```bash
+cd ../client
+```
+
+5/ Install NodeJS dependancies
+```bash
+npm install
+```
+
+6/ Build project
+```bash
+npm run build
+```
+
+7/ Go to `http://localhost:3001/` and start using the application

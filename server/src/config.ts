@@ -20,7 +20,7 @@ export class Config {
   constructor() {
     this.port = 3001; // tslint:disable-line
     this.baseUrl = 'https://www.oui.sncf';
-    this.dbUrl = 'postgres://postgres:@localhost:5432/tgvmax';
+    this.dbUrl = 'mongodb://localhost:27017/maxplorateur';
   }
 }
 
