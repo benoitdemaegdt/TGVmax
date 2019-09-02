@@ -68,7 +68,7 @@ class TravelAlertRouter {
     const travelAlerts: ITravelAlert[] = await TravelAlertController.getAllTravelAlerts(params.userId);
 
     ctx.body = travelAlerts;
-    ctx.status = ctx.status = isEmpty(travelAlerts) ? HttpStatus.NOT_FOUND : HttpStatus.OK;
+    ctx.status = ctx.status = HttpStatus.OK;
   }
 
   /**
