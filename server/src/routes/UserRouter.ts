@@ -1,14 +1,19 @@
 import * as Ajv from 'ajv';
+import * as jwt from 'jsonwebtoken';
 import { Context } from 'koa';
 import * as Router from 'koa-router';
+import { isNil } from 'lodash';
+import Config from '../config';
 import UserController from '../controllers/UserController';
 import { HttpStatus } from '../Enum';
+import { ValidationError } from '../errors/ValidationError';
+import { authenticate } from '../middlewares/authenticate';
 import { validate } from '../middlewares/validate';
 import { userSchema } from '../schemas/userSchema';
 import { IUser } from '../types';
 
 /**
- * CRUD operations for travels
+ * CRUD operations for users
  */
 class UserRouter {
 
@@ -31,17 +36,30 @@ class UserRouter {
 
   /**
    * Add a user to database
+   * Log a user in
    */
   private readonly addUser = async(ctx: Context): Promise<void> => {
     const user: IUser = ctx.request.body as IUser;
+    const query: {action: string} = ctx.request.query as {action: string};
 
-    const userId: string = await UserController.addUser(user);
+    let userId: string;
+    if (query.action === 'register') {
+      if (isNil(user.tgvmaxNumber)) {
+        throw new ValidationError('should have required property \'tgvmaxNumber\'');
+      }
+      userId = await UserController.addUser(user);
+    } else if (query.action === 'signIn') {
+      userId = await UserController.checkUserCredentials(user);
+    } else {
+      throw new ValidationError('Invalid query action');
+    }
 
     ctx.set('Location', `${ctx.request.href}${userId}`);
     ctx.body = {
       _id: userId,
+      token: jwt.sign({email: user.email}, Config.jwtSecret, { expiresIn: Config.jwtDuration }),
     };
-    ctx.status = HttpStatus.CREATED;
+    ctx.status = query.action === 'register' ? HttpStatus.CREATED : HttpStatus.OK;
   }
 
   /**
@@ -60,7 +78,7 @@ class UserRouter {
    */
   private init(): void {
     this.router.post('/', validate(this.userSchema), this.addUser);
-    this.router.delete('/:userId', this.deleteUser);
+    this.router.delete('/:userId', authenticate(), this.deleteUser);
   }
 
 }

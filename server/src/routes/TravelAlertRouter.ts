@@ -5,6 +5,7 @@ import { isEmpty, isNil } from 'lodash';
 import TravelAlertController from '../controllers/TravelAlertController';
 import { HttpStatus } from '../Enum';
 import { NotFoundError } from '../errors/NotFoundError';
+import { authenticate } from '../middlewares/authenticate';
 import { validate } from '../middlewares/validate';
 import { travelAlertSchema } from '../schemas/travelAlertSchema';
 import { ITravelAlert } from '../types';
@@ -91,10 +92,10 @@ class TravelAlertRouter {
    * init router
    */
   private init(): void {
-    this.router.post('/', validate(this.travelAlertSchema), this.addTravel);
-    this.router.get('/', this.getAllTravelAlerts);
-    this.router.get('/:travelAlertId', this.getTravelAlert);
-    this.router.delete('/:travelAlertId', this.deleteTravelAlert);
+    this.router.post('/', authenticate(), validate(this.travelAlertSchema), this.addTravel);
+    this.router.get('/', authenticate(), this.getAllTravelAlerts);
+    this.router.get('/:travelAlertId', authenticate(), this.getTravelAlert);
+    this.router.delete('/:travelAlertId', authenticate(), this.deleteTravelAlert);
   }
 
 }

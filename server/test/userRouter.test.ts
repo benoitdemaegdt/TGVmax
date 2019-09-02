@@ -34,7 +34,7 @@ describe('UserRouter', () => {
 
   it('POST /api/v1/users/ 201 CREATED', async() => {
     const response: request.Response = await request(server)
-    .post('/api/v1/users')
+    .post('/api/v1/users?action=register')
     .send({
       email: 'jane.doe@yopmail.com',
       password: 'this-is-my-fake-password',
@@ -59,7 +59,7 @@ describe('UserRouter', () => {
 
   it('POST /api/v1/users/ 400 BAD REQUEST (missing property)', async() => {
     return request(server)
-    .post('/api/v1/users')
+    .post('/api/v1/users?action=register')
     .send({
       email: 'jane.doe@yopmail.com',
       password: 'this-is-my-fake-password',
@@ -73,7 +73,7 @@ describe('UserRouter', () => {
 
   it('POST /api/v1/users/ 400 BAD REQUEST (invalid format)', async() => {
     return request(server)
-    .post('/api/v1/users')
+    .post('/api/v1/users?action=register')
     .send({
       email: 'jane.doe@yopmail.com',
       password: 'this-is-my-fake-password',
@@ -88,7 +88,7 @@ describe('UserRouter', () => {
 
   it('POST /api/v1/users/ 400 BAD REQUEST (invalid pattern)', async() => {
     return request(server)
-    .post('/api/v1/users')
+    .post('/api/v1/users?action=register')
     .send({
       email: 'jane.doe@yopmail.com',
       password: 'this-is-my-fake-password',
@@ -103,7 +103,7 @@ describe('UserRouter', () => {
 
   it('POST /api/v1/users/ 422 UNPROCESSABLE ENTITY', async() => {
     return request(server)
-    .post('/api/v1/users')
+    .post('/api/v1/users?action=register')
     .send({
       email: 'jane.doe@yopmail.com',
       password: 'this-is-my-fake-password',
@@ -119,7 +119,7 @@ describe('UserRouter', () => {
 
   it('DELETE /api/v1/users/:userId 200 OK', async() => {
     const insertedDoc: request.Response = await request(server)
-    .post('/api/v1/users')
+    .post('/api/v1/users?action=register')
     .send({
       email: 'john.doe@yopmail.com',
       password: 'this-is-my-fake-password',
@@ -129,6 +129,7 @@ describe('UserRouter', () => {
 
     await request(server)
     .delete(`/api/v1/users/${insertedDoc.body._id}`)
+    .set({ Authorization: `Bearer ${insertedDoc.body.token}` })
     .expect(HttpStatus.OK);
 
     /**

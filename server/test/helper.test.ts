@@ -10,11 +10,12 @@ before(async() => {
 });
 
 /**
- * after running every test
- * shutdown db connection pool
+ * after running every test :
+ * - clean db state
+ * - disconnect db
  */
 after(async() => {
-  // await Promise.all([ Database.deleteAll('users'), Database.deleteAll('alerts') ]);
+  await Promise.all([ Database.deleteAll('users'), Database.deleteAll('alerts') ]);
 
   return Database.disconnect();
 });

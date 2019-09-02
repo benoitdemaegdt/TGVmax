@@ -2,11 +2,10 @@ import { HttpStatus } from '../Enum';
 
 /**
  * validation error
- * message: 'BAD_REQUEST'
- * code: 400
- * message: 'missing required parameter "fromTime"'
+ * code: 401
+ * message: 'invalid client credential'
  */
-export class ValidationError extends Error {
+export class CredentialError extends Error {
   /**
    * error http code
    */
@@ -14,6 +13,6 @@ export class ValidationError extends Error {
 
   constructor(message: string) {
     super(message);
-    this.code = HttpStatus.BAD_REQUEST;
+    this.code = HttpStatus.UNAUTHORIZED;
   }
 }

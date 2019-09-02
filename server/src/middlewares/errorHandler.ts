@@ -18,7 +18,6 @@ export function errorHandler(): Middleware {
     try {
       await next(); // tslint:disable-line
     } catch (err) {
-      console.log(err); // tslint:disable-line
       const error: IError = err as IError;
       ctx.status = getErrorCode(error);
       ctx.body = {

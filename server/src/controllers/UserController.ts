@@ -1,7 +1,7 @@
 import * as bcrypt from 'bcrypt';
-// import Database from '../database/db';
 import { DeleteWriteOpResultObject, InsertOneWriteOpResult, ObjectId } from 'mongodb';
 import Database from '../database/database';
+import { CredentialError } from '../errors/CredentialError';
 import { IUser } from '../types';
 
 /**
@@ -14,6 +14,7 @@ class UserController {
   constructor() {
     this.collectionUsers = 'users';
   }
+
   /**
    * Add a user to database
    */
@@ -26,6 +27,23 @@ class UserController {
     });
 
     return insertOp.insertedId.toString();
+  }
+
+  /**
+   * check user existence and credentials in database
+   */
+  public async checkUserCredentials(credentials: IUser): Promise<string> {
+    const user: IUser[] = await Database.find<IUser>(this.collectionUsers, {
+      email: credentials.email,
+    });
+    const salt: number = 8;
+    const hash: string = bcrypt.hashSync(credentials.password, salt);
+    if (user === [] || !bcrypt.compareSync(credentials.password, hash)) {
+      throw new CredentialError('invalid client credentials');
+    }
+    const userId: ObjectId = user[0]._id as ObjectId;
+
+    return userId.toString();
   }
 
   /**

@@ -36,7 +36,7 @@ describe('TravelAlertRouter', () => {
      * so I first need to insert a user in db and get its id
      */
     const res1: request.Response = await request(server)
-    .post('/api/v1/users')
+    .post('/api/v1/users?action=register')
     .send({
       email: 'jane.doe@yopmail.com',
       password: 'this-is-my-fake-password',
@@ -46,6 +46,7 @@ describe('TravelAlertRouter', () => {
 
     const res2: request.Response = await request(server)
     .post(`/api/v1/users/${res1.body._id}/travels`)
+    .set({ Authorization: `Bearer ${res1.body.token}` })
     .send({
       origin: 'FRPAR',
       destination: 'FRLYS',
@@ -71,11 +72,21 @@ describe('TravelAlertRouter', () => {
   });
 
   it('POST /api/v1/users/:userId/travels 404 NOT FOUND', async() => {
+    const res1: request.Response = await request(server)
+    .post('/api/v1/users?action=register')
+    .send({
+      email: 'johan.doe@yopmail.com',
+      password: 'this-is-my-fake-password',
+      tgvmaxNumber: 'HC000054322',
+    })
+    .expect(HttpStatus.CREATED);
+
     /**
      * this is a random :userId
      */
     return request(server)
     .post('/api/v1/users/5d6824a20aa16d3a91ef8aa5/travels')
+    .set({ Authorization: `Bearer ${res1.body.token}` })
     .send({
       origin: 'FRPAR',
       destination: 'FRLYS',
@@ -91,8 +102,18 @@ describe('TravelAlertRouter', () => {
   });
 
   it('POST /api/v1/users/:userId/travels 400 BAD REQUEST', async() => {
+    const res1: request.Response = await request(server)
+    .post('/api/v1/users?action=register')
+    .send({
+      email: 'johana.doe@yopmail.com',
+      password: 'this-is-my-fake-password',
+      tgvmaxNumber: 'HC000054323',
+    })
+    .expect(HttpStatus.CREATED);
+
     return request(server)
     .post('/api/v1/users/userId2/travels')
+    .set({ Authorization: `Bearer ${res1.body.token}` })
     .send({
       origin: 'FRPAR',
       destination: 'FRLYS',
@@ -111,11 +132,11 @@ describe('TravelAlertRouter', () => {
      * so I first need to insert a user in db and get its id
      */
     const res1: request.Response = await request(server)
-    .post('/api/v1/users')
+    .post('/api/v1/users?action=register')
     .send({
       email: 'jack.doe@yopmail.com',
       password: 'this-is-my-fake-password',
-      tgvmaxNumber: 'HC000054323',
+      tgvmaxNumber: 'HC000054329',
     })
     .expect(HttpStatus.CREATED);
 
@@ -124,6 +145,7 @@ describe('TravelAlertRouter', () => {
      */
     const res2: request.Response = await request(server)
     .post(`/api/v1/users/${res1.body._id}/travels`)
+    .set({ Authorization: `Bearer ${res1.body.token}` })
     .send({
       origin: 'FRPAR',
       destination: 'FRLYS',
@@ -137,6 +159,7 @@ describe('TravelAlertRouter', () => {
      */
     const res3: request.Response = await request(server)
     .get(`/api/v1/users/${res1.body._id}/travels/${res2.body._id}`)
+    .set({ Authorization: `Bearer ${res1.body.token}` })
     .expect(HttpStatus.OK);
 
     chai.expect(res3.body[0].origin).to.equal('FRPAR');
@@ -145,11 +168,21 @@ describe('TravelAlertRouter', () => {
   });
 
   it('GET /api/v1/users/:userId/travels/:travelAlertId 404 NOT FOUND', async() => {
+    const res1: request.Response = await request(server)
+    .post('/api/v1/users?action=register')
+    .send({
+      email: 'janone.doe@yopmail.com',
+      password: 'this-is-my-fake-password',
+      tgvmaxNumber: 'HC000054328',
+    })
+    .expect(HttpStatus.CREATED);
+
     /**
      * test route GET with random userId and travelAlertId uuid
      */
     const res: request.Response = await request(server)
     .get('/api/v1/users/5d6ad4a0ffdc444360854134/travels/5d6ad4a0ffdc444360854135')
+    .set({ Authorization: `Bearer ${res1.body.token}` })
     .expect(HttpStatus.NOT_FOUND);
 
     chai.expect(res.body).to.deep.equal([]);
@@ -161,7 +194,7 @@ describe('TravelAlertRouter', () => {
      * so I first need to insert a user in db and get its id
      */
     const res1: request.Response = await request(server)
-    .post('/api/v1/users')
+    .post('/api/v1/users?action=register')
     .send({
       email: 'jeff.doe@yopmail.com',
       password: 'this-is-my-fake-password',
@@ -174,6 +207,7 @@ describe('TravelAlertRouter', () => {
      */
     const res2: request.Response = await request(server)
     .post(`/api/v1/users/${res1.body._id}/travels`)
+    .set({ Authorization: `Bearer ${res1.body.token}` })
     .send({
       origin: 'FRPAR',
       destination: 'FRLYS',
@@ -184,6 +218,7 @@ describe('TravelAlertRouter', () => {
 
     const res3: request.Response = await request(server)
     .post(`/api/v1/users/${res1.body._id}/travels`)
+    .set({ Authorization: `Bearer ${res1.body.token}` })
     .send({
       origin: 'FRPAR',
       destination: 'FRNIT',
@@ -197,21 +232,36 @@ describe('TravelAlertRouter', () => {
      */
     const res4: request.Response = await request(server)
     .get(`/api/v1/users/${res1.body._id}/travels`)
+    .set({ Authorization: `Bearer ${res1.body.token}` })
     .expect(HttpStatus.OK);
 
     chai.expect(res4.body[0]._id).to.equal(res2.body._id);
     chai.expect(res4.body[1]._id).to.equal(res3.body._id);
   });
 
-  it('GET /api/v1/users/:userId/travels 404 NOT FOUND', async() => {
-    /**
-     * test route GET with random userId uuid
-     */
-    const res: request.Response = await request(server)
-    .get('/api/v1/users/5d6ad4a0ffdc444360854139/travels')
-    .expect(HttpStatus.NOT_FOUND);
+  it('GET /api/v1/users/:userId/travels 401 UNAUTHORIEZD', async() => {
+    const res1: request.Response = await request(server)
+    .post('/api/v1/users?action=register')
+    .send({
+      email: 'ben.doe@yopmail.com',
+      password: 'this-is-my-fake-password',
+      tgvmaxNumber: 'HC000054327',
+    })
+    .expect(HttpStatus.CREATED);
 
-    chai.expect(res.body).to.deep.equal([]);
+    /**
+     * Add a travelAlert linked to this user
+     */
+    await request(server)
+    .post(`/api/v1/users/${res1.body._id}/travels`)
+    .set({ Authorization: 'Bearer this-is-a-fake-jwt' })
+    .send({
+      origin: 'FRPAR',
+      destination: 'FRLYS',
+      fromTime: '2019-08-13T01:00:00.283185Z',
+      toTime: '2019-08-13T13:00:00.283185Z',
+    })
+    .expect(HttpStatus.UNAUTHORIZED);
   });
 
   it('DELETE /api/v1/users/:userId/travels/:travelAlertId 200 OK', async() => {
@@ -220,7 +270,7 @@ describe('TravelAlertRouter', () => {
      * so I first need to insert a user in db and get its id
      */
     const res1: request.Response = await request(server)
-    .post('/api/v1/users')
+    .post('/api/v1/users?action=register')
     .send({
       email: 'joey.doe@yopmail.com',
       password: 'this-is-my-fake-password',
@@ -233,6 +283,7 @@ describe('TravelAlertRouter', () => {
      */
     const res2: request.Response = await request(server)
     .post(`/api/v1/users/${res1.body._id}/travels`)
+    .set({ Authorization: `Bearer ${res1.body.token}` })
     .send({
       origin: 'FRPSL',
       destination: 'FRLYS',
@@ -252,6 +303,7 @@ describe('TravelAlertRouter', () => {
 
     await request(server)
     .delete(`/api/v1/users/${res1.body._id}/travels/${res2.body._id}`)
+    .set({ Authorization: `Bearer ${res1.body.token}` })
     .expect(HttpStatus.OK);
 
     /**
