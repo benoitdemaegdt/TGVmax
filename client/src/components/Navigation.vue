@@ -52,6 +52,7 @@ export default {
           { icon: 'notifications', title: 'Alertes', path: '/alert' },
           { icon: 'near_me', title: 'Destinations', path: '/destination' },
           { icon: 'email', title: 'Contact', path: '/contact' },
+          { icon: 'person', title: 'Compte', path: '/register' },
       ],
     };
   },
