@@ -34,6 +34,10 @@ export default new Vuex.Store({
     auth_error(state: IState) {
       state.status = 'error';
     },
+    logout(state: IState) {
+      state.token = '';
+      state.userId = '';
+    },
   },
   actions: {
     async register({commit}, user) {
@@ -76,6 +80,12 @@ export default new Vuex.Store({
         localStorage.removeItem('userId');
         throw new Error(err.response.data.message);
       }
+    },
+    logout({commit}) {
+      commit('logout');
+      delete axios.defaults.headers.common.Authorization;
+      localStorage.removeItem('token');
+      localStorage.removeItem('userId');
     },
   },
   getters : {

@@ -91,7 +91,7 @@
     <div v-else>
       <h1 class="display-1">Pour créer une alerte TGVmax, vous devez être connecté</h1>
       <p>Avoir un compte vous permet de recevoir par email les alertes de disponibilité des TGVmax</p>
-      <v-btn to='/register' class='primary'>Je me créé un compte</v-btn>
+      <v-btn to='/register' class='primary'>Je créé un compte</v-btn>
     </div>
   </v-container>
 </template>
@@ -167,8 +167,8 @@ export default {
   computed: {
     isLoggedIn() {
       return this.$store.getters.isLoggedIn;
-    }
-  }
+    },
+  },
 };
 </script>
 

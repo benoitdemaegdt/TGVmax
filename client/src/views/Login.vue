@@ -73,7 +73,7 @@ export default {
     clearState() {
       this.error = false;
       this.errorMessage = '';
-    }
+    },
   },
 };
 </script>

@@ -7,6 +7,7 @@ import Alert from './views/Alert.vue';
 import Destination from './views/Destination.vue';
 import Contact from './views/Contact.vue';
 import Login from './views/Login.vue';
+import Logout from './views/Logout.vue';
 import Register from './views/Register.vue';
 
 Vue.use(Router);
@@ -46,6 +47,11 @@ const router: Router = new Router({
       path: '/login',
       name: 'Connexion',
       component: Login,
+    },
+    {
+      path: '/logout',
+      name: 'Déconnexion',
+      component: Logout,
     },
   ],
 });
