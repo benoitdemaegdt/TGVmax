@@ -1,4 +1,5 @@
 import * as bcrypt from 'bcrypt';
+import { isEmpty } from 'lodash';
 import { DeleteWriteOpResultObject, InsertOneWriteOpResult, ObjectId } from 'mongodb';
 import Database from '../database/database';
 import { CredentialError } from '../errors/CredentialError';
@@ -9,6 +10,9 @@ import { IUser } from '../types';
  */
 class UserController {
 
+  /**
+   * database collection name
+   */
   private readonly collectionUsers: string;
 
   constructor() {
@@ -19,10 +23,10 @@ class UserController {
    * Add a user to database
    */
   public async addUser(user: IUser): Promise<string> {
-    const salt: number = 8;
+    const passwordSalt: number = 8;
     const insertOp: InsertOneWriteOpResult = await Database.insertOne(this.collectionUsers, {
       email: user.email,
-      password: bcrypt.hashSync(user.password, salt),
+      password: bcrypt.hashSync(user.password, passwordSalt),
       tgvmaxNumber: user.tgvmaxNumber,
     });
 
@@ -36,10 +40,8 @@ class UserController {
     const user: IUser[] = await Database.find<IUser>(this.collectionUsers, {
       email: credentials.email,
     });
-    const salt: number = 8;
-    const hash: string = bcrypt.hashSync(credentials.password, salt);
-    if (user === [] || !bcrypt.compareSync(credentials.password, hash)) {
-      throw new CredentialError('invalid client credentials');
+    if (isEmpty(user) || !bcrypt.compareSync(credentials.password, user[0].password)) {
+      throw new CredentialError();
     }
     const userId: ObjectId = user[0]._id as ObjectId;
 

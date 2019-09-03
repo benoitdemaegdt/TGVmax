@@ -11,7 +11,7 @@ export class CredentialError extends Error {
    */
   public readonly code: number;
 
-  constructor(message: string) {
+  constructor(message: string = 'email / mot de passe invalide') {
     super(message);
     this.code = HttpStatus.UNAUTHORIZED;
   }

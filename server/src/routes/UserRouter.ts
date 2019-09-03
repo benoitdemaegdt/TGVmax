@@ -48,7 +48,7 @@ class UserRouter {
         throw new ValidationError('should have required property \'tgvmaxNumber\'');
       }
       userId = await UserController.addUser(user);
-    } else if (query.action === 'signIn') {
+    } else if (query.action === 'login') {
       userId = await UserController.checkUserCredentials(user);
     } else {
       throw new ValidationError('Invalid query action');

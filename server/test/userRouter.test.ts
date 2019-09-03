@@ -32,7 +32,7 @@ describe('UserRouter', () => {
     server.close();
   });
 
-  it('POST /api/v1/users/ 201 CREATED', async() => {
+  it('POST /api/v1/users/?action=register 201 CREATED', async() => {
     const response: request.Response = await request(server)
     .post('/api/v1/users?action=register')
     .send({
@@ -44,6 +44,7 @@ describe('UserRouter', () => {
 
     chai.expect(response.header).to.ownPropertyDescriptor('location');
     chai.expect(response.body).to.ownPropertyDescriptor('_id');
+    chai.expect(response.body).to.ownPropertyDescriptor('token');
 
     const insertedDoc: IUser[] = await Database.find<IUser>('users', {
       _id: new ObjectId(response.body._id),
@@ -55,6 +56,34 @@ describe('UserRouter', () => {
       chai.expect(insertedDoc[0].tgvmaxNumber).to.equal('HC000054321');
       chai.expect(insertedDoc[0].email).to.equal('jane.doe@yopmail.com');
     }
+  });
+
+  it('POST /api/v1/users/?action=login 200 OK', async() => {
+    const response: request.Response = await request(server)
+    .post('/api/v1/users?action=login')
+    .send({
+      email: 'jane.doe@yopmail.com',
+      password: 'this-is-my-fake-password',
+    })
+    .expect(HttpStatus.OK);
+
+    chai.expect(response.header).to.ownPropertyDescriptor('location');
+    chai.expect(response.body).to.ownPropertyDescriptor('_id');
+    chai.expect(response.body).to.ownPropertyDescriptor('token');
+  });
+
+  it('POST /api/v1/users/?action=login 401 UNAUTHORIZED', async() => {
+    await request(server)
+    .post('/api/v1/users?action=login')
+    .send({
+      email: 'jane.doe@yopmail.com',
+      password: 'wrong-password',
+    })
+    .expect(HttpStatus.UNAUTHORIZED)
+    .then((response: request.Response) => {
+      chai.expect(response.body.statusCode).to.equal(HttpStatus.UNAUTHORIZED);
+      chai.expect(response.body.message).to.equal('email / mot de passe invalide');
+    });
   });
 
   it('POST /api/v1/users/ 400 BAD REQUEST (missing property)', async() => {
@@ -107,13 +136,13 @@ describe('UserRouter', () => {
     .send({
       email: 'jane.doe@yopmail.com',
       password: 'this-is-my-fake-password',
-      tgvmaxNumber: 'HC000054321',
+      tgvmaxNumber: 'HC000064321',
     })
     .expect(HttpStatus.UNPROCESSABLE_ENTITY)
     .then((response: request.Response) => {
 
       chai.expect(response.body.statusCode).to.equal(HttpStatus.UNPROCESSABLE_ENTITY);
-      chai.expect(response.body.message).to.equal('E11000 duplicate key error collection: maxplorateur.users index: email_1 dup key: { : "jane.doe@yopmail.com" }');
+      chai.expect(response.body.message).to.equal('Cet email est déjà utilisé');
     });
   });
 
