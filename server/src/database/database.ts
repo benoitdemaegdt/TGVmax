@@ -12,11 +12,15 @@ export class Database {
   private static client: MongoClient;
 
   /**
-   * connect to database
+   * connect to database & ensure indexes exist
    */
   public async connect(): Promise<void> {
     Database.client = await MongoClient.connect(Config.dbUrl, { useNewUrlParser: true, useUnifiedTopology: true });
     Database.db = Database.client.db();
+    await Promise.all([
+      Database.db.collection('users').createIndex({ email: 1 }, { unique: true }),
+      Database.db.collection('users').createIndex({ tgvmaxNumber: 1 }, { unique: true }),
+    ]);
   }
 
   /**
