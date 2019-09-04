@@ -136,7 +136,7 @@ export default {
         const body = await response.data;
         this.alerts = body;
       } catch (err) {
-        throw new Error(err);
+        console.log(err);
       }
     },
     async deleteTravelAlert(alert) {
@@ -147,7 +147,7 @@ export default {
         const index = this.alerts.indexOf(alert);
         this.alerts.splice(index, 1);
       } catch (err) {
-        throw new Error(err);
+        console.log(err);
       }
     },
     async addTravelAlert(alert) {
@@ -160,7 +160,7 @@ export default {
         alert = {...alert, _id: body._id };
         this.alerts = [...this.alerts, alert];
       } catch (err) {
-        throw new Error(err);
+        console.log(err);
       }
     },
   },

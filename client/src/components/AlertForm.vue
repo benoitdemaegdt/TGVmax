@@ -160,7 +160,7 @@ export default {
         const body = await response.data;
         this.trainStations = body;
       } catch (err) {
-        throw new Error(err);
+        console.log(err);
       }
     },
     closeForm() {
