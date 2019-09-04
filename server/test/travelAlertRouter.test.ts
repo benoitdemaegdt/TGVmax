@@ -26,7 +26,8 @@ describe('TravelAlertRouter', () => {
   /**
    * after running every test
    */
-  after(() => {
+  after(async() => {
+    await Database.disconnect();
     server.close();
   });
 

@@ -7,6 +7,7 @@ import * as serve from 'koa-static';
 import { HttpStatus } from './Enum';
 import { errorHandler } from './middlewares/errorHandler';
 import { historyApiFallback } from './middlewares/historyApiFallback';
+import StationRouter from './routes/StationRouter';
 import TravelAlertRouter from './routes/TravelAlertRouter';
 import UserRouter from './routes/UserRouter';
 
@@ -48,6 +49,8 @@ class App {
 
     this.app.use(router.routes());
     this.app.use(router.allowedMethods());
+    this.app.use(StationRouter.routes());
+    this.app.use(StationRouter.allowedMethods());
     this.app.use(TravelAlertRouter.routes());
     this.app.use(TravelAlertRouter.allowedMethods());
     this.app.use(UserRouter.routes());
