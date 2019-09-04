@@ -18,5 +18,20 @@ export default Vue.extend({
   components: {
     Navigation,
   },
+  created() {
+    /**
+     * if jwt is expired : logout
+     */
+    (this as any).$http.interceptors.response.use(undefined, (err: any) => {
+      const errorResponse: any = err.response;
+      return new Promise((resolve, reject) => {
+        if (errorResponse.status === 401 && errorResponse.config && !errorResponse.config.__isRetryRequest) {
+          this.$store.dispatch('logout');
+          this.$router.push('/');
+        }
+        throw err;
+      });
+    });
+  },
 });
 </script>
