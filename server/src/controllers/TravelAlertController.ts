@@ -1,3 +1,4 @@
+import { isEmpty } from 'lodash';
 import { DeleteWriteOpResultObject, InsertOneWriteOpResult , ObjectId } from 'mongodb';
 import Database from '../database/database';
 import { NotFoundError } from '../errors/NotFoundError';
@@ -25,7 +26,7 @@ class TravelAlertController {
     const user: IUser[] = await Database.find<IUser>('users', {
       _id: new ObjectId(userId),
     });
-    if (user.length === 0) {
+    if (isEmpty(user)) {
       throw new NotFoundError('user not found');
     }
 
@@ -37,6 +38,7 @@ class TravelAlertController {
       toTime: new Date(travelAlert.toTime),
       status: 'pending',
       lastCheck: new Date(),
+      createdAt: new Date(),
     });
 
     return insertOp.insertedId.toString();

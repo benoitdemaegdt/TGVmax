@@ -31,7 +31,7 @@ export interface IUser {
  * TravelAlert interface
  */
 export interface ITravelAlert {
-  id: string;
+  _id?: string;
   userId: string;
   origin: string;
   destination: string;
