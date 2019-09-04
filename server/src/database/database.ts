@@ -20,6 +20,7 @@ export class Database {
     await Promise.all([
       Database.db.collection('users').createIndex({ email: 1 }, { unique: true }),
       Database.db.collection('users').createIndex({ tgvmaxNumber: 1 }, { unique: true }),
+      Database.db.collection('stations').createIndex({ name: 1 }, { unique: true }),
     ]);
   }
 
