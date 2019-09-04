@@ -122,6 +122,11 @@ export default {
     this.getFrenchDate = getFrenchDate;
     this.getISOString = getISOString;
   },
+  mounted() {
+    if (this.isLoggedIn) {
+      this.getTrainStations();
+    }
+  },
   data() {
     return {
       valid: false,
@@ -132,17 +137,7 @@ export default {
       date: new Date().toISOString().substr(0, 10),
       fromTime: '',
       toTime: '',
-      trainStations: [
-        'Paris (toutes gares intramuros)',
-        'Gare Montparnasse (Paris)',
-        'Gare du Nord (Paris)',
-        'Lyon (toutes gares intramuros)',
-        'Lyon Part-Dieu',
-        'Lyon Perrache',
-        'Marseille Saint-Charles',
-        'La Rochelle Ville',
-        'Montpellier Saint-Roch',
-      ],
+      trainStations: [],
       hours: [
         '05h00', '05h30', '06h00', '06h30', '07h00', '07h30',
         '08h00', '08h30', '09h00', '09h30', '10h00', '10h30',
@@ -159,6 +154,15 @@ export default {
     },
   },
   methods: {
+    async getTrainStations() {
+      try {
+        const response = await this.$http.get('http://localhost:3001/api/v1/stations');
+        const body = await response.data;
+        this.trainStations = body;
+      } catch (err) {
+        throw new Error(err);
+      }
+    },
     closeForm() {
       this.$refs.alertForm.reset();
       this.$emit('close:dialog');
@@ -177,6 +181,9 @@ export default {
     },
   },
   computed: {
+    isLoggedIn() {
+      return this.$store.getters.isLoggedIn;
+    },
     minDate() {
       return convertToDatePickerFormat(new Date());
     },
