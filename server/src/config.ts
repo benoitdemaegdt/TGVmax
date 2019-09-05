@@ -29,11 +29,19 @@ export class Config {
    */
   public jwtDuration: string;
 
+  /**
+   * cronjob schedule
+   */
+  public schedule: string;
+
   constructor() {
     this.baseUrl = 'https://www.oui.sncf';
-    this.dbUrl = 'mongodb://localhost:27017/maxplorateur';
+    this.dbUrl = isNil(process.env.DB_URL)
+      ? `mongodb://localhost:27017/${process.env.NODE_ENV === 'test' ? 'test' : 'maxplorateur'}`
+      : process.env.DB_URL;
     this.jwtSecret = isNil(process.env.JWT_SECRET) ? 'mySecret' : process.env.JWT_SECRET;
     this.jwtDuration = isNil(process.env.JWT_DURATION) ? '365 days' : process.env.JWT_DURATION;
+    this.schedule = isNil(process.env.SCHEDULE) ? '*/30 * * * * *' : process.env.SCHEDULE;
   }
 }
 

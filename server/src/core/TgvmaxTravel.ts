@@ -1,13 +1,14 @@
-import { filter, get, map, pick } from 'lodash';
+import { filter, get, isEmpty, map, pick } from 'lodash';
 import * as moment from 'moment-timezone';
 import * as request from 'superagent';
-import Config from './config';
-import { IAvailability, ITrain } from './types';
+import Config from '../config';
+import { IAvailability, ITrain } from '../types';
 
 /**
- * This class is about fetching data from oui.sncf
+ * Tgvmax Travel
+ * Fetch Tgvmax availabilities from oui.sncf
  */
-export class Travel {
+export class TgvmaxTravel {
   /**
    * departure station
    */
@@ -47,12 +48,12 @@ export class Travel {
    * - going to train station : destination
    * - leaving between fromTime and toTime
    */
-  public async isTgvmaxAvailable(): Promise<IAvailability> {
+  public async isAvailable(): Promise<IAvailability> {
     const tgvmax: ITrain[] = await this.getTgvmax();
     /**
      * If previous call returns an empty array, there is no TGVmax available
      */
-    if (tgvmax.length === 0) {
+    if (isEmpty(tgvmax)) {
       return {
         isTgvmaxAvailable: false,
         hours: [],

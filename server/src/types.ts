@@ -42,8 +42,8 @@ export interface ITravelAlert {
     name: string;
     code: string;
   };
-  fromTime: string;
-  toTime: string;
+  fromTime: Date;
+  toTime: Date;
   status: string;
   lastCheck: string;
   createdAt: string;
