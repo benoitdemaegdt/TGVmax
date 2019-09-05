@@ -1,4 +1,4 @@
-import { Db, DeleteWriteOpResultObject, InsertOneWriteOpResult, MongoClient } from 'mongodb';
+import { Db, DeleteWriteOpResultObject, InsertOneWriteOpResult, MongoClient, UpdateWriteOpResult } from 'mongodb';
 import Config from '../config';
 import { DatabaseError } from '../errors/DatabaseError';
 
@@ -42,6 +42,18 @@ export class Database {
   public async insertOne(coll: string, doc: object): Promise<InsertOneWriteOpResult> {
     try {
       return await Database.db.collection(coll).insertOne(doc);
+    } catch (err) {
+      const error: {code: number; errmsg: string} = err as {code: number; errmsg: string};
+      throw new DatabaseError(error.code, error.errmsg);
+    }
+  }
+
+  /**
+   * updateOne
+   */
+  public async updateOne(coll: string, query: object, update: object): Promise<UpdateWriteOpResult> {
+    try {
+      return await Database.db.collection(coll).updateOne(query, update);
     } catch (err) {
       const error: {code: number; errmsg: string} = err as {code: number; errmsg: string};
       throw new DatabaseError(error.code, error.errmsg);

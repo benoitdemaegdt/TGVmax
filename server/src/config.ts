@@ -34,6 +34,16 @@ export class Config {
    */
   public schedule: string;
 
+  /**
+   * gmail user
+   */
+  public email: string;
+
+  /**
+   * gmail password
+   */
+  public password: string;
+
   constructor() {
     this.baseUrl = 'https://www.oui.sncf';
     this.dbUrl = isNil(process.env.DB_URL)
@@ -41,7 +51,9 @@ export class Config {
       : process.env.DB_URL;
     this.jwtSecret = isNil(process.env.JWT_SECRET) ? 'mySecret' : process.env.JWT_SECRET;
     this.jwtDuration = isNil(process.env.JWT_DURATION) ? '365 days' : process.env.JWT_DURATION;
-    this.schedule = isNil(process.env.SCHEDULE) ? '*/30 * * * * *' : process.env.SCHEDULE;
+    this.schedule = isNil(process.env.SCHEDULE) ? '*/10 * * * * *' : process.env.SCHEDULE;
+    this.email = isNil(process.env.EMAIL) ? 'maxplorateur@gmail.com' : process.env.EMAIL;
+    this.password = isNil(process.env.GMAIL_PASSWORD) ? 'my-password' : process.env.GMAIL_PASSWORD;
   }
 }
 

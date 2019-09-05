@@ -1,7 +1,9 @@
 import { isEmpty } from 'lodash';
+import { ObjectId } from 'mongodb';
 import * as cron from 'node-cron';
+import Notification from '../core/Notification';
 import Database from '../database/database';
-import { IAvailability, ITravelAlert } from '../types';
+import { IAvailability, ITravelAlert, IUser } from '../types';
 import { TgvmaxTravel } from './TgvmaxTravel';
 
 /**
@@ -20,30 +22,48 @@ class CronChecks {
     const MAX_DATE_LENGTH: number = 19;
 
     cron.schedule(schedule, async() =>  {
-      const travelAlerts: ITravelAlert[] = await this.fetchPendingTravelAlerts();
-      if (isEmpty(travelAlerts)) {
-        return;
-      }
-
-      /**
-       * Process each travelAlert
-       * Send notification if tgvmax seat is available
-       */
-      for (const travelAlert of travelAlerts) {
-        const tgvmaxTravel: TgvmaxTravel = new TgvmaxTravel(
-          travelAlert.origin.code,
-          travelAlert.destination.code,
-          travelAlert.fromTime.toISOString().substring(0, MAX_DATE_LENGTH),
-          travelAlert.toTime.toISOString().substring(0, MAX_DATE_LENGTH),
-          travelAlert.tgvmaxNumber,
-        );
-
-        const availability: IAvailability = await tgvmaxTravel.isAvailable();
-        if (!availability.isTgvmaxAvailable) {
-          continue;
+      try {
+        const travelAlerts: ITravelAlert[] = await this.fetchPendingTravelAlerts();
+        if (isEmpty(travelAlerts)) {
+          return;
         }
-        // TODO: send notification
-        console.log(availability.hours); // tslint:disable-line
+
+        /**
+         * Process each travelAlert
+         * Send notification if tgvmax seat is available
+         */
+        for (const travelAlert of travelAlerts) {
+          const tgvmaxTravel: TgvmaxTravel = new TgvmaxTravel(
+            travelAlert.origin.code,
+            travelAlert.destination.code,
+            travelAlert.fromTime.toISOString().substring(0, MAX_DATE_LENGTH),
+            travelAlert.toTime.toISOString().substring(0, MAX_DATE_LENGTH),
+            travelAlert.tgvmaxNumber,
+          );
+
+          const availability: IAvailability = await tgvmaxTravel.isAvailable();
+          if (!availability.isTgvmaxAvailable) {
+            continue;
+          }
+
+          /**
+           * if is TGVmax is available : send email
+           */
+          const email: string = await this.fetchEmailAddress(travelAlert.userId);
+          await Notification.sendEmail(
+            email,
+            travelAlert.origin.name,
+            travelAlert.destination.name,
+            travelAlert.fromTime,
+            availability.hours,
+          );
+          /**
+           * update travelALert status
+           */
+          await Database.updateOne('alerts', {_id: new ObjectId(travelAlert._id)}, {$set: {status: 'triggered'}});
+        }
+      } catch (err) {
+        console.log(err); // tslint:disable-line
       }
     });
   }
@@ -56,6 +76,17 @@ class CronChecks {
       status: 'pending',
       fromTime: { $gt: new Date() },
     });
+  }
+
+  /**
+   * fetch all pending travelAlert in database
+   */
+  private readonly fetchEmailAddress = async(userId: string): Promise<string> => {
+    const user: IUser[] = await  Database.find<IUser>('users', {
+      _id: new ObjectId(userId),
+    });
+
+    return user[0].email;
   }
 }
 
