@@ -33,11 +33,27 @@ export interface IUser {
 export interface ITravelAlert {
   _id?: string;
   userId: string;
-  origin: string;
-  destination: string;
+  tgvmaxNumber: string;
+  origin: {
+    name: string;
+    code: string;
+  };
+  destination: {
+    name: string;
+    code: string;
+  };
   fromTime: string;
   toTime: string;
   status: string;
   lastCheck: string;
   createdAt: string;
+}
+
+/**
+ * Train station interface
+ */
+export interface IStation {
+  _id?: string;
+  name: string;
+  code: string;
 }

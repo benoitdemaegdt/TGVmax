@@ -49,8 +49,8 @@ describe('TravelAlertRouter', () => {
     .post(`/api/v1/users/${res1.body._id}/travels`)
     .set({ Authorization: `Bearer ${res1.body.token}` })
     .send({
-      origin: 'FRPAR',
-      destination: 'FRLYS',
+      origin: {name: 'Paris (toutes gares intramuros)', code: 'FRPAR'},
+      destination: {name: 'Lyon (toutes gares intramuros)', code: 'FRLYS'},
       fromTime: '2019-08-13T01:00:00.283185Z',
       toTime: '2019-08-13T13:00:00.283185Z',
     })
@@ -67,8 +67,8 @@ describe('TravelAlertRouter', () => {
       _id: new ObjectId(res2.body._id),
     });
 
-    chai.expect(insertedDoc[0].origin).to.equal('FRPAR');
-    chai.expect(insertedDoc[0].destination).to.equal('FRLYS');
+    chai.expect(insertedDoc[0].origin).to.deep.equal({name: 'Paris (toutes gares intramuros)', code: 'FRPAR'});
+    chai.expect(insertedDoc[0].destination).to.deep.equal({name: 'Lyon (toutes gares intramuros)', code: 'FRLYS'});
     chai.expect(insertedDoc[0].status).to.equal('pending');
     chai.expect(insertedDoc[0].tgvmaxNumber).to.equal('HC000054321');
   });
@@ -90,8 +90,8 @@ describe('TravelAlertRouter', () => {
     .post('/api/v1/users/5d6824a20aa16d3a91ef8aa5/travels')
     .set({ Authorization: `Bearer ${res1.body.token}` })
     .send({
-      origin: 'FRPAR',
-      destination: 'FRLYS',
+      origin: {name: 'Paris (toutes gares intramuros)', code: 'FRPAR'},
+      destination: {name: 'Lyon (toutes gares intramuros)', code: 'FRLYS'},
       fromTime: '2019-09-13T01:00:00.283185Z',
       toTime: '2019-09-13T13:00:00.283185Z',
     })
@@ -117,8 +117,8 @@ describe('TravelAlertRouter', () => {
     .post('/api/v1/users/userId2/travels')
     .set({ Authorization: `Bearer ${res1.body.token}` })
     .send({
-      origin: 'FRPAR',
-      destination: 'FRLYS',
+      origin: {name: 'Paris (toutes gares intramuros)', code: 'FRPAR'},
+      destination: {name: 'Lyon (toutes gares intramuros)', code: 'FRLYS'},
       fromTime: '2019-08-13T01:00:00.283185Z',
     })
     .expect(HttpStatus.BAD_REQUEST)
@@ -149,8 +149,8 @@ describe('TravelAlertRouter', () => {
     .post(`/api/v1/users/${res1.body._id}/travels`)
     .set({ Authorization: `Bearer ${res1.body.token}` })
     .send({
-      origin: 'FRPAR',
-      destination: 'FRLYS',
+      origin: {name: 'Paris (toutes gares intramuros)', code: 'FRPAR'},
+      destination: {name: 'Lyon (toutes gares intramuros)', code: 'FRLYS'},
       fromTime: '2019-08-13T01:00:00.283185Z',
       toTime: '2019-08-13T13:00:00.283185Z',
     })
@@ -164,8 +164,8 @@ describe('TravelAlertRouter', () => {
     .set({ Authorization: `Bearer ${res1.body.token}` })
     .expect(HttpStatus.OK);
 
-    chai.expect(res3.body[0].origin).to.equal('FRPAR');
-    chai.expect(res3.body[0].destination).to.equal('FRLYS');
+    chai.expect(res3.body[0].origin).to.deep.equal({name: 'Paris (toutes gares intramuros)', code: 'FRPAR'});
+    chai.expect(res3.body[0].destination).to.deep.equal({name: 'Lyon (toutes gares intramuros)', code: 'FRLYS'});
     chai.expect(res3.body[0].status).to.equal('pending');
     chai.expect(res3.body[0].tgvmaxNumber).to.equal('HC000054329');
   });
@@ -212,8 +212,8 @@ describe('TravelAlertRouter', () => {
     .post(`/api/v1/users/${res1.body._id}/travels`)
     .set({ Authorization: `Bearer ${res1.body.token}` })
     .send({
-      origin: 'FRPAR',
-      destination: 'FRLYS',
+      origin: {name: 'Paris (toutes gares intramuros)', code: 'FRPAR'},
+      destination: {name: 'Lyon (toutes gares intramuros)', code: 'FRLYS'},
       fromTime: '2019-08-13T01:00:00.283185Z',
       toTime: '2019-08-13T13:00:00.283185Z',
     })
@@ -223,8 +223,8 @@ describe('TravelAlertRouter', () => {
     .post(`/api/v1/users/${res1.body._id}/travels`)
     .set({ Authorization: `Bearer ${res1.body.token}` })
     .send({
-      origin: 'FRPAR',
-      destination: 'FRNIT',
+      origin: {name: 'Paris (toutes gares intramuros)', code: 'FRPAR'},
+      destination: {name: 'Niort', code: 'FRNIT'},
       fromTime: '2019-08-13T01:00:00.283185Z',
       toTime: '2019-08-13T13:00:00.283185Z',
     })
@@ -259,8 +259,8 @@ describe('TravelAlertRouter', () => {
     .post(`/api/v1/users/${res1.body._id}/travels`)
     .set({ Authorization: 'Bearer this-is-a-fake-jwt' })
     .send({
-      origin: 'FRPAR',
-      destination: 'FRLYS',
+      origin: {name: 'Paris (toutes gares intramuros)', code: 'FRPAR'},
+      destination: {name: 'Lyon (toutes gares intramuros)', code: 'FRLYS'},
       fromTime: '2019-08-13T01:00:00.283185Z',
       toTime: '2019-08-13T13:00:00.283185Z',
     })
@@ -288,8 +288,8 @@ describe('TravelAlertRouter', () => {
     .post(`/api/v1/users/${res1.body._id}/travels`)
     .set({ Authorization: `Bearer ${res1.body.token}` })
     .send({
-      origin: 'FRPSL',
-      destination: 'FRLYS',
+      origin: {name: 'Paris (toutes gares intramuros)', code: 'FRPAR'},
+      destination: {name: 'Lyon (toutes gares intramuros)', code: 'FRLYS'},
       fromTime: '2019-08-13T01:00:00.283185Z',
       toTime: '2019-08-13T13:00:00.283185Z',
     })
@@ -302,7 +302,7 @@ describe('TravelAlertRouter', () => {
       _id: new ObjectId(res2.body._id),
     });
 
-    chai.expect(doc1[0].origin).to.equal('FRPSL');
+    chai.expect(doc1[0].origin).to.deep.equal({name: 'Paris (toutes gares intramuros)', code: 'FRPAR'});
 
     await request(server)
     .delete(`/api/v1/users/${res1.body._id}/travels/${res2.body._id}`)
