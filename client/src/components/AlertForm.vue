@@ -16,6 +16,8 @@
                 label='Gare de départ'
                 hint='ex: Paris (toutes gares intramuros)'
                 :items='trainStations'
+                item-text='name'
+                return-object
                 :rules="[v => !!v || 'Champ obligatoire']"
                 :error-messages='sameTrainStationError'
                 no-data-text='Gare non disponible'
@@ -32,6 +34,8 @@
                 label="Gare d'arrivée"
                 hint='ex: Lyon (toutes gares intramuros)'
                 :items='trainStations'
+                item-text='name'
+                return-object
                 :rules="[v => !!v || 'Champ obligatoire']"
                 no-data-text='Gare non disponible'
                 prepend-icon='place'

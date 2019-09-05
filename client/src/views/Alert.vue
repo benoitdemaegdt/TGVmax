@@ -24,6 +24,15 @@
           </v-toolbar>
         </template>
 
+        <!-- display train station name -->
+        <template v-slot:item.origin='{ item }'>
+          {{item.origin.name}}
+        </template>
+
+        <template v-slot:item.destination='{ item }'>
+          {{item.destination.name}}
+        </template>
+
         <!-- human readable dates -->
         <template v-slot:item.date='{ item }'>
           {{getFrenchDate(item.fromTime)}}
@@ -62,7 +71,7 @@
       </p>
       <v-card v-for='alert of alerts' :key='alert.id' class='hidden-md-and-up elevation-6 mx-auto mb-5' max-width='90%'>
         <v-card-title class='primary white--text'>
-          {{alert.origin}}<br>{{alert.destination}}
+          {{alert.origin.name}}<br>{{alert.destination.name}}
         </v-card-title>
         <v-card-text class='primary white--text pt-3'>
           {{getFrenchDate(alert.fromTime)}} : {{getHour(alert.fromTime)}} - {{getHour(alert.toTime)}}
