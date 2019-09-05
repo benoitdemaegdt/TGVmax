@@ -62,7 +62,7 @@ describe('TravelAlertRouter', () => {
     /**
      * check that travel alert is actually on db
      */
-    interface t {origin: string; destination: string; status: string; }
+    interface t {origin: string; destination: string; status: string; tgvmaxNumber: string; }
     const insertedDoc: t[] = await Database.find<t>('alerts', {
       _id: new ObjectId(res2.body._id),
     });
@@ -70,6 +70,7 @@ describe('TravelAlertRouter', () => {
     chai.expect(insertedDoc[0].origin).to.equal('FRPAR');
     chai.expect(insertedDoc[0].destination).to.equal('FRLYS');
     chai.expect(insertedDoc[0].status).to.equal('pending');
+    chai.expect(insertedDoc[0].tgvmaxNumber).to.equal('HC000054321');
   });
 
   it('POST /api/v1/users/:userId/travels 404 NOT FOUND', async() => {
@@ -166,6 +167,7 @@ describe('TravelAlertRouter', () => {
     chai.expect(res3.body[0].origin).to.equal('FRPAR');
     chai.expect(res3.body[0].destination).to.equal('FRLYS');
     chai.expect(res3.body[0].status).to.equal('pending');
+    chai.expect(res3.body[0].tgvmaxNumber).to.equal('HC000054329');
   });
 
   it('GET /api/v1/users/:userId/travels/:travelAlertId 404 NOT FOUND', async() => {

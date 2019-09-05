@@ -32,6 +32,7 @@ class TravelAlertController {
 
     const insertOp: InsertOneWriteOpResult = await Database.insertOne(this.collectionAlerts, {
       userId: new ObjectId(userId),
+      tgvmaxNumber: user[0].tgvmaxNumber,
       origin: travelAlert.origin,
       destination: travelAlert.destination,
       fromTime: new Date(travelAlert.fromTime),
