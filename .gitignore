@@ -19,3 +19,6 @@ coverage
 
 # frontend build
 client/dist
+
+# server build
+server/dist
