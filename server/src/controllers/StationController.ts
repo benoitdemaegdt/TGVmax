@@ -16,12 +16,8 @@ class StationController {
    * fetch train stations stored in database
    * TODO: autocomplete feature with text index
    */
-  public async getStations(): Promise<string[]> {
-    const stations: IStation[] = await Database.find<IStation>(this.collectionStations, {});
-
-    return stations.map((station: IStation) => {
-      return station.name;
-    });
+  public async getStations(): Promise<IStation[]> {
+    return Database.find<IStation>(this.collectionStations, {}, {_id: 0});
   }
 }
 

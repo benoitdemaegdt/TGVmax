@@ -6,6 +6,7 @@ import App from '../src/app';
 import Config from '../src/config';
 import Database from '../src/database/database';
 import { HttpStatus } from '../src/Enum';
+import { IStation } from '../src/types';
 
 describe('StationRouter', () => {
   /**
@@ -53,9 +54,23 @@ describe('StationRouter', () => {
     .set({ Authorization: `Bearer ${res1.body.token}` })
     .expect(HttpStatus.OK);
 
-    chai.expect(res2.body.includes('Paris (toutes gares intramuros)')).to.equal(true);
-    chai.expect(res2.body.includes('Lyon (toutes gares intramuros)')).to.equal(true);
-    chai.expect(res2.body.includes('Marseille (toutes gares)')).to.equal(true);
+    chai.expect(res2.body.length).to.equal(3);
+
+    const names: string[] = res2.body.map((station: IStation) => {
+      return station.name;
+    });
+
+    chai.expect(names.includes('Lyon (toutes gares intramuros)')).to.equal(true);
+    chai.expect(names.includes('Marseille (toutes gares)')).to.equal(true);
+    chai.expect(names.includes('Paris (toutes gares intramuros)')).to.equal(true);
+
+    const codes: string[] = res2.body.map((station: IStation) => {
+      return station.code;
+    });
+
+    chai.expect(codes.includes('FRPAR')).to.equal(true);
+    chai.expect(codes.includes('FRLYS')).to.equal(true);
+    chai.expect(codes.includes('FRMRS')).to.equal(true);
   });
 
   it('GET /api/v1/stations 401 UNAUTHORIZED', async() => {

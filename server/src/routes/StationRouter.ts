@@ -3,6 +3,7 @@ import * as Router from 'koa-router';
 import StationController from '../controllers/StationController';
 import { HttpStatus } from '../Enum';
 import { authenticate } from '../middlewares/authenticate';
+import { IStation } from '../types';
 
 /**
  * Autocomplete router for train stations
@@ -23,7 +24,7 @@ class StationRouter {
    * Add a travel to database
    */
   private readonly getStations = async(ctx: Context): Promise<void> => {
-    const stations: string[] = await StationController.getStations();
+    const stations: IStation[] = await StationController.getStations();
     ctx.body = stations;
     ctx.status = HttpStatus.OK;
   }

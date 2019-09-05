@@ -27,9 +27,9 @@ export class Database {
   /**
    * find
    */
-  public async find<T>(coll: string, query: object): Promise<T[]> {
+  public async find<T>(coll: string, query: object, projection: object = {}): Promise<T[]> {
     try {
-      return await Database.db.collection(coll).find(query).toArray();
+      return await Database.db.collection(coll).find(query).project(projection).toArray();
     } catch (err) {
       const error: {code: number; errmsg: string} = err as {code: number; errmsg: string};
       throw new DatabaseError(error.code, error.errmsg);
