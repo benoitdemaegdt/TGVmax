@@ -1,4 +1,4 @@
-import * as bcrypt from 'bcrypt';
+import * as bcrypt from 'bcryptjs';
 import { isEmpty } from 'lodash';
 import { DeleteWriteOpResultObject, InsertOneWriteOpResult, ObjectId } from 'mongodb';
 import Database from '../database/database';
@@ -23,10 +23,10 @@ class UserController {
    * Add a user to database
    */
   public async addUser(user: IUser): Promise<string> {
-    const passwordSalt: number = 8;
+    const SALT: number = 8;
     const insertOp: InsertOneWriteOpResult = await Database.insertOne(this.collectionUsers, {
       email: user.email,
-      password: bcrypt.hashSync(user.password, passwordSalt),
+      password: bcrypt.hashSync(user.password, bcrypt.genSaltSync(SALT)),
       tgvmaxNumber: user.tgvmaxNumber,
     });
 
