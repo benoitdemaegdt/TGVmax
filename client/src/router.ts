@@ -1,6 +1,5 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import store from './store';
 
 import Home from './views/Home.vue';
 import Alert from './views/Alert.vue';
@@ -9,6 +8,7 @@ import Contact from './views/Contact.vue';
 import Login from './views/Login.vue';
 import Logout from './views/Logout.vue';
 import Register from './views/Register.vue';
+import NotFound from './components/NotFound.vue';
 
 Vue.use(Router);
 
@@ -52,6 +52,10 @@ const router: Router = new Router({
       path: '/logout',
       name: 'Déconnexion',
       component: Logout,
+    },
+    {
+      path: '*',
+      component: NotFound,
     },
   ],
 });
