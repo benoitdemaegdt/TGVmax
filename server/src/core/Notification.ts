@@ -1,6 +1,6 @@
 import * as moment from 'moment-timezone';
 import * as nodemailer from 'nodemailer';
-import Config from '../config';
+import Config from '../Config';
 
 /**
  * Send an email when a TGVmax seat is available

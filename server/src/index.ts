@@ -1,5 +1,5 @@
-import App from './app';
-import Config from './config';
+import App from './App';
+import Config from './Config';
 import CronChecks from './core/CronChecks';
 import Database from './database/database';
 

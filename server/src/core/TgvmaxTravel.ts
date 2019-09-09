@@ -1,7 +1,7 @@
 import { filter, get, isEmpty, map, pick } from 'lodash';
 import * as moment from 'moment-timezone';
 import * as request from 'superagent';
-import Config from '../config';
+import Config from '../Config';
 import { IAvailability, ITrain } from '../types';
 
 /**

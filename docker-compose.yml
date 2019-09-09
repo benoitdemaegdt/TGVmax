@@ -11,10 +11,9 @@ services:
     server:
         container_name: maxplorateur-server
         restart: always
-        environment:
-            - NODE_ENV=production
-            - SCHEDULE=*/30 * * * *
-            - DB_URL=mongodb://host.docker.internal:27017/maxplorateur
         build: ./server
+        environment:
+            - DB_URL=${DB_URL}
+            - FRONT_PORT=${FRONT_PORT}
         ports:
             - 3000:3000

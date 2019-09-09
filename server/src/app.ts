@@ -4,6 +4,7 @@ import * as bodyParser from 'koa-bodyparser';
 import * as helmet from 'koa-helmet';
 import * as logger from 'koa-logger';
 import * as Router from 'koa-router';
+import Config from './Config';
 import { HttpStatus } from './Enum';
 import { errorHandler } from './middlewares/errorHandler';
 import StationRouter from './routes/StationRouter';
@@ -32,7 +33,7 @@ class App {
     }
     this.app.use(errorHandler());
     this.app.use(cors({
-      origin: 'http://localhost',
+      origin: `http://localhost${Config.frontPort === '80' ? '' : Config.frontPort}`,
     }));
     this.app.use(helmet());
     this.app.use(bodyParser());

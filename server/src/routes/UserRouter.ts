@@ -3,7 +3,7 @@ import * as jwt from 'jsonwebtoken';
 import { Context } from 'koa';
 import * as Router from 'koa-router';
 import { isNil } from 'lodash';
-import Config from '../config';
+import Config from '../Config';
 import UserController from '../controllers/UserController';
 import { HttpStatus } from '../Enum';
 import { ValidationError } from '../errors/ValidationError';

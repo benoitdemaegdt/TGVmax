@@ -1,4 +1,4 @@
-import { isNil } from 'lodash';
+import * as config from 'config';
 
 /**
  * Config class
@@ -44,16 +44,21 @@ export class Config {
    */
   public password: string;
 
+  /**
+   * vuejs port
+   */
+  public frontPort: string;
+
   constructor() {
+    /* tslint:disable */
     this.baseUrl = 'https://www.oui.sncf';
-    this.dbUrl = isNil(process.env.DB_URL)
-      ? `mongodb://localhost:27017/${process.env.NODE_ENV === 'test' ? 'test' : 'maxplorateur'}`
-      : process.env.DB_URL;
-    this.jwtSecret = isNil(process.env.JWT_SECRET) ? 'mySecret' : process.env.JWT_SECRET;
-    this.jwtDuration = isNil(process.env.JWT_DURATION) ? '365 days' : process.env.JWT_DURATION;
-    this.schedule = isNil(process.env.SCHEDULE) ? '*/10 * * * * *' : process.env.SCHEDULE;
-    this.email = isNil(process.env.EMAIL) ? 'maxplorateur@gmail.com' : process.env.EMAIL;
-    this.password = isNil(process.env.GMAIL_PASSWORD) ? 'my-password' : process.env.GMAIL_PASSWORD;
+    this.dbUrl = process.env.DB_URL || config.get('dbUrl');
+    this.jwtSecret = process.env.JWT_SECRET || config.get('jwtSecret');
+    this.jwtDuration = process.env.JWT_DURATION || config.get('jwtDuration');
+    this.schedule = process.env.SCHEDULE || config.get('schedule');
+    this.email = process.env.EMAIL || config.get('email');
+    this.password = process.env.PASSWORD || config.get('password');
+    this.frontPort = process.env.FRONT_PORT || config.get('frontPort');
   }
 }
 

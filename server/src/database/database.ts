@@ -1,5 +1,5 @@
 import { Db, DeleteWriteOpResultObject, InsertOneWriteOpResult, MongoClient, UpdateWriteOpResult } from 'mongodb';
-import Config from '../config';
+import Config from '../Config';
 import { DatabaseError } from '../errors/DatabaseError';
 
 /**

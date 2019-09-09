@@ -1,7 +1,7 @@
 import * as jwt from 'jsonwebtoken';
 import { Context, Middleware } from 'koa';
 import { isNil } from 'lodash';
-import Config from '../config';
+import Config from '../Config';
 import { CredentialError } from '../errors/CredentialError';
 
 /**
