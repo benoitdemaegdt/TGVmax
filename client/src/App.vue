@@ -25,7 +25,11 @@ export default Vue.extend({
     (this as any).$http.interceptors.response.use(undefined, (err: any) => {
       const errorResponse: any = err.response;
       return new Promise((resolve, reject) => {
-        if (errorResponse.status === 401 && errorResponse.config && !errorResponse.config.__isRetryRequest) {
+        if (errorResponse.status === 401
+          && errorResponse.config
+          && !errorResponse.config.__isRetryRequest
+          && errorResponse.data
+          && errorResponse.data.message === 'jwt expired') {
           this.$store.dispatch('logout');
           this.$router.push('/');
         }

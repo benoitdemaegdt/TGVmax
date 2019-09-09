@@ -21,7 +21,8 @@ export function authenticate(): Middleware {
     try {
       jwt.verify(token, Config.jwtSecret);
     } catch (err) {
-      throw new CredentialError('invalid credentials');
+      const error: {message: string} = err as {message: string};
+      throw new CredentialError(error.message);
     }
     await next(); // tslint:disable-line
   };
