@@ -1,0 +1,20 @@
+
+version: '3'
+services:
+    client:
+        container_name: maxplorateur-client
+        build: ./client
+        ports:
+            - 80:80
+        links:
+            - server
+    server:
+        container_name: maxplorateur-server
+        restart: always
+        environment:
+            - NODE_ENV=production
+            - SCHEDULE=*/30 * * * *
+            - DB_URL=mongodb://host.docker.internal:27017/maxplorateur
+        build: ./server
+        ports:
+            - 3000:3000
