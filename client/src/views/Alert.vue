@@ -141,7 +141,7 @@ export default {
   methods: {
     async getTravelAlerts() {
       try {
-        const response = await this.$http.get(`http://localhost:3001/api/v1/users/${this.$store.state.userId}/travels`);
+        const response = await this.$http.get(`http://localhost:3000/api/v1/users/${this.$store.state.userId}/travels`);
         const body = await response.data;
         this.alerts = body;
       } catch (err) {
@@ -152,7 +152,7 @@ export default {
       try {
         const _id = alert._id;
         const response =
-          await this.$http.delete(`http://localhost:3001/api/v1/users/${this.$store.state.userId}/travels/${_id}`);
+          await this.$http.delete(`http://localhost:3000/api/v1/users/${this.$store.state.userId}/travels/${_id}`);
         const index = this.alerts.indexOf(alert);
         this.alerts.splice(index, 1);
       } catch (err) {
@@ -162,7 +162,7 @@ export default {
     async addTravelAlert(alert) {
       try {
         const response =
-          await this.$http.post(`http://localhost:3001/api/v1/users/${this.$store.state.userId}/travels`, {
+          await this.$http.post(`http://localhost:3000/api/v1/users/${this.$store.state.userId}/travels`, {
           ...alert,
         });
         const body = await response.data;

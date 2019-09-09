@@ -7,7 +7,7 @@ export class Config {
   /**
    * App port
    */
-  public port: number = 3001;
+  public port: number = 3000;
 
   /**
    * oui.sncf base url

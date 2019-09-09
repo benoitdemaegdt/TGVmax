@@ -247,4 +247,4 @@ npm install
 npm run build
 ```
 
-7/ Go to `http://localhost:3001/` and start using the application
+7/ Go to `http://localhost:3000/` and start using the application

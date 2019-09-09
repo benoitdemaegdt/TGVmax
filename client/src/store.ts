@@ -43,7 +43,7 @@ export default new Vuex.Store({
     async register({commit}, user) {
       commit('auth_request');
       try {
-        const response = await axios.post(`http://localhost:3001/api/v1/users?action=register`, {
+        const response = await axios.post(`http://localhost:3000/api/v1/users?action=register`, {
           ...user,
         });
         const token = response.data.token;
@@ -65,7 +65,7 @@ export default new Vuex.Store({
         /**
          * user is not the same type than above (no tgvmaxNumber here)
          */
-        const response = await axios.post(`http://localhost:3001/api/v1/users?action=login`, {
+        const response = await axios.post(`http://localhost:3000/api/v1/users?action=login`, {
           ...user,
         });
         const token = response.data.token;
