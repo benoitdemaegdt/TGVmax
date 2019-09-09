@@ -1,6 +1,7 @@
 import { isEmpty } from 'lodash';
 import { ObjectId } from 'mongodb';
 import * as cron from 'node-cron';
+import Config from '../Config';
 import Notification from '../core/Notification';
 import Database from '../database/database';
 import { IAvailability, ITravelAlert, IUser } from '../types';
@@ -43,6 +44,7 @@ class CronChecks {
 
           const availability: IAvailability = await tgvmaxTravel.isAvailable();
           if (!availability.isTgvmaxAvailable) {
+            await this.delay(Config.delay);
             continue;
           }
 
@@ -61,6 +63,7 @@ class CronChecks {
            * update travelALert status
            */
           await Database.updateOne('alerts', {_id: new ObjectId(travelAlert._id)}, {$set: {status: 'triggered'}});
+          await this.delay(Config.delay);
         }
       } catch (err) {
         console.log(err); // tslint:disable-line
@@ -87,6 +90,15 @@ class CronChecks {
     });
 
     return user[0].email;
+  }
+
+  /**
+   * delay function
+   */
+  private readonly delay = async(ms: number): Promise<void> => {
+    type IResolve = (value?: void | PromiseLike<void> | undefined) => void;
+
+    return new Promise((resolve: IResolve): number => setTimeout(resolve, ms));
   }
 }
 

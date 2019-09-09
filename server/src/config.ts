@@ -49,6 +49,11 @@ export class Config {
    */
   public frontPort: string;
 
+  /**
+   * minimum delay between calls to oui.sncf
+   */
+  public delay: number;
+
   constructor() {
     /* tslint:disable */
     this.baseUrl = 'https://www.oui.sncf';
@@ -59,6 +64,7 @@ export class Config {
     this.email = process.env.EMAIL || config.get('email');
     this.password = process.env.PASSWORD || config.get('password');
     this.frontPort = process.env.FRONT_PORT || config.get('frontPort');
+    this.delay = Number(process.env.DELAY) || config.get('delay');
   }
 }
 
