@@ -56,7 +56,9 @@ export default new Vuex.Store({
         commit('auth_error');
         localStorage.removeItem('token');
         localStorage.removeItem('userId');
-        throw new Error(err.response.data.message);
+        throw new Error(err.response && err.response.data
+          ? err.response.data.message
+          : 'Erreur réseau. Veuillez réessayer plus tard');
       }
     },
     async login({commit}, user) {
@@ -78,7 +80,9 @@ export default new Vuex.Store({
         commit('auth_error');
         localStorage.removeItem('token');
         localStorage.removeItem('userId');
-        throw new Error(err.response.data.message);
+        throw new Error(err.response && err.response.data
+          ? err.response.data.message
+          : 'Erreur réseau. Veuillez réessayer plus tard');
       }
     },
     logout({commit}) {
