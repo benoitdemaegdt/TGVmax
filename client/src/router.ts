@@ -21,7 +21,7 @@ const router: Router = new Router({
       component: Home,
     },
     {
-      path: '/alert',
+      path: '/alertes',
       name: 'Alertes',
       component: Alert,
       meta: {
@@ -29,7 +29,7 @@ const router: Router = new Router({
       },
     },
     {
-      path: '/destination',
+      path: '/destinations',
       name: 'Destinations',
       component: Destination,
     },
@@ -39,17 +39,17 @@ const router: Router = new Router({
       component: Contact,
     },
     {
-      path: '/register',
+      path: '/inscription',
       name: 'Création d\'un compte',
       component: Register,
     },
     {
-      path: '/login',
+      path: '/connexion',
       name: 'Connexion',
       component: Login,
     },
     {
-      path: '/logout',
+      path: '/deconnexion',
       name: 'Déconnexion',
       component: Logout,
     },

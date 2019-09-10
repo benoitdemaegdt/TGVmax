@@ -13,10 +13,10 @@
         <v-btn v-for='item in navigation.slice(1)' :key='item.title' :to='item.path' text>
           {{ item.title }}
         </v-btn>
-        <v-btn v-if='!this.isLoggedIn' key='Connexion' to='/register' text>
+        <v-btn v-if='!this.isLoggedIn' key='Connexion' to='/inscription' text>
           Connexion
         </v-btn>
-        <v-btn v-else key='Déconnexion' to='/logout' text>
+        <v-btn v-else key='Déconnexion' to='/deconnexion' text>
           Déconnexion
         </v-btn>
       </v-toolbar-items>
@@ -40,7 +40,7 @@
             <v-list-item-title>{{ item.title }}</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-        <v-list-item v-if='!this.isLoggedIn' key='Connexion' to='/register' link>
+        <v-list-item v-if='!this.isLoggedIn' key='Connexion' to='/inscription' link>
           <v-list-item-icon>
             <v-icon>person</v-icon>
           </v-list-item-icon>
@@ -51,7 +51,7 @@
       </v-list>
       <template v-if='isLoggedIn' v-slot:append>
         <div class='pa-2'>
-          <v-btn to='/logout' block color='#E0E0E0'>Déconnexion</v-btn>
+          <v-btn to='/deconnexion' block color='#E0E0E0'>Déconnexion</v-btn>
         </div>
       </template>
     </v-navigation-drawer>
@@ -68,8 +68,8 @@ export default {
       drawer: false,
       navigation: [
           { icon: 'home', title: 'Accueil', path: '/' },
-          { icon: 'notifications', title: 'Alertes', path: '/alert' },
-          { icon: 'near_me', title: 'Destinations', path: '/destination' },
+          { icon: 'notifications', title: 'Alertes', path: '/alertes' },
+          { icon: 'near_me', title: 'Destinations', path: '/destinations' },
           { icon: 'email', title: 'Contact', path: '/contact' },
       ],
     };
