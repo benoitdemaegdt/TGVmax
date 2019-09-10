@@ -22,7 +22,7 @@
   },
   "homepage": "https://github.com/benoitdemaegdt/TGVmax#readme",
   "dependencies": {
-    "@koa/cors": "^2.2.3",
+    "@koa/cors": "^3.0.0",
     "ajv": "^6.10.2",
     "bcryptjs": "^2.4.3",
     "config": "^3.2.2",
