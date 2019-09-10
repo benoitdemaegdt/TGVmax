@@ -1,10 +1,22 @@
 export const travelAlertSchema: object = {
   properties: {
     origin: {
-      type: 'string',
+      type: 'object',
+      properties: {
+        name: { type: 'string' },
+        code: { type: 'string' },
+      },
+      required: ['name', 'code'],
+      additionalProperties: false,
     },
     destination: {
-      type: 'string',
+      type: 'object',
+      properties: {
+        name: { type: 'string' },
+        code: { type: 'string' },
+      },
+      required: ['name', 'code'],
+      additionalProperties: false,
     },
     fromTime: {
       type: 'string',
@@ -16,4 +28,5 @@ export const travelAlertSchema: object = {
     },
   },
   required: ['origin', 'destination', 'fromTime', 'toTime'],
+  additionalProperties: false,
 };

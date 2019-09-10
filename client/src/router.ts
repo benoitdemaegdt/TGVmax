@@ -5,10 +5,14 @@ import Home from './views/Home.vue';
 import Alert from './views/Alert.vue';
 import Destination from './views/Destination.vue';
 import Contact from './views/Contact.vue';
+import Login from './views/Login.vue';
+import Logout from './views/Logout.vue';
+import Register from './views/Register.vue';
+import NotFound from './components/NotFound.vue';
 
 Vue.use(Router);
 
-export default new Router({
+const router: Router = new Router({
   mode: 'history',
   routes: [
     {
@@ -18,12 +22,15 @@ export default new Router({
     },
     {
       path: '/alert',
-      name: 'Alerte',
+      name: 'Alertes',
       component: Alert,
+      meta: {
+        private: true,
+      },
     },
     {
       path: '/destination',
-      name: 'Destination',
+      name: 'Destinations',
       component: Destination,
     },
     {
@@ -31,5 +38,26 @@ export default new Router({
       name: 'Contact',
       component: Contact,
     },
+    {
+      path: '/register',
+      name: 'Création d\'un compte',
+      component: Register,
+    },
+    {
+      path: '/login',
+      name: 'Connexion',
+      component: Login,
+    },
+    {
+      path: '/logout',
+      name: 'Déconnexion',
+      component: Logout,
+    },
+    {
+      path: '*',
+      component: NotFound,
+    },
   ],
 });
+
+export default router;

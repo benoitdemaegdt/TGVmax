@@ -1,10 +1,13 @@
+import * as cors from '@koa/cors';
 import * as koa from 'koa';
 import * as bodyParser from 'koa-bodyparser';
 import * as helmet from 'koa-helmet';
 import * as logger from 'koa-logger';
 import * as Router from 'koa-router';
+import Config from './Config';
 import { HttpStatus } from './Enum';
 import { errorHandler } from './middlewares/errorHandler';
+import StationRouter from './routes/StationRouter';
 import TravelAlertRouter from './routes/TravelAlertRouter';
 import UserRouter from './routes/UserRouter';
 
@@ -29,6 +32,9 @@ class App {
       this.app.use(logger());
     }
     this.app.use(errorHandler());
+    this.app.use(cors({
+      origin: `http://localhost${Config.frontPort === '80' ? '' : Config.frontPort}`,
+    }));
     this.app.use(helmet());
     this.app.use(bodyParser());
   }
@@ -44,6 +50,8 @@ class App {
 
     this.app.use(router.routes());
     this.app.use(router.allowedMethods());
+    this.app.use(StationRouter.routes());
+    this.app.use(StationRouter.allowedMethods());
     this.app.use(TravelAlertRouter.routes());
     this.app.use(TravelAlertRouter.allowedMethods());
     this.app.use(UserRouter.routes());

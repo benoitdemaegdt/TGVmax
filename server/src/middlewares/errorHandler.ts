@@ -4,7 +4,7 @@ import { HttpStatus } from '../Enum';
 
 interface IError {
   code: number;
-  detail: string;
+  message: string;
 }
 
 /**
@@ -22,7 +22,7 @@ export function errorHandler(): Middleware {
       ctx.status = getErrorCode(error);
       ctx.body = {
         statusCode: getErrorCode(error),
-        detail: getErrorDetail(error),
+        message: getErrorMessage(error),
       };
     }
   };
@@ -38,6 +38,6 @@ function getErrorCode(err: IError): number {
 /**
  * get error detail
  */
-function getErrorDetail(err: IError): string {
-  return !isNil(err.detail) ? err.detail : 'An unexpected error occured.';
+function getErrorMessage(err: IError): string {
+  return !isNil(err.message) ? err.message : 'An unexpected error occured.';
 }

@@ -3,6 +3,7 @@ export const userSchema: object = {
     email: {
       type: 'string',
       minLength: 5,
+      format: 'email',
     },
     password: {
       type: 'string',
@@ -12,8 +13,9 @@ export const userSchema: object = {
       type: 'string',
       minLength: 11,
       maxLength: 11,
+      pattern: '^HC',
     },
   },
-  required: ['email', 'password', 'tgvmaxNumber'],
+  required: ['email', 'password'],
   additionalProperties: false,
 };

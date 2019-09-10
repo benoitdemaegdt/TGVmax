@@ -1,3 +1,5 @@
+import { ObjectId } from 'mongodb';
+
 /**
  * Train interface
  */
@@ -16,37 +18,42 @@ export interface IAvailability {
 }
 
 /**
- * Travel interface (PostGre)
- */
-export interface ITravel {
-  origin: string;
-  destination: string;
-  from_time: Date;
-  to_time: Date;
-  tgvmax_number: string;
-  email: Date;
-}
-
-/**
  * User interface
  */
 export interface IUser {
+  _id?: ObjectId;
   email: string;
   password: string;
-  tgvmaxNumber: string;
+  tgvmaxNumber?: string;
 }
 
 /**
  * TravelAlert interface
  */
 export interface ITravelAlert {
-  id: string;
+  _id?: string;
   userId: string;
-  origin: string;
-  destination: string;
-  fromTime: string;
-  toTime: string;
+  tgvmaxNumber: string;
+  origin: {
+    name: string;
+    code: string;
+  };
+  destination: {
+    name: string;
+    code: string;
+  };
+  fromTime: Date;
+  toTime: Date;
   status: string;
   lastCheck: string;
   createdAt: string;
+}
+
+/**
+ * Train station interface
+ */
+export interface IStation {
+  _id?: string;
+  name: string;
+  code: string;
 }

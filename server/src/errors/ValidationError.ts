@@ -4,7 +4,7 @@ import { HttpStatus } from '../Enum';
  * validation error
  * message: 'BAD_REQUEST'
  * code: 400
- * details: 'missing required parameter "fromTime"'
+ * message: 'missing required parameter "fromTime"'
  */
 export class ValidationError extends Error {
   /**
@@ -12,14 +12,8 @@ export class ValidationError extends Error {
    */
   public readonly code: number;
 
-  /**
-   * details about the error (see example above)
-   */
-  public readonly detail: string;
-
-  constructor(detail: string) {
-    super();
+  constructor(message: string) {
+    super(message);
     this.code = HttpStatus.BAD_REQUEST;
-    this.detail = detail;
   }
 }

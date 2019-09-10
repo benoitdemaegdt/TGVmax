@@ -1,0 +1,10 @@
+{
+  "dbUrl": "mongodb://localhost:27017/test",
+  "jwtSecret": "mySecret",
+  "jwtDuration": "365 days",
+  "schedule": "*/30 * * * *",
+  "email": "maxplorateur@gmail.com",
+  "password": "my-password",
+  "frontPort": ":8080",
+  "delay": 30000
+}

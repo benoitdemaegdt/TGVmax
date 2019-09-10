@@ -1,36 +1,57 @@
-import { QueryResult } from 'pg';
-import Database from '../database/db';
-import { ITravelAlert } from '../types';
+import { isEmpty } from 'lodash';
+import { DeleteWriteOpResultObject, InsertOneWriteOpResult , ObjectId } from 'mongodb';
+import Database from '../database/database';
+import { NotFoundError } from '../errors/NotFoundError';
+import { ITravelAlert, IUser } from '../types';
 
 /**
  * Travel controller
  */
 class TravelAlertController {
 
+  private readonly collectionAlerts: string;
+
+  constructor() {
+    this.collectionAlerts = 'alerts';
+  }
+
   /**
    * Add a travelAlert to database
    */
   public async addTravelAlert(userId: string, travelAlert: ITravelAlert): Promise<string> {
-    const insertOp: QueryResult = await Database.insert('travel_alerts', {
-      user_id: userId,
+    /**
+     * check that user actually exists in db
+     * (there is no foreign key constraint in mongo)
+     */
+    const user: IUser[] = await Database.find<IUser>('users', {
+      _id: new ObjectId(userId),
+    });
+    if (isEmpty(user)) {
+      throw new NotFoundError('user not found');
+    }
+
+    const insertOp: InsertOneWriteOpResult = await Database.insertOne(this.collectionAlerts, {
+      userId: new ObjectId(userId),
+      tgvmaxNumber: user[0].tgvmaxNumber,
       origin: travelAlert.origin,
       destination: travelAlert.destination,
-      from_time: travelAlert.fromTime,
-      to_time: travelAlert.toTime,
+      fromTime: new Date(travelAlert.fromTime),
+      toTime: new Date(travelAlert.toTime),
+      status: 'pending',
+      lastCheck: new Date(),
+      createdAt: new Date(),
     });
 
-    const rows: {id: string}[] = insertOp.rows as {id: string}[];
-
-    return rows[0].id;
+    return insertOp.insertedId.toString();
   }
 
   /**
    * Get one user travelAlert from database
    */
   public async getTravelAlert(userId: string, travelAlertId: string): Promise<ITravelAlert[]> {
-    return Database.find<ITravelAlert>('travel_alerts', {
-      user_id: userId,
-      id: travelAlertId,
+    return Database.find<ITravelAlert>(this.collectionAlerts, {
+      _id: new ObjectId(travelAlertId),
+      userId: new ObjectId(userId),
     });
   }
 
@@ -38,19 +59,21 @@ class TravelAlertController {
    * Get all user travelAlerts from database
    */
   public async getAllTravelAlerts(userId: string): Promise<ITravelAlert[]> {
-    return Database.find<ITravelAlert>('travel_alerts', {
-      user_id: userId,
+    return Database.find<ITravelAlert>(this.collectionAlerts, {
+      userId: new ObjectId(userId),
     });
   }
 
   /**
    * Delete TravelAlert
    */
-  public async deleteTravelAlert(userId: string, travelAlertId: string): Promise<QueryResult> {
-    return Database.delete('travel_alerts', {
-      id: travelAlertId,
-      user_id: userId,
+  public async deleteTravelAlert(userId: string, travelAlertId: string): Promise<number | undefined> {
+    const deleteOp: DeleteWriteOpResultObject = await Database.deleteOne(this.collectionAlerts, {
+      _id: new ObjectId(travelAlertId),
+      userId: new ObjectId(userId),
     });
+
+    return deleteOp.result.n;
   }
 }
 

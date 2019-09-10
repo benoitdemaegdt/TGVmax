@@ -1,5 +1,8 @@
-import { QueryResult } from 'pg';
-import Database from '../database/db';
+import * as bcrypt from 'bcryptjs';
+import { isEmpty } from 'lodash';
+import { DeleteWriteOpResultObject, InsertOneWriteOpResult, ObjectId } from 'mongodb';
+import Database from '../database/database';
+import { CredentialError } from '../errors/CredentialError';
 import { IUser } from '../types';
 
 /**
@@ -8,27 +11,49 @@ import { IUser } from '../types';
 class UserController {
 
   /**
+   * database collection name
+   */
+  private readonly collectionUsers: string;
+
+  constructor() {
+    this.collectionUsers = 'users';
+  }
+
+  /**
    * Add a user to database
    */
   public async addUser(user: IUser): Promise<string> {
-    // TODO: Bcrypt password
-    const insertOp: QueryResult = await Database.insert('users', {
+    const SALT: number = 8;
+    const insertOp: InsertOneWriteOpResult = await Database.insertOne(this.collectionUsers, {
       email: user.email,
-      password: user.password,
-      tgvmax_number: user.tgvmaxNumber,
+      password: bcrypt.hashSync(user.password, bcrypt.genSaltSync(SALT)),
+      tgvmaxNumber: user.tgvmaxNumber,
     });
 
-    const rows: {id: string}[] = insertOp.rows as {id: string}[];
+    return insertOp.insertedId.toString();
+  }
 
-    return rows[0].id;
+  /**
+   * check user existence and credentials in database
+   */
+  public async checkUserCredentials(credentials: IUser): Promise<string> {
+    const user: IUser[] = await Database.find<IUser>(this.collectionUsers, {
+      email: credentials.email,
+    });
+    if (isEmpty(user) || !bcrypt.compareSync(credentials.password, user[0].password)) {
+      throw new CredentialError();
+    }
+    const userId: ObjectId = user[0]._id as ObjectId;
+
+    return userId.toString();
   }
 
   /**
    * delete a user from database
    */
-  public async deleteUser(userId: string): Promise<QueryResult> {
-    return Database.delete('users', {
-      id: userId,
+  public async deleteUser(userId: string): Promise<DeleteWriteOpResultObject> {
+    return Database.deleteOne('users', {
+      _id: new ObjectId(userId),
     });
   }
 }

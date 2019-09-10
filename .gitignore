@@ -1,6 +1,5 @@
 .DS_Store
 node_modules
-/dist
 
 # vscode things
 .vscode
@@ -8,6 +7,7 @@ node_modules
 # local env files
 .env.local
 .env.*.local
+.env
 
 # log files
 npm-debug.log*
@@ -17,3 +17,9 @@ yarn-error.log*
 # coverage
 .nyc_output
 coverage
+
+# frontend build
+client/dist
+
+# server build
+server/dist

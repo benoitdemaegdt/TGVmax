@@ -1,13 +1,14 @@
 <template>
   <v-container>
-    <v-layout>
-      <v-flex xs12>
-        <h1 class="display-1">Trouvez une destination</h1>
-        <p> 1. Indiquez votre ville de départ </p>
-        <p> 2. Sélectionnez un week end </p>
-        <p> 3. L'assistant maxplorateur se charge de trouver toutes les destinations TGVmax possibles !</p>
-      </v-flex>
-    </v-layout>
+    <h1 class="display-1">Trouvez une destination</h1>
+    <v-list-item class='mt-5'>
+      <v-list-item-content>
+        <v-list-item-title><v-icon>place</v-icon> Indiquez une ville de départ</v-list-item-title>
+        <v-list-item-title class='mt-2'><v-icon>event</v-icon> Sélectionnez une date de départ et une date de retour</v-list-item-title>
+      </v-list-item-content>
+    </v-list-item>
+    <p>L'assistant Maxplorateur se charge de trouver tous les voyages TGVmax aller/retour disponibles !</p>
+    <p class="font-italic">Fonctionnalité en cours de développement</p>
   </v-container>
 </template>
 

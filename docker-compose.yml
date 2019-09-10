@@ -1,0 +1,25 @@
+
+version: '3'
+services:
+    client:
+        container_name: maxplorateur-client
+        build: ./client
+        ports:
+            - 80:80
+        links:
+            - server
+    server:
+        container_name: maxplorateur-server
+        restart: always
+        build: ./server
+        environment:
+            - DB_URL=${DB_URL}
+            - JWT_SECRET=${JWT_SECRET}
+            - JWT_DURATION=${JWT_DURATION}
+            - SCHEDULE=${SCHEDULE}
+            - EMAIL=${EMAIL}
+            - PASSWORD={PASSWORD}
+            - DELAY=${DELAY}
+            - FRONT_PORT=${FRONT_PORT}
+        ports:
+            - 3000:3000

@@ -31,7 +31,7 @@
     /* Module Resolution Options */           
     "moduleResolution": "node",            /* Specify module resolution strategy: 'node' (Node.js) or 'classic' (TypeScript pre-1.6). */
     "typeRoots": [],                       /* List of folders to include type definitions from. */
-    "types": [],                           /* Type declaration files to be included in compilation. */
+    "types": ["node"],                     /* Type declaration files to be included in compilation. */
     "allowSyntheticDefaultImports": false, /* Allow default imports from modules with no default export. This does not affect code emit, just typechecking. */
 
     /* Source Map Options */                  
