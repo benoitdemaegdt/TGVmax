@@ -14,6 +14,12 @@ services:
         build: ./server
         environment:
             - DB_URL=${DB_URL}
+            - JWT_SECRET=${JWT_SECRET}
+            - JWT_DURATION=${JWT_DURATION}
+            - SCHEDULE=${SCHEDULE}
+            - EMAIL=${EMAIL}
+            - PASSWORD={PASSWORD}
+            - DELAY=${DELAY}
             - FRONT_PORT=${FRONT_PORT}
         ports:
             - 3000:3000
