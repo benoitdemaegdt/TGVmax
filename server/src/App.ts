@@ -33,7 +33,7 @@ class App {
     }
     this.app.use(errorHandler());
     this.app.use(cors({
-      origin: `http://localhost${Config.frontPort === '80' ? '' : Config.frontPort}`,
+      origin: Config.whitelist,
     }));
     this.app.use(helmet());
     this.app.use(bodyParser());

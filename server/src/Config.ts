@@ -45,9 +45,9 @@ export class Config {
   public password: string;
 
   /**
-   * vuejs port
+   * cors whitelist
    */
-  public frontPort: string;
+  public whitelist: string;
 
   /**
    * minimum delay between calls to oui.sncf
@@ -63,8 +63,16 @@ export class Config {
     this.schedule = process.env.SCHEDULE || config.get('schedule');
     this.email = process.env.EMAIL || config.get('email');
     this.password = process.env.PASSWORD || config.get('password');
-    this.frontPort = process.env.FRONT_PORT || config.get('frontPort');
+    this.whitelist = process.env.WHITELIST || this.getWhitelist();
     this.delay = Number(process.env.DELAY) || config.get('delay');
+  }
+
+  private getWhitelist = (): string => {
+    if (process.env.NODE_ENV === 'production') {
+      return 'http://maxplorateur.fr';
+    } else {
+      return 'http://localhost:8080';
+    }
   }
 }
 

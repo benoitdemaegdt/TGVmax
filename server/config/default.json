@@ -5,6 +5,5 @@
   "schedule": "*/30 * * * *",
   "email": "maxplorateur@gmail.com",
   "password": "my-password",
-  "frontPort": ":8080",
   "delay": 30000
 }

@@ -20,6 +20,6 @@ services:
             - EMAIL=${EMAIL}
             - PASSWORD={PASSWORD}
             - DELAY=${DELAY}
-            - FRONT_PORT=${FRONT_PORT}
+            - WHITELIST=${WHITELIST}
         ports:
             - 3000:3000
