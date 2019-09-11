@@ -1,4 +1,6 @@
-# use light version of NodeJS
+#####################################
+# buid front-end app                #
+#####################################
 FROM node:lts-alpine as build-stage
 
 # set the working directory
@@ -16,12 +18,13 @@ COPY . ./
 # build project (typescript -> javascript)
 RUN npm run build
 
-# use nginx to serve static content
+#####################################
+# use nginx to serve static content #
+#####################################
 FROM nginx:stable-alpine as production-stage
 
 # use nginx conf file
-COPY nginx.conf /temp/prod.conf
-RUN envsubst /usr/src/app/ < /temp/prod.conf > /etc/nginx/conf.d/default.conf
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 # use dist directory from build stage
 COPY --from=build-stage /usr/src/app/dist /usr/share/nginx/html
