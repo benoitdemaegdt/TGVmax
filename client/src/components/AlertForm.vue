@@ -160,7 +160,7 @@ export default {
   methods: {
     async getTrainStations() {
       try {
-        const response = await this.$http.get('http://localhost:3000/api/v1/stations');
+        const response = await this.$http.get(`${process.env.VUE_APP_API_BASE_URL}/api/v1/station`);
         const body = await response.data;
         this.trainStations = body;
       } catch (err) {
