@@ -23,9 +23,6 @@ RUN npm run build
 #####################################
 FROM nginx:stable-alpine as production-stage
 
-# use nginx conf file
-COPY nginx.conf /etc/nginx/conf.d/default.conf
-
 # use dist directory from build stage
 COPY --from=build-stage /usr/src/app/dist /usr/share/nginx/html
 

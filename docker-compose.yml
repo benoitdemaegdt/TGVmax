@@ -1,17 +1,12 @@
-
 version: '3'
+
 services:
-    client:
-        container_name: maxplorateur-client
-        build: ./client
-        ports:
-            - 80:80
-        links:
-            - server
-    server:
-        container_name: maxplorateur-server
+    backend:
+        build:
+            context: ./server
+            dockerfile: Dockerfile
+        container_name: backend
         restart: always
-        build: ./server
         environment:
             - DB_URL=${DB_URL}
             - JWT_SECRET=${JWT_SECRET}
@@ -23,3 +18,21 @@ services:
             - WHITELIST=${WHITELIST}
         ports:
             - 3000:3000
+        networks:
+            - maxplorateur-network
+    nginx:
+        container_name: nginx
+        build:
+            context: ./client
+            dockerfile: Dockerfile
+        ports:
+            - 80:80
+        volumes:
+            - ./client/nginx:/etc/nginx/conf.d
+        depends_on:
+            - backend
+        networks:
+            - maxplorateur-network
+networks:
+    maxplorateur-network:
+        driver: bridge
