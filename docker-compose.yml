@@ -27,12 +27,37 @@ services:
             dockerfile: Dockerfile
         ports:
             - 80:80
+            - 443:443
         volumes:
+            - web-root:/usr/share/nginx/html
             - ./client/nginx:/etc/nginx/conf.d
+            - certbot-etc:/etc/letsencrypt
+            - certbot-var:/var/lib/letsencrypt
+            - dhparam:/etc/ssl/certs
         depends_on:
             - backend
         networks:
             - maxplorateur-network
+    certbot:
+        image: certbot/certbot
+        container_name: certbot
+        volumes:
+            - certbot-etc:/etc/letsencrypt
+            - certbot-var:/var/lib/letsencrypt
+            - web-root:/usr/share/nginx/html
+        depends_on:
+            - backend
+        command: certonly --webroot --webroot-path=/usr/share/nginx/html --email benoit.demaegdt@gmail.com --agree-tos --no-eff-email --force-renewal -d maxplorateur.fr -d www.maxplorateur.fr
+volumes:
+    certbot-etc:
+    certbot-var:
+    web-root:
+    dhparam:
+        driver: local
+        driver_opts:
+          type: none
+          device: /home/benoitdemaegdt/TGVmax/dhparam/
+          o: bind
 networks:
     maxplorateur-network:
         driver: bridge
