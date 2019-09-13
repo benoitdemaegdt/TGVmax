@@ -23,3 +23,6 @@ client/dist
 
 # server build
 server/dist
+
+# ssl key
+dhparam
