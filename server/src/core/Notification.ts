@@ -36,7 +36,7 @@ class Notification {
       to,
       subject: 'Disponibilité TGVmax',
       html: `<p>Votre trajet ${origin} -> ${destination} le ${this.getHumanReadableDate(date)} est disponible en TGVmax !</p>
-             <p>Départ possible à ${hours}</p>
+             <p>Départ possible à ${hours.join(' - ')}</p>
              <p>Bon voyage !</p>`,
     };
     await this.transport.sendMail(message); // tslint:disable-line
