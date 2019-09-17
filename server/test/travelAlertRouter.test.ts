@@ -208,14 +208,15 @@ describe('TravelAlertRouter', () => {
     /**
      * Add a travelAlert linked to this user
      */
+    const date: Date = new Date();
     const res2: request.Response = await request(server)
     .post(`/api/v1/users/${res1.body._id}/travels`)
     .set({ Authorization: `Bearer ${res1.body.token}` })
     .send({
       origin: {name: 'Paris (toutes gares intramuros)', code: 'FRPAR'},
       destination: {name: 'Lyon (toutes gares intramuros)', code: 'FRLYS'},
-      fromTime: '2019-08-13T01:00:00.283185Z',
-      toTime: '2019-08-13T13:00:00.283185Z',
+      fromTime: new Date(date.setDate(date.getDate() + 1)).toISOString(),
+      toTime: new Date(date.setDate(date.getDate() + 1)).toISOString(),
     })
     .expect(HttpStatus.CREATED);
 
@@ -225,8 +226,8 @@ describe('TravelAlertRouter', () => {
     .send({
       origin: {name: 'Paris (toutes gares intramuros)', code: 'FRPAR'},
       destination: {name: 'Niort', code: 'FRNIT'},
-      fromTime: '2019-08-13T01:00:00.283185Z',
-      toTime: '2019-08-13T13:00:00.283185Z',
+      fromTime: new Date(date.setDate(date.getDate() + 2)).toISOString(),
+      toTime: new Date(date.setDate(date.getDate() + 2)).toISOString(),
     })
     .expect(HttpStatus.CREATED);
 

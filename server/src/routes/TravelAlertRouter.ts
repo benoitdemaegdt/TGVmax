@@ -63,10 +63,10 @@ class TravelAlertRouter {
   /**
    * get all user's travelAlert
    */
-  private readonly getAllTravelAlerts = async(ctx: Context): Promise<void> => {
+  private readonly getAllPendingTravelAlerts = async(ctx: Context): Promise<void> => {
     const params: { userId: string } = ctx.params as { userId: string };
 
-    const travelAlerts: ITravelAlert[] = await TravelAlertController.getAllTravelAlerts(params.userId);
+    const travelAlerts: ITravelAlert[] = await TravelAlertController.getAllPendingTravelAlerts(params.userId);
 
     ctx.body = travelAlerts;
     ctx.status = ctx.status = HttpStatus.OK;
@@ -93,7 +93,7 @@ class TravelAlertRouter {
    */
   private init(): void {
     this.router.post('/', authenticate(), validate(this.travelAlertSchema), this.addTravel);
-    this.router.get('/', authenticate(), this.getAllTravelAlerts);
+    this.router.get('/', authenticate(), this.getAllPendingTravelAlerts);
     this.router.get('/:travelAlertId', authenticate(), this.getTravelAlert);
     this.router.delete('/:travelAlertId', authenticate(), this.deleteTravelAlert);
   }

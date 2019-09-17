@@ -58,9 +58,11 @@ class TravelAlertController {
   /**
    * Get all user travelAlerts from database
    */
-  public async getAllTravelAlerts(userId: string): Promise<ITravelAlert[]> {
+  public async getAllPendingTravelAlerts(userId: string): Promise<ITravelAlert[]> {
     return Database.find<ITravelAlert>(this.collectionAlerts, {
       userId: new ObjectId(userId),
+      status: 'pending',
+      fromTime: { $gt: new Date() },
     });
   }
 
