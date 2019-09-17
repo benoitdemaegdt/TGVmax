@@ -13,7 +13,7 @@ services:
             - JWT_DURATION=${JWT_DURATION}
             - SCHEDULE=${SCHEDULE}
             - EMAIL=${EMAIL}
-            - PASSWORD={PASSWORD}
+            - PASSWORD=${PASSWORD}
             - DELAY=${DELAY}
             - WHITELIST=${WHITELIST}
         ports:
