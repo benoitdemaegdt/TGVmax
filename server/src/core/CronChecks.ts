@@ -44,6 +44,7 @@ class CronChecks {
 
           const availability: IAvailability = await tgvmaxTravel.isAvailable();
           if (!availability.isTgvmaxAvailable) {
+            await Database.updateOne('alerts', {_id: new ObjectId(travelAlert._id)}, {$set: {lastCheck: new Date()}});
             await this.delay(Config.delay);
             continue;
           }
@@ -62,7 +63,9 @@ class CronChecks {
           /**
            * update travelALert status
            */
-          await Database.updateOne('alerts', {_id: new ObjectId(travelAlert._id)}, {$set: {status: 'triggered'}});
+          await Database.updateOne('alerts', {_id: new ObjectId(travelAlert._id)}, {
+            $set: {status: 'triggered', triggeredAt: new Date()}},
+          );
           await this.delay(Config.delay);
         }
       } catch (err) {
