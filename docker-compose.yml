@@ -29,13 +29,13 @@ services:
             - 80:80
             - 443:443
         volumes:
-            - web-root:/usr/share/nginx/html
             - ./client/nginx:/etc/nginx/conf.d
             - certbot-etc:/etc/letsencrypt
             - certbot-var:/var/lib/letsencrypt
             - dhparam:/etc/ssl/certs
         depends_on:
             - backend
+        command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
         networks:
             - maxplorateur-network
     certbot:
@@ -44,14 +44,12 @@ services:
         volumes:
             - certbot-etc:/etc/letsencrypt
             - certbot-var:/var/lib/letsencrypt
-            - web-root:/usr/share/nginx/html
         depends_on:
             - backend
-        command: certonly --webroot --webroot-path=/usr/share/nginx/html --email benoit.demaegdt@gmail.com --agree-tos --no-eff-email --force-renewal -d maxplorateur.fr -d www.maxplorateur.fr
+        entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
 volumes:
     certbot-etc:
     certbot-var:
-    web-root:
     dhparam:
         driver: local
         driver_opts:
