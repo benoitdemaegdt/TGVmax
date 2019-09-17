@@ -1,4 +1,5 @@
 import { isEmpty } from 'lodash';
+import * as moment from 'moment-timezone';
 import { ObjectId } from 'mongodb';
 import * as cron from 'node-cron';
 import Config from '../Config';
@@ -20,8 +21,6 @@ class CronChecks {
    * init CronJob
    */
   public readonly init = (schedule: string): void => {
-    const MAX_DATE_LENGTH: number = 19;
-
     cron.schedule(schedule, async() =>  {
       try {
         const travelAlerts: ITravelAlert[] = await this.fetchPendingTravelAlerts();
@@ -37,8 +36,8 @@ class CronChecks {
           const tgvmaxTravel: TgvmaxTravel = new TgvmaxTravel(
             travelAlert.origin.code,
             travelAlert.destination.code,
-            travelAlert.fromTime.toISOString().substring(0, MAX_DATE_LENGTH),
-            travelAlert.toTime.toISOString().substring(0, MAX_DATE_LENGTH),
+            moment(travelAlert.fromTime).tz('Europe/Paris').format('YYYY-MM-DD[T]HH:mm:ss'),
+            moment(travelAlert.toTime).tz('Europe/Paris').format('YYYY-MM-DD[T]HH:mm:ss'),
             travelAlert.tgvmaxNumber,
           );
 
