@@ -22,7 +22,7 @@
                   v => v.length >= 8 || 'Le mot de passe doit comporter au moins 8 caractères'
                 ]"
                 v-model='password'
-                prepend-icon='mdi-lock'
+                prepend-icon='lock'
                 :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
                 @click:append='showPassword = !showPassword'
               />
