@@ -54,7 +54,7 @@
         <!-- add a column for deleting an alert -->
         <template v-slot:item.action='{ item }'>
           <v-icon medium @click='deleteTravelAlert(item)'>
-            delete
+            mdi-delete
           </v-icon>
         </template>
 
@@ -81,7 +81,7 @@
           <div v-else>Dernière recherche : {{getFrenchDate(alert.lastCheck)}} à {{getHour(alert.lastCheck)}}</div>
           <v-spacer></v-spacer>
           <v-btn icon>
-            <v-icon medium @click='deleteTravelAlert(alert)'>delete</v-icon>
+            <v-icon medium @click='deleteTravelAlert(alert)'>mdi-delete</v-icon>
           </v-btn>
         </v-card-actions>
       </v-card>
@@ -90,7 +90,7 @@
       <v-dialog v-model='dialog' persistent max-width='600px'>
         <template v-slot:activator='{ on }'>
           <v-btn class='hidden-md-and-up' fab dark large color='#757575' fixed right bottom @click='dialog = true'>
-            <v-icon dark>add</v-icon>
+            <v-icon dark>mdi-plus</v-icon>
           </v-btn>
         </template>
         <alert-form @close:dialog='dialog = !dialog' @add:travelAlert='addTravelAlert'/>

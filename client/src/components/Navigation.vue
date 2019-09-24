@@ -42,7 +42,7 @@
         </v-list-item>
         <v-list-item v-if='!this.isLoggedIn' key='Connexion' to='/inscription' link>
           <v-list-item-icon>
-            <v-icon>person</v-icon>
+            <v-icon>mdi-account</v-icon>
           </v-list-item-icon>
           <v-list-item-content>
             <v-list-item-title>Connexion</v-list-item-title>
@@ -67,10 +67,10 @@ export default {
       title: 'Maxplorateur',
       drawer: false,
       navigation: [
-          { icon: 'home', title: 'Accueil', path: '/' },
-          { icon: 'notifications', title: 'Alertes', path: '/alertes' },
-          { icon: 'near_me', title: 'Destinations', path: '/destinations' },
-          { icon: 'email', title: 'Contact', path: '/contact' },
+          { icon: 'mdi-home', title: 'Accueil', path: '/' },
+          { icon: 'mdi-bell', title: 'Alertes', path: '/alertes' },
+          { icon: 'mdi-near-me', title: 'Destinations', path: '/destinations' },
+          { icon: 'mdi-email', title: 'Contact', path: '/contact' },
       ],
     };
   },
