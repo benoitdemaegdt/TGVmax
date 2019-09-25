@@ -16,4 +16,30 @@ This process is boring and time consuming. This project is an attempt to make it
 Please read documentation [here](./doc/sncf.md)
 
 ## How to use this project locally ?
-**I'll try to write this section as soon as possible**
+
+### Prerequisites
+1/ Install [MongoDB](https://www.mongodb.com/download-center/community)
+
+2/ Install [Docker and Docker Compose](https://docs.docker.com/docker-for-mac/install/)
+
+### Run the app locally
+1/ Open a terminal and start your local mongodb server
+```bash
+mongodb
+```
+
+2/ Open another terminal and go in the project directory (/TGVmax).
+
+3/ Build both docker containers
+```bash
+docker-compose -f docker-compose.dev.yml build
+```
+
+4/ Run both docker compose services and wait a moment
+```bash
+docker-compose -f docker-compose.dev.yml up
+```
+
+5/ Open your web browser and go to `http://localhost:8080/`. You should see the app running.
+
+6/ Create an account. If everything worked well, you should see a new document in your local mongodb database, in the collection *users* 😊.
