@@ -6,6 +6,7 @@
     "clean": "rm -fR ./node_modules ./.nyc_output ./coverage",
     "lint": "npx tslint ./src/*.ts{,x} ./src/**/*.ts{,x} --project tsconfig.json",
     "start": "npx ts-node ./src/index.ts",
+    "start:watch": "nodemon",
     "pretest": "npm run lint",
     "test": "NODE_ENV=test mocha -r ts-node/register ./test/**/*.test.ts",
     "cover": "nyc --reporter=lcov npm test",
@@ -66,6 +67,7 @@
     "chai": "^4.2.0",
     "mocha": "^6.2.0",
     "nock": "^11.3.5",
+    "nodemon": "^1.19.2",
     "nyc": "^14.1.1",
     "supertest": "^4.0.2",
     "ts-node": "^8.4.1",
@@ -91,5 +93,17 @@
       "html"
     ],
     "all": true
+  },
+  "nodemonConfig": {
+    "ignore": [
+      "**/*.test.ts",
+      ".git",
+      "node_modules"
+    ],
+    "watch": [
+      "src"
+    ],
+    "exec": "npm start",
+    "ext": "ts"
   }
 }
