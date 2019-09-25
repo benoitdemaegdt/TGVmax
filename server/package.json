@@ -58,7 +58,7 @@
     "@types/moment-timezone": "^0.5.12",
     "@types/mongodb": "^3.3.3",
     "@types/nock": "^11.1.0",
-    "@types/node": "^12.7.5",
+    "@types/node": "^12.7.7",
     "@types/node-cron": "^2.0.2",
     "@types/nodemailer": "^6.2.1",
     "@types/superagent": "^4.1.3",
