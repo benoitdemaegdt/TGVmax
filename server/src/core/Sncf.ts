@@ -8,7 +8,7 @@ import { IAvailability, ITrain } from '../types';
  * Tgvmax Travel
  * Fetch Tgvmax availabilities from oui.sncf
  */
-export class TgvmaxTravel {
+export class Sncf {
   /**
    * departure station
    */
@@ -48,7 +48,7 @@ export class TgvmaxTravel {
    * - going to train station : destination
    * - leaving between fromTime and toTime
    */
-  public async isAvailable(): Promise<IAvailability> {
+  public async isTgvmaxAvailable(): Promise<IAvailability> {
     const tgvmax: ITrain[] = await this.getTgvmax();
     /**
      * If previous call returns an empty array, there is no TGVmax available

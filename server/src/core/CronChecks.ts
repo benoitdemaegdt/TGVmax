@@ -6,7 +6,7 @@ import Config from '../Config';
 import Notification from '../core/Notification';
 import Database from '../database/database';
 import { IAvailability, ITravelAlert, IUser } from '../types';
-import { TgvmaxTravel } from './TgvmaxTravel';
+import { Sncf } from './Sncf';
 
 /**
  * Periodically check Tgvmax availability
@@ -33,7 +33,7 @@ class CronChecks {
          * Send notification if tgvmax seat is available
          */
         for (const travelAlert of travelAlerts) {
-          const tgvmaxTravel: TgvmaxTravel = new TgvmaxTravel(
+          const sncf: Sncf = new Sncf(
             travelAlert.origin.code,
             travelAlert.destination.code,
             moment(travelAlert.fromTime).tz('Europe/Paris').format('YYYY-MM-DD[T]HH:mm:ss'),
@@ -41,7 +41,7 @@ class CronChecks {
             travelAlert.tgvmaxNumber,
           );
 
-          const availability: IAvailability = await tgvmaxTravel.isAvailable();
+          const availability: IAvailability = await sncf.isTgvmaxAvailable();
           if (!availability.isTgvmaxAvailable) {
             await Database.updateOne('alerts', {_id: new ObjectId(travelAlert._id)}, {$set: {lastCheck: new Date()}});
             await this.delay(Config.delay);

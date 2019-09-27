@@ -3,7 +3,7 @@ import 'mocha';
 import * as moment from 'moment-timezone';
 import * as nock from 'nock';
 import Config from '../src/config';
-import { TgvmaxTravel } from '../src/core/TgvmaxTravel';
+import { Sncf } from '../src/core/Sncf';
 import { IAvailability } from '../src/types';
 
 describe('Travel', () => {
@@ -40,7 +40,7 @@ describe('Travel', () => {
     const fromTime: string = moment(new Date()).add(1, 'days').startOf('day').toISOString();
     const toTime: string = moment(fromTime).add(6, 'hours').toISOString();
     const tgvmaxNumber: string = 'HC000054321';
-    const tgvmaxTravel: TgvmaxTravel = new TgvmaxTravel(origin, destination, fromTime, toTime, tgvmaxNumber);
+    const sncf: Sncf = new Sncf(origin, destination, fromTime, toTime, tgvmaxNumber);
 
     /**
      * create oui.sncf fake server
@@ -72,7 +72,7 @@ describe('Travel', () => {
      * Test function : isTgvmaxAvailable
      * It should not return an TGVmax seat
      */
-    const tgvmaxAvailability: IAvailability = await tgvmaxTravel.isAvailable();
+    const tgvmaxAvailability: IAvailability = await sncf.isTgvmaxAvailable();
     chai.expect(tgvmaxAvailability.isTgvmaxAvailable).to.equal(false);
     chai.expect(tgvmaxAvailability.hours).to.deep.equal([]);
   });
@@ -86,7 +86,7 @@ describe('Travel', () => {
     const fromTime: string = moment(new Date()).add(1, 'days').startOf('day').toISOString();
     const toTime: string = moment(fromTime).add(6, 'hours').toISOString();
     const tgvmaxNumber: string = 'HC000054321';
-    const tgvmaxTravel: TgvmaxTravel = new TgvmaxTravel(origin, destination, fromTime, toTime, tgvmaxNumber);
+    const sncf: Sncf = new Sncf(origin, destination, fromTime, toTime, tgvmaxNumber);
 
     /**
      * create oui.sncf fake server
@@ -118,7 +118,7 @@ describe('Travel', () => {
      * Test function : isTgvmaxAvailable
      * It should one TGVmax seat
      */
-    const tgvmaxAvailability: IAvailability = await tgvmaxTravel.isAvailable();
+    const tgvmaxAvailability: IAvailability = await sncf.isTgvmaxAvailable();
     chai.expect(tgvmaxAvailability.isTgvmaxAvailable).to.equal(true);
     chai.expect(tgvmaxAvailability.hours).to.deep.equal([moment(fromTime).add(4, 'hours').format('HH:mm')]);
   });
@@ -132,7 +132,7 @@ describe('Travel', () => {
     const fromTime: string = moment(new Date()).add(1, 'days').startOf('day').toISOString();
     const toTime: string = moment(fromTime).add(10, 'hours').toISOString();
     const tgvmaxNumber: string = 'HC000054321';
-    const tgvmaxTravel: TgvmaxTravel = new TgvmaxTravel(origin, destination, fromTime, toTime, tgvmaxNumber);
+    const sncf: Sncf = new Sncf(origin, destination, fromTime, toTime, tgvmaxNumber);
 
     /**
      * create oui.sncf fake server
@@ -193,7 +193,7 @@ describe('Travel', () => {
      * Test function : isTgvmaxAvailable
      * It should two TGVmax seats
      */
-    const tgvmaxAvailability: IAvailability = await tgvmaxTravel.isAvailable();
+    const tgvmaxAvailability: IAvailability = await sncf.isTgvmaxAvailable();
     chai.expect(tgvmaxAvailability.isTgvmaxAvailable).to.equal(true);
     chai.expect(tgvmaxAvailability.hours).to.deep.equal([
       moment(fromTime).add(1, 'hours').format('HH:mm'),
@@ -210,7 +210,7 @@ describe('Travel', () => {
     const fromTime: string = moment(new Date()).add(1, 'days').startOf('day').toISOString();
     const toTime: string = moment(fromTime).add(10, 'hours').toISOString();
     const tgvmaxNumber: string = 'HC000054321';
-    const tgvmaxTravel: TgvmaxTravel = new TgvmaxTravel(origin, destination, fromTime, toTime, tgvmaxNumber);
+    const sncf: Sncf = new Sncf(origin, destination, fromTime, toTime, tgvmaxNumber);
 
     /**
      * create oui.sncf fake server
@@ -224,7 +224,7 @@ describe('Travel', () => {
      * It should two TGVmax seats
      */
     try {
-      await tgvmaxTravel.isAvailable();
+      await sncf.isTgvmaxAvailable();
     } catch (e) {
       chai.expect(e.status).to.equal(500);
     }
