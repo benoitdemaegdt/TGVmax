@@ -13,7 +13,7 @@ describe('Travel', () => {
    * This intercepts every HTTP calls to https://www.oui.sncf
    */
   before(() => {
-    fakeServer = nock(Config.baseUrl);
+    fakeServer = nock(Config.baseSncfUrl);
   });
 
   /**

@@ -104,7 +104,7 @@ export class Sncf {
    */
   private async getMinPrices(time: string): Promise<ITrain[]> {
     const response: request.Response = await request
-      .post(`${Config.baseUrl}/proposition/rest/travels/outward/train/next`)
+      .post(`${Config.baseSncfUrl}/proposition/rest/travels/outward/train/next`)
       .send({
         context: {
           paginationContext: {

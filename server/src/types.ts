@@ -1,12 +1,34 @@
 import { ObjectId } from 'mongodb';
 
 /**
- * Train interface
+ * SNCF Train interface
  */
 export interface ITrain {
   departureDate: string;
   arrivalDate: string;
   minPrice: number;
+}
+
+/**
+ * Trainline Train interface
+ */
+export interface ITrainlineTrain {
+  id?: string;
+  arrival_date?: string;
+  arrival_station_id?: string;
+  departure_date: string;
+  departure_station_id?: string;
+  cents?: number;
+  currency?: string;
+  local_amount?: {
+    subunit: number;
+    subunit_to_unit: number;
+  };
+  local_currency?: string;
+  digest?: string;
+  segment_ids?: string[];
+  passenger_id?: string;
+  folder_id?: string;
 }
 
 /**
@@ -36,11 +58,13 @@ export interface ITravelAlert {
   tgvmaxNumber: string;
   origin: {
     name: string;
-    code: string;
+    sncfId: string;
+    trainlineId: string;
   };
   destination: {
     name: string;
-    code: string;
+    sncfId: string;
+    trainlineId: string;
   };
   fromTime: Date;
   toTime: Date;
@@ -55,5 +79,6 @@ export interface ITravelAlert {
 export interface IStation {
   _id?: string;
   name: string;
-  code: string;
+  sncfId: string;
+  trainlineId: string;
 }

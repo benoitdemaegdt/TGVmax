@@ -34,8 +34,8 @@ class CronChecks {
          */
         for (const travelAlert of travelAlerts) {
           const sncf: Sncf = new Sncf(
-            travelAlert.origin.code,
-            travelAlert.destination.code,
+            travelAlert.origin.sncfId,
+            travelAlert.destination.sncfId,
             moment(travelAlert.fromTime).tz('Europe/Paris').format('YYYY-MM-DD[T]HH:mm:ss'),
             moment(travelAlert.toTime).tz('Europe/Paris').format('YYYY-MM-DD[T]HH:mm:ss'),
             travelAlert.tgvmaxNumber,
