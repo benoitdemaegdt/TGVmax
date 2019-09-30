@@ -6,7 +6,7 @@ import Config from '../Config';
 import Notification from '../core/Notification';
 import Database from '../database/database';
 import { IAvailability, ITravelAlert, IUser } from '../types';
-import { Sncf } from './Sncf';
+import { Trainline } from './Trainline';
 
 /**
  * Periodically check Tgvmax availability
@@ -14,7 +14,7 @@ import { Sncf } from './Sncf';
  * 1/ every x min (let's say 30min) a cronjob will fetch travelAlerts with status: 'pending' in db
  * 2/ for each travelAlert, check if a tgvmax seat is available
  * 3/ if YES -> update status to 'triggered' and send notification
- *    if NO  -> do nothing until next check
+ *    if NO  -> update lastCheck to current time and continue
  */
 class CronChecks {
   /**
@@ -33,15 +33,17 @@ class CronChecks {
          * Send notification if tgvmax seat is available
          */
         for (const travelAlert of travelAlerts) {
-          const sncf: Sncf = new Sncf(
-            travelAlert.origin.sncfId,
-            travelAlert.destination.sncfId,
+          console.log(`processing travelAlert ${travelAlert._id}`); // tslint:disable-line
+
+          const trainline: Trainline = new Trainline(
+            travelAlert.origin.trainlineId,
+            travelAlert.destination.trainlineId,
             moment(travelAlert.fromTime).tz('Europe/Paris').format('YYYY-MM-DD[T]HH:mm:ss'),
             moment(travelAlert.toTime).tz('Europe/Paris').format('YYYY-MM-DD[T]HH:mm:ss'),
             travelAlert.tgvmaxNumber,
           );
 
-          const availability: IAvailability = await sncf.isTgvmaxAvailable();
+          const availability: IAvailability = await trainline.isTgvmaxAvailable();
           if (!availability.isTgvmaxAvailable) {
             await Database.updateOne('alerts', {_id: new ObjectId(travelAlert._id)}, {$set: {lastCheck: new Date()}});
             await this.delay(Config.delay);

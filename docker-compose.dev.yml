@@ -21,10 +21,10 @@ services:
             - DB_URL=mongodb://host.docker.internal:27017/maxplorateur
             - JWT_SECRET=myJwtSecret
             - JWT_DURATION=365 days
-            - SCHEDULE=0 0 5 31 2 *
+            - SCHEDULE=*/10 * * * *
             - EMAIL=
             - PASSWORD=
-            - DELAY=30000
+            - DELAY=150
             - WHITELIST=http://localhost:8080
         ports:
             - 3000:3000

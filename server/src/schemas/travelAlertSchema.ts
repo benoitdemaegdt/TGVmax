@@ -4,18 +4,20 @@ export const travelAlertSchema: object = {
       type: 'object',
       properties: {
         name: { type: 'string' },
-        code: { type: 'string' },
+        sncfId: { type: 'string' },
+        trainlineId: { type: 'string' },
       },
-      required: ['name', 'code'],
+      required: ['name', 'sncfId', 'trainlineId'],
       additionalProperties: false,
     },
     destination: {
       type: 'object',
       properties: {
         name: { type: 'string' },
-        code: { type: 'string' },
+        sncfId: { type: 'string' },
+        trainlineId: { type: 'string' },
       },
-      required: ['name', 'code'],
+      required: ['name', 'sncfId', 'trainlineId'],
       additionalProperties: false,
     },
     fromTime: {
