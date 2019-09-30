@@ -4,7 +4,7 @@
       <v-card-title class='primary white--text'>
         <span class='headline'>Ajouter une nouvelle alerte</span>
         <v-spacer></v-spacer>
-        <v-icon color='white' @click='closeForm();'>close</v-icon>
+        <v-icon color='white' @click='closeForm();'>mdi-close</v-icon>
       </v-card-title>
       <v-card-text>
         <v-container>
@@ -21,7 +21,7 @@
                 :rules="[v => !!v || 'Champ obligatoire']"
                 :error-messages='sameTrainStationError'
                 no-data-text='Gare non disponible'
-                prepend-icon='place'
+                prepend-icon='mdi-map-marker'
                 required
               >
               </v-autocomplete>
@@ -38,7 +38,7 @@
                 return-object
                 :rules="[v => !!v || 'Champ obligatoire']"
                 no-data-text='Gare non disponible'
-                prepend-icon='place'
+                prepend-icon='mdi-map-marker'
                 required
               >
               </v-autocomplete>
@@ -60,7 +60,7 @@
                     v-model='dateFormatted'
                     :rules="[v => !!v || 'Champ obligatoire']"
                     label='Date de départ'
-                    prepend-icon='event'
+                    prepend-icon='mdi-calendar'
                     readonly
                     required
                     v-on='on'
@@ -84,7 +84,7 @@
             <v-col cols='12' sm='6'>
               <v-select
                 v-model='fromTime'
-                prepend-icon='access_time'
+                prepend-icon='mdi-clock-outline'
                 :items='hours'
                 :rules="[(v) => !!v || 'Champ obligatoire']"
                 :error-messages='minAfterMaxError'
@@ -97,7 +97,7 @@
             <v-col cols='12' sm='6'>
               <v-select
                 v-model='toTime'
-                prepend-icon='access_time'
+                prepend-icon='mdi-clock-outline'
                 :items='hours'
                 :rules="[(v) => !!v || 'Champ obligatoire']"
                 label='Heure max'

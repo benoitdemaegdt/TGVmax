@@ -1,0 +1,32 @@
+version: '3'
+
+services:
+    client:
+        container_name: client
+        build:
+            context: ./client
+            dockerfile: Dockerfile.dev
+        ports:
+            - 8080:8080
+        volumes:
+            - ./client:/usr/src/app
+        depends_on:
+            - server
+    server:
+        container_name: server
+        build:
+            context: ./server
+            dockerfile: Dockerfile.dev
+        environment:
+            - DB_URL=mongodb://host.docker.internal:27017/maxplorateur
+            - JWT_SECRET=myJwtSecret
+            - JWT_DURATION=365 days
+            - SCHEDULE=*/10 * * * *
+            - EMAIL=
+            - PASSWORD=
+            - DELAY=150
+            - WHITELIST=http://localhost:8080
+        ports:
+            - 3000:3000
+        volumes:
+            - ./server:/usr/src/app

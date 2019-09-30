@@ -22,9 +22,9 @@ describe('StationRouter', () => {
     await Promise.all([ Database.deleteAll('alerts'), Database.deleteAll('users'), Database.deleteAll('stations') ]);
 
     return Promise.all([
-      Database.insertOne('stations', {name: 'Paris (toutes gares intramuros)', code: 'FRPAR' }),
-      Database.insertOne('stations', {name: 'Lyon (toutes gares intramuros)', code: 'FRLYS' }),
-      Database.insertOne('stations', {name: 'Marseille (toutes gares)', code: 'FRMRS' }),
+      Database.insertOne('stations', {name: 'Gare Montparnasse (Paris)', sncfId: 'FRPMO', trainlineId: '4920' }),
+      Database.insertOne('stations', {name: 'Lyon Part-Dieu', sncfId: 'FRLPD', trainlineId: '4676' }),
+      Database.insertOne('stations', {name: 'Marseille Saint-Charles', sncfId: 'FRMSC', trainlineId: '4791' }),
     ]);
   });
 
@@ -60,17 +60,17 @@ describe('StationRouter', () => {
       return station.name;
     });
 
-    chai.expect(names.includes('Lyon (toutes gares intramuros)')).to.equal(true);
-    chai.expect(names.includes('Marseille (toutes gares)')).to.equal(true);
-    chai.expect(names.includes('Paris (toutes gares intramuros)')).to.equal(true);
+    chai.expect(names.includes('Lyon Part-Dieu')).to.equal(true);
+    chai.expect(names.includes('Marseille Saint-Charles')).to.equal(true);
+    chai.expect(names.includes('Gare Montparnasse (Paris)')).to.equal(true);
 
-    const codes: string[] = res2.body.map((station: IStation) => {
-      return station.code;
+    const sncfIds: string[] = res2.body.map((station: IStation) => {
+      return station.sncfId;
     });
 
-    chai.expect(codes.includes('FRPAR')).to.equal(true);
-    chai.expect(codes.includes('FRLYS')).to.equal(true);
-    chai.expect(codes.includes('FRMRS')).to.equal(true);
+    chai.expect(sncfIds.includes('FRPMO')).to.equal(true);
+    chai.expect(sncfIds.includes('FRLPD')).to.equal(true);
+    chai.expect(sncfIds.includes('FRMSC')).to.equal(true);
   });
 
   it('GET /api/v1/stations 401 UNAUTHORIZED', async() => {

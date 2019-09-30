@@ -12,7 +12,7 @@
                 label='email'
                 :rules="[v => !!v || 'email obligatoire']"
                 v-model='email'
-                prepend-icon='person'
+                prepend-icon='mdi-account'
               />
               <v-text-field
                 :type="showPassword ? 'text' : 'password'"
@@ -22,7 +22,7 @@
                   v => v.length >= 8 || 'Le mot de passe doit comporter au moins 8 caractères'
                 ]"
                 v-model='password'
-                prepend-icon='lock'
+                prepend-icon='mdi-lock'
                 :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
                 @click:append='showPassword = !showPassword'
               />
@@ -33,7 +33,7 @@
                   v => v.length === 11 || 'Le numéro TGVmax doit comporter 11 caractères'
                 ]"
                 v-model='tgvmaxNumber'
-                prepend-icon='train'
+                prepend-icon='mdi-train'
                 counter='11'
                 hint='ex: HC000054321'/>
             </v-form>

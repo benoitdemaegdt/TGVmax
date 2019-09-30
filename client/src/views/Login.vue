@@ -12,7 +12,7 @@
                 label='email'
                 :rules="[v => !!v || 'email obligatoire']"
                 v-model='email'
-                prepend-icon='person'
+                prepend-icon='mdi-account'
               />
               <v-text-field
                 :type="showPassword ? 'text' : 'password'"
@@ -22,7 +22,7 @@
                   v => v.length >= 8 || 'Le mot de passe doit comporter au moins 8 caractères'
                 ]"
                 v-model='password'
-                prepend-icon='lock'
+                prepend-icon='mdi-lock'
                 :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
                 @click:append='showPassword = !showPassword'
               />
