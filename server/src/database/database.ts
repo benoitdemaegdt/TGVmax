@@ -39,7 +39,7 @@ export class Database {
   /**
    * insertOne
    */
-  public async insertOne(coll: string, doc: object): Promise<InsertOneWriteOpResult> {
+  public async insertOne<T>(coll: string, doc: object): Promise<InsertOneWriteOpResult<T>> {
     try {
       return await Database.db.collection(coll).insertOne(doc);
     } catch (err) {

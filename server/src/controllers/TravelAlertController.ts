@@ -30,7 +30,8 @@ class TravelAlertController {
       throw new NotFoundError('user not found');
     }
 
-    const insertOp: InsertOneWriteOpResult = await Database.insertOne(this.collectionAlerts, {
+    const insertOp: InsertOneWriteOpResult<ITravelAlert> =
+      await Database.insertOne<ITravelAlert>(this.collectionAlerts, {
       userId: new ObjectId(userId),
       tgvmaxNumber: user[0].tgvmaxNumber,
       origin: travelAlert.origin,

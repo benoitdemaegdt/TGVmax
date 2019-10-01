@@ -3,7 +3,7 @@
   "version": "1.1.1",
   "description": "find a tgvmax seat",
   "scripts": {
-    "clean": "rm -fR ./node_modules ./.nyc_output ./coverage",
+    "clean": "rm -fR ./node_modules ./.nyc_output ./coverage ./dist",
     "lint": "npx tslint ./src/*.ts{,x} ./src/**/*.ts{,x} --project tsconfig.json",
     "start": "npx ts-node ./src/index.ts",
     "start:watch": "nodemon",

@@ -43,17 +43,17 @@ export interface IAvailability {
  * User interface
  */
 export interface IUser {
-  _id?: ObjectId;
+  _id: ObjectId;
   email: string;
   password: string;
-  tgvmaxNumber?: string;
+  tgvmaxNumber: string;
 }
 
 /**
  * TravelAlert interface
  */
 export interface ITravelAlert {
-  _id?: string;
+  _id: ObjectId;
   userId: string;
   tgvmaxNumber: string;
   origin: {
@@ -69,8 +69,8 @@ export interface ITravelAlert {
   fromTime: Date;
   toTime: Date;
   status: string;
-  lastCheck: string;
-  createdAt: string;
+  lastCheck: Date;
+  createdAt: Date;
 }
 
 /**
