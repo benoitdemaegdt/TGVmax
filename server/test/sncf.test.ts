@@ -6,7 +6,7 @@ import Config from '../src/config';
 import { Sncf } from '../src/core/Sncf';
 import { IAvailability } from '../src/types';
 
-describe('Travel', () => {
+describe('Sncf', () => {
   let fakeServer: nock.Scope;
   /**
    * Create fake server before running all tests in "Travel" section
@@ -22,13 +22,6 @@ describe('Travel', () => {
    */
   afterEach(() => {
     nock.cleanAll();
-  });
-
-  /**
-   * Restore the HTTP interceptor to the normal unmocked behaviour after running all tests
-   */
-  after(() => {
-    nock.restore();
   });
 
   it('should not find any TGVmax seat available', async() => {
