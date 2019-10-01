@@ -1,4 +1,4 @@
-import { filter, isEmpty, map, uniq } from 'lodash';
+import { filter, isEmpty, isNil, map, uniq } from 'lodash';
 import * as moment from 'moment-timezone';
 import * as request from 'superagent';
 import * as uuidv4 from 'uuid/v4';
@@ -109,7 +109,7 @@ export class Trainline {
           },
         });
 
-        const pageResults: {trips: ITrainlineTrain[]} = JSON.parse(response.text) as {trips: ITrainlineTrain[]};
+        const pageResults: {trips: ITrainlineTrain[]} = response.body as {trips: ITrainlineTrain[]};
         const pageTrips: ITrainlineTrain[] = pageResults.trips;
 
         results.push(...pageTrips);
@@ -135,7 +135,9 @@ export class Trainline {
     const tgvmaxTravels: ITrainlineTrain[] = filter(results, (item: ITrainlineTrain) => {
       const departureDate: string = moment(item.departure_date).tz('Europe/Paris').format('YYYY-MM-DD[T]HH:mm:ss');
 
-      return item.cents === 0 && moment(departureDate).isSameOrBefore(this.toTime);
+      return item.cents === 0
+        && moment(departureDate).isSameOrBefore(this.toTime)
+        && isNil(item.short_unsellable_reason);
     });
 
     return map(tgvmaxTravels, (tgvmaxTravel: ITrainlineTrain) => {

@@ -29,6 +29,7 @@ export interface ITrainlineTrain {
   segment_ids?: string[];
   passenger_id?: string;
   folder_id?: string;
+  short_unsellable_reason?: string;
 }
 
 /**
