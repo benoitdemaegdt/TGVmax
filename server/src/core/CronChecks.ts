@@ -33,7 +33,7 @@ class CronChecks {
          * Send notification if tgvmax seat is available
          */
         for (const travelAlert of travelAlerts) {
-          console.log(`processing travelAlert ${travelAlert._id}`); // tslint:disable-line
+          console.log(`${moment(new Date()).tz('Europe/Paris').format('DD-MM-YYYY HH:mm:ss')} - processing travelAlert ${travelAlert._id}`); // tslint:disable-line
 
           const trainline: Trainline = new Trainline(
             travelAlert.origin.trainlineId,

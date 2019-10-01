@@ -3889,6 +3889,7 @@
   { "name": "Port-de-Bouc", "sncfId": "FRPDB", "trainlineId": "4940" },
   { "name": "Chocques", "sncfId": "FRCXT", "trainlineId": "1580" },
   { "name": "Strasbourg Roethig", "sncfId": "FRBUK", "trainlineId": "938" },
+  { "name": "Strasbourg", "sncfId": "FRAEG", "trainlineId": "153" },
   { "name": "Schwindratzheim", "sncfId": "FRBUG", "trainlineId": "934" },
   { "name": "Valençay", "sncfId": "FREXW", "trainlineId": "2515" },
   { "name": "Ondres", "sncfId": "FRGHD", "trainlineId": "3245" },
