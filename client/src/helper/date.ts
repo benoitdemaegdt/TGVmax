@@ -50,6 +50,8 @@ export function getISOString(date: string, time: string) {
  */
 function getFrenchDay(dayNumber: number) {
   switch (dayNumber) {
+    case 0:
+      return 'dimanche';
     case 1:
       return 'lundi';
     case 2:
@@ -62,8 +64,6 @@ function getFrenchDay(dayNumber: number) {
       return 'vendredi';
     case 6:
       return 'samedi';
-    case 7:
-      return 'dimanche';
   }
 }
 
