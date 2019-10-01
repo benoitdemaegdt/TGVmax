@@ -1,6 +1,6 @@
 {
   "name": "maxplorateur-server",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "find a tgvmax seat",
   "scripts": {
     "clean": "rm -fR ./node_modules ./.nyc_output ./coverage",
