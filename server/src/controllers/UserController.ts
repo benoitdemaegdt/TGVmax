@@ -24,7 +24,7 @@ class UserController {
    */
   public async addUser(user: IUser): Promise<string> {
     const SALT: number = 8;
-    const insertOp: InsertOneWriteOpResult = await Database.insertOne(this.collectionUsers, {
+    const insertOp: InsertOneWriteOpResult<IUser> = await Database.insertOne<IUser>(this.collectionUsers, {
       email: user.email,
       password: bcrypt.hashSync(user.password, bcrypt.genSaltSync(SALT)),
       tgvmaxNumber: user.tgvmaxNumber,
