@@ -75,7 +75,7 @@ export default {
         try {
           await this.$store.dispatch('register', { email, password, tgvmaxNumber });
           this.clearState();
-          this.$router.push('/');
+          this.$router.push('/alertes');
         } catch (err) {
           this.error = true;
           this.errorMessage = `⚠️ ${err.message}`;
