@@ -63,7 +63,7 @@ export default {
         try {
           await this.$store.dispatch('login', { email, password });
           this.clearState();
-          this.$router.push('/');
+          this.$router.push('/alertes');
         } catch (err) {
           this.error = true;
           this.errorMessage = `⚠️ ${err.message}`;

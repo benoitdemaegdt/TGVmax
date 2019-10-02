@@ -1,5 +1,5 @@
 <template>
-  <nav class='mb-5'>
+  <nav>
     <!-- Start of app navbar (large screen) -->
     <v-app-bar app>
       <!-- hamburger menu -->
@@ -69,7 +69,6 @@ export default {
       navigation: [
           { icon: 'mdi-home', title: 'Accueil', path: '/' },
           { icon: 'mdi-bell', title: 'Alertes', path: '/alertes' },
-          { icon: 'mdi-near-me', title: 'Destinations', path: '/destinations' },
           { icon: 'mdi-email', title: 'Contact', path: '/contact' },
       ],
     };
