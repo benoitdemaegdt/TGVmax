@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <v-container class='mt-5'>
     <div v-if='isLoggedIn'>
       <!-- Start of app data table -->
       <v-data-table

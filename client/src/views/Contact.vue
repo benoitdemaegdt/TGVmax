@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <v-container class='mt-5'>
     <h1 class="display-1">Vous êtes un utilisateur de maxplorateur.fr et ...</h1>
     <v-list-item class='mt-5'>
       <v-list-item-content>

@@ -29,11 +29,6 @@ const router: Router = new Router({
       },
     },
     {
-      path: '/destinations',
-      name: 'Destinations',
-      component: Destination,
-    },
-    {
       path: '/contact',
       name: 'Contact',
       component: Contact,
