@@ -30,7 +30,7 @@
     "jsonwebtoken": "^8.5.1",
     "koa": "^2.8.2",
     "koa-bodyparser": "^4.2.1",
-    "koa-helmet": "^5.1.0",
+    "koa-helmet": "^5.2.0",
     "koa-logger": "^3.2.1",
     "koa-router": "^7.4.0",
     "koa-static": "^5.0.0",
