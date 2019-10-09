@@ -28,6 +28,7 @@ class CronChecks {
           return;
         }
 
+        console.log(`${moment(new Date()).tz('Europe/Paris').format('DD-MM-YYYY HH:mm:ss')} - processing ${travelAlerts.length} travelAlerts`); // tslint:disable-line
         /**
          * Process each travelAlert
          * Send notification if tgvmax seat is available
