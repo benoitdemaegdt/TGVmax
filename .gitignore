@@ -26,3 +26,9 @@ server/dist
 
 # ssl key
 dhparam
+
+# docker config
+docker-compose.yml
+server/Dockerfile
+client/Dockerfile
+client/nginx

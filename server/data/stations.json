@@ -955,6 +955,7 @@
   { "name": "Nevers-le-Banlay", "sncfId": "FRNLB", "trainlineId": "4855" },
   { "name": "Saint-Rambert-d'Albon", "sncfId": "FRIEO", "trainlineId": "4269" },
   { "name": "Massy - Palaiseau", "sncfId": "FRMPU", "trainlineId": "2002" },
+  { "name": "Paris Massy (Gare TGV et Ouigo, à 24km de Paris)", "sncfId": "FRDJU", "trainlineId": "1818" },
   { "name": "Brou", "sncfId": "FRDKS", "trainlineId": "1839" },
   { "name": "Brouvelieures - HdV", "sncfId": "FRAZX", "trainlineId": "568" },
   { "name": "Laroche - Migennes", "sncfId": "FRISI", "trainlineId": "4526" },
@@ -2204,6 +2205,10 @@
     "sncfId": "FRPMO",
     "trainlineId": "4920"
   },
+  { "name": "Paris (toutes gares intramuros)", "sncfId": "FRPAR", "trainlineId": "4916" },
+  { "name": "Marseille (toutes gares)", "sncfId": "FRMRS", "trainlineId": "4790" },
+  { "name": "Lille (toutes gares)", "sncfId": "FRLIL", "trainlineId": "4652" },
+  { "name": "Lyon (toutes gares intramuros)", "sncfId": "FRLYS", "trainlineId": "4718" },
   { "name": "La Meaugon", "sncfId": "FRDYA", "trainlineId": "2052" },
   { "name": "Urmatt", "sncfId": "FRBYT", "trainlineId": "1043" },
   { "name": "Dardilly-les-Mouilles", "sncfId": "FRGSP", "trainlineId": "3464" },
