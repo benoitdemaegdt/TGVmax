@@ -3,17 +3,17 @@ import 'mocha';
 import * as moment from 'moment-timezone';
 import * as nock from 'nock';
 import Config from '../src/config';
-import { Sncf } from '../src/core/Sncf';
+import { SncfWeb } from '../src/core/SncfWeb';
 import { IAvailability } from '../src/types';
 
-describe('Sncf', () => {
+describe('SncfWeb', () => {
   let fakeServer: nock.Scope;
   /**
    * Create fake server before running all tests in "Travel" section
    * This intercepts every HTTP calls to https://www.oui.sncf
    */
   before(() => {
-    fakeServer = nock(Config.baseSncfUrl);
+    fakeServer = nock(Config.baseSncfWebUrl);
   });
 
   /**
@@ -33,7 +33,7 @@ describe('Sncf', () => {
     const fromTime: string = moment(new Date()).add(1, 'days').startOf('day').toISOString();
     const toTime: string = moment(fromTime).add(6, 'hours').toISOString();
     const tgvmaxNumber: string = 'HC000054321';
-    const sncf: Sncf = new Sncf(origin, destination, fromTime, toTime, tgvmaxNumber);
+    const sncf: SncfWeb = new SncfWeb(origin, destination, fromTime, toTime, tgvmaxNumber);
 
     /**
      * create oui.sncf fake server
@@ -79,7 +79,7 @@ describe('Sncf', () => {
     const fromTime: string = moment(new Date()).add(1, 'days').startOf('day').toISOString();
     const toTime: string = moment(fromTime).add(6, 'hours').toISOString();
     const tgvmaxNumber: string = 'HC000054321';
-    const sncf: Sncf = new Sncf(origin, destination, fromTime, toTime, tgvmaxNumber);
+    const sncf: SncfWeb = new SncfWeb(origin, destination, fromTime, toTime, tgvmaxNumber);
 
     /**
      * create oui.sncf fake server
@@ -125,7 +125,7 @@ describe('Sncf', () => {
     const fromTime: string = moment(new Date()).add(1, 'days').startOf('day').toISOString();
     const toTime: string = moment(fromTime).add(10, 'hours').toISOString();
     const tgvmaxNumber: string = 'HC000054321';
-    const sncf: Sncf = new Sncf(origin, destination, fromTime, toTime, tgvmaxNumber);
+    const sncf: SncfWeb = new SncfWeb(origin, destination, fromTime, toTime, tgvmaxNumber);
 
     /**
      * create oui.sncf fake server
@@ -203,7 +203,7 @@ describe('Sncf', () => {
     const fromTime: string = moment(new Date()).add(1, 'days').startOf('day').toISOString();
     const toTime: string = moment(fromTime).add(10, 'hours').toISOString();
     const tgvmaxNumber: string = 'HC000054321';
-    const sncf: Sncf = new Sncf(origin, destination, fromTime, toTime, tgvmaxNumber);
+    const sncf: SncfWeb = new SncfWeb(origin, destination, fromTime, toTime, tgvmaxNumber);
 
     /**
      * create oui.sncf fake server

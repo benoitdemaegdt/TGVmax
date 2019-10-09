@@ -12,7 +12,7 @@ export class Config {
   /**
    * oui.sncf base url
    */
-  public baseSncfUrl: string;
+  public baseSncfWebUrl: string;
 
   /**
    * trainline base url
@@ -61,7 +61,7 @@ export class Config {
 
   constructor() {
     /* tslint:disable */
-    this.baseSncfUrl = 'https://www.oui.sncf';
+    this.baseSncfWebUrl = 'https://www.oui.sncf';
     this.baseTrainlineUrl = 'https://www.trainline.eu';
     this.dbUrl = process.env.DB_URL || config.get('dbUrl');
     this.jwtSecret = process.env.JWT_SECRET || config.get('jwtSecret');
