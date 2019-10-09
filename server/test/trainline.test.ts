@@ -30,10 +30,10 @@ describe('Trainline', () => {
      */
     const origin: string = '1'; // fake trainlineId
     const destination: string = '2'; // fake trainlineId
-    const fromTime: string = moment(new Date()).add(1, 'days').startOf('day').tz('Europe/Paris').format('YYYY-MM-DD[T]HH:mm:ss');
-    const toTime: string = moment(fromTime).add(6, 'hours').tz('Europe/Paris').format('YYYY-MM-DD[T]HH:mm:ss');
+    const fromTime: Date = moment(new Date()).add(1, 'days').startOf('day').toDate();
+    const toTime: Date = moment(fromTime).add(6, 'hours').toDate();
     const tgvmaxNumber: string = 'HC000054321';
-    
+
     const trainline: Trainline = new Trainline(origin, destination, fromTime, toTime, tgvmaxNumber);
 
     /**
@@ -77,10 +77,10 @@ describe('Trainline', () => {
      */
     const origin: string = '1'; // fake trainlineId
     const destination: string = '2'; // fake trainlineId
-    const fromTime: string = moment(new Date()).add(1, 'days').startOf('day').tz('Europe/Paris').format('YYYY-MM-DD[T]HH:mm:ss');
-    const toTime: string = moment(fromTime).add(6, 'hours').tz('Europe/Paris').format('YYYY-MM-DD[T]HH:mm:ss');
+    const fromTime: Date = moment(new Date()).add(1, 'days').startOf('day').toDate();
+    const toTime: Date = moment(fromTime).add(6, 'hours').toDate();
     const tgvmaxNumber: string = 'HC000054321';
-    
+
     const trainline: Trainline = new Trainline(origin, destination, fromTime, toTime, tgvmaxNumber);
 
     /**
@@ -125,8 +125,8 @@ describe('Trainline', () => {
      */
     const origin: string = '1'; // fake trainlineId
     const destination: string = '2'; // fake trainlineId
-    const fromTime: string = moment(new Date()).add(1, 'days').startOf('day').tz('Europe/Paris').format('YYYY-MM-DD[T]HH:mm:ss');
-    const toTime: string = moment(fromTime).add(6, 'hours').tz('Europe/Paris').format('YYYY-MM-DD[T]HH:mm:ss');
+    const fromTime: Date = moment(new Date()).add(1, 'days').startOf('day').toDate();
+    const toTime: Date = moment(fromTime).add(6, 'hours').toDate();
     const tgvmaxNumber: string = 'HC000054321';
 
     const trainline: Trainline = new Trainline(origin, destination, fromTime, toTime, tgvmaxNumber);

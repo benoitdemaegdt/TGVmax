@@ -39,8 +39,8 @@ class CronChecks {
           const trainline: Trainline = new Trainline(
             travelAlert.origin.trainlineId,
             travelAlert.destination.trainlineId,
-            moment(travelAlert.fromTime).tz('Europe/Paris').format('YYYY-MM-DD[T]HH:mm:ss'),
-            moment(travelAlert.toTime).tz('Europe/Paris').format('YYYY-MM-DD[T]HH:mm:ss'),
+            travelAlert.fromTime,
+            travelAlert.toTime,
             travelAlert.tgvmaxNumber,
           );
 

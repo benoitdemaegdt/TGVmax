@@ -34,11 +34,11 @@ export class Trainline {
    */
   private readonly tgvmaxNumber: string;
 
-  constructor(origin: string, destination: string, fromTime: string, toTime: string, tgvmaxNumber: string) {
+  constructor(origin: string, destination: string, fromTime: Date, toTime: Date, tgvmaxNumber: string) {
     this.origin = origin;
     this.destination = destination;
-    this.fromTime = fromTime;
-    this.toTime = toTime;
+    this.fromTime = moment(fromTime).tz('Europe/Paris').format('YYYY-MM-DD[T]HH:mm:ss');
+    this.toTime = moment(toTime).tz('Europe/Paris').format('YYYY-MM-DD[T]HH:mm:ss');
     this.tgvmaxNumber = tgvmaxNumber;
   }
 
