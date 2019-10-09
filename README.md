@@ -16,6 +16,7 @@ This process is boring and time consuming. This project is an attempt to make it
 Please read documentation [here](./doc/sncf.md)
 
 ## How to use this project locally ?
+⚠️ This documentation may not be up to date ⚠️
 
 ### Prerequisites
 1/ Install [MongoDB](https://www.mongodb.com/download-center/community)
