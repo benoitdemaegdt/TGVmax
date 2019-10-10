@@ -38,7 +38,7 @@
     "moment-timezone": "^0.5.26",
     "mongodb": "^3.3.2",
     "node-cron": "^2.0.3",
-    "nodemailer": "^6.3.0",
+    "nodemailer": "^6.3.1",
     "superagent": "^5.1.0",
     "uuid": "^3.3.3"
   },
@@ -55,7 +55,7 @@
     "@types/koa-router": "^7.0.42",
     "@types/koa-static": "^4.0.1",
     "@types/koa__cors": "^2.2.3",
-    "@types/lodash": "^4.14.142",
+    "@types/lodash": "^4.14.144",
     "@types/mocha": "^5.2.7",
     "@types/moment-timezone": "^0.5.12",
     "@types/mongodb": "^3.3.6",
@@ -74,7 +74,7 @@
     "supertest": "^4.0.2",
     "ts-node": "^8.4.1",
     "tslint": "^5.20.0",
-    "typescript": "^3.6.3"
+    "typescript": "^3.6.4"
   },
   "nyc": {
     "check-coverage": true,

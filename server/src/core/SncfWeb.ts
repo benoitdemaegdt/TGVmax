@@ -8,7 +8,7 @@ import { IAvailability, ITrain } from '../types';
  * Tgvmax Travel
  * Fetch Tgvmax availabilities from oui.sncf
  */
-export class Sncf {
+export class SncfWeb {
   /**
    * departure station
    */
@@ -104,7 +104,7 @@ export class Sncf {
    */
   private async getMinPrices(time: string): Promise<ITrain[]> {
     const response: request.Response = await request
-      .post(`${Config.baseSncfUrl}/proposition/rest/travels/outward/train/next`)
+      .post(`${Config.baseSncfWebUrl}/proposition/rest/travels/outward/train/next`)
       .send({
         context: {
           paginationContext: {

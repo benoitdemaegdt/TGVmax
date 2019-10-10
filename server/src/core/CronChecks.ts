@@ -1,4 +1,4 @@
-import { isEmpty } from 'lodash';
+import { isEmpty, random } from 'lodash';
 import * as moment from 'moment-timezone';
 import { ObjectId } from 'mongodb';
 import * as cron from 'node-cron';
@@ -6,6 +6,7 @@ import Config from '../Config';
 import Notification from '../core/Notification';
 import Database from '../database/database';
 import { IAvailability, ITravelAlert, IUser } from '../types';
+import { SncfMobile } from './SncfMobile';
 import { Trainline } from './Trainline';
 
 /**
@@ -28,22 +29,39 @@ class CronChecks {
           return;
         }
 
+        console.log(`${moment(new Date()).tz('Europe/Paris').format('DD-MM-YYYY HH:mm:ss')} - processing ${travelAlerts.length} travelAlerts`); // tslint:disable-line
         /**
          * Process each travelAlert
          * Send notification if tgvmax seat is available
          */
         for (const travelAlert of travelAlerts) {
-          console.log(`${moment(new Date()).tz('Europe/Paris').format('DD-MM-YYYY HH:mm:ss')} - processing travelAlert ${travelAlert._id}`); // tslint:disable-line
+          let availability: IAvailability;
 
-          const trainline: Trainline = new Trainline(
-            travelAlert.origin.trainlineId,
-            travelAlert.destination.trainlineId,
-            moment(travelAlert.fromTime).tz('Europe/Paris').format('YYYY-MM-DD[T]HH:mm:ss'),
-            moment(travelAlert.toTime).tz('Europe/Paris').format('YYYY-MM-DD[T]HH:mm:ss'),
-            travelAlert.tgvmaxNumber,
-          );
+          /**
+           * split load on trainline and sncf mobile APIs
+           */
+          if (random(0, 1) === 0) {
+            console.log(`${moment(new Date()).tz('Europe/Paris').format('DD-MM-YYYY HH:mm:ss')} - processing travelAlert ${travelAlert._id} - trainline API`); // tslint:disable-line
+            const trainline: Trainline = new Trainline(
+              travelAlert.origin.trainlineId,
+              travelAlert.destination.trainlineId,
+              travelAlert.fromTime,
+              travelAlert.toTime,
+              travelAlert.tgvmaxNumber,
+            );
+            availability = await trainline.isTgvmaxAvailable();
+          } else {
+            console.log(`${moment(new Date()).tz('Europe/Paris').format('DD-MM-YYYY HH:mm:ss')} - processing travelAlert ${travelAlert._id} - sncf API`); // tslint:disable-line
+            const sncfMobile: SncfMobile = new SncfMobile(
+              travelAlert.origin.sncfId,
+              travelAlert.destination.sncfId,
+              travelAlert.fromTime,
+              travelAlert.toTime,
+              travelAlert.tgvmaxNumber,
+            );
+            availability = await sncfMobile.isTgvmaxAvailable();
+          }
 
-          const availability: IAvailability = await trainline.isTgvmaxAvailable();
           if (!availability.isTgvmaxAvailable) {
             await Database.updateOne('alerts', {_id: new ObjectId(travelAlert._id)}, {$set: {lastCheck: new Date()}});
             await this.delay(Config.delay);
@@ -53,6 +71,7 @@ class CronChecks {
           /**
            * if is TGVmax is available : send email
            */
+          console.log(`${moment(new Date()).tz('Europe/Paris').format('DD-MM-YYYY HH:mm:ss')} - travelAlert ${travelAlert._id} triggered`); // tslint:disable-line
           const email: string = await this.fetchEmailAddress(travelAlert.userId);
           await Notification.sendEmail(
             email,

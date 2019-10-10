@@ -33,6 +33,31 @@ export interface ITrainlineTrain {
 }
 
 /**
+ * Trainline Train interface
+ */
+export interface ISncfMobileTrain {
+  departureDate: string;
+  arrivalDate: string;
+  departureStation: {
+    name: string;
+  };
+  arrivalStation: {
+    name: string;
+  };
+  durationInMillis: number;
+  price: {
+    currency: string;
+    value: number;
+  };
+  segments: object[];
+  proposals: object[][];
+  connections: string[];
+  features: string[];
+  info: object;
+  unsellableReason?: string;
+}
+
+/**
  * Availability interface
  */
 export interface IAvailability {
