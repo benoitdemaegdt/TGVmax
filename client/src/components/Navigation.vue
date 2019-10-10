@@ -16,8 +16,8 @@
         <v-btn v-if='!this.isLoggedIn' key='Connexion' to='/inscription' text>
           Connexion
         </v-btn>
-        <v-btn v-else key='Déconnexion' to='/deconnexion' text>
-          Déconnexion
+        <v-btn v-else key='Compte' to='/compte' text>
+          Compte
         </v-btn>
       </v-toolbar-items>
     </v-app-bar>
@@ -48,12 +48,15 @@
             <v-list-item-title>Connexion</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
+        <v-list-item v-if='this.isLoggedIn' key='Compte' to='/compte' link>
+          <v-list-item-icon>
+            <v-icon>mdi-account</v-icon>
+          </v-list-item-icon>
+          <v-list-item-content>
+            <v-list-item-title>Compte</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
       </v-list>
-      <template v-if='isLoggedIn' v-slot:append>
-        <div class='pa-2'>
-          <v-btn to='/deconnexion' block color='#E0E0E0'>Déconnexion</v-btn>
-        </div>
-      </template>
     </v-navigation-drawer>
     <!-- End of mobile menu -->
   </nav>
