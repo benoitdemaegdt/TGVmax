@@ -15,6 +15,11 @@ export class Config {
   public baseSncfWebUrl: string;
 
   /**
+   * oui.sncf mobile base url
+   */
+  public baseSncfMobileUrl: string;
+
+  /**
    * trainline base url
    */
   public baseTrainlineUrl: string;
@@ -62,6 +67,7 @@ export class Config {
   constructor() {
     /* tslint:disable */
     this.baseSncfWebUrl = 'https://www.oui.sncf';
+    this.baseSncfMobileUrl = 'https://wshoraires.oui.sncf';
     this.baseTrainlineUrl = 'https://www.trainline.eu';
     this.dbUrl = process.env.DB_URL || config.get('dbUrl');
     this.jwtSecret = process.env.JWT_SECRET || config.get('jwtSecret');

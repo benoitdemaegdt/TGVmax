@@ -37,7 +37,7 @@ describe('Trainline', () => {
     const trainline: Trainline = new Trainline(origin, destination, fromTime, toTime, tgvmaxNumber);
 
     /**
-     * create oui.sncf fake server
+     * create trainline fake server
      */
     fakeServer
     .post('/api/v5_1/search')
@@ -59,7 +59,7 @@ describe('Trainline', () => {
           passenger_id: 'ccddfbfd-d7f5-43bf-8b64-bd92aaaf116e',
           folder_id: 'd8949f5ce45311e994d38242726611c2'
         },
-      ]
+      ],
     });
 
     /**
@@ -84,7 +84,7 @@ describe('Trainline', () => {
     const trainline: Trainline = new Trainline(origin, destination, fromTime, toTime, tgvmaxNumber);
 
     /**
-     * create oui.sncf fake server
+     * create trainline fake server
      */
     fakeServer
     .post('/api/v5_1/search')
@@ -105,9 +105,9 @@ describe('Trainline', () => {
           digest: '4430840c0e40b203372e3f7bdc20af0b0948d18a',
           segment_ids: [ 'd8949c5ae45311e99c234aa6e5cf66f2' ],
           passenger_id: 'ccddfbfd-d7f5-43bf-8b64-bd92aaaf116e',
-          folder_id: 'd8949f5ce45311e994d38242726611c2'
+          folder_id: 'd8949f5ce45311e994d38242726611c2',
         },
-      ]
+      ],
     });
 
     /**
@@ -131,7 +131,7 @@ describe('Trainline', () => {
 
     const trainline: Trainline = new Trainline(origin, destination, fromTime, toTime, tgvmaxNumber);
     /**
-     * create oui.sncf fake server
+     * create trainline fake server
      */
     fakeServer
     .post('/api/v5_1/search')
@@ -153,7 +153,7 @@ describe('Trainline', () => {
           passenger_id: 'ccddfbfd-d7f5-43bf-8b64-bd92aaaf116e',
           folder_id: 'd8949f5ce45311e994d38242726611c2'
         },
-      ]
+      ],
     });
 
     /**
@@ -164,4 +164,4 @@ describe('Trainline', () => {
     chai.expect(tgvmaxAvailability.isTgvmaxAvailable).to.equal(true);
     chai.expect(tgvmaxAvailability.hours).to.deep.equal([moment(fromTime).add(1, 'hours').tz('Europe/Paris').format('HH:mm')]);
   });
-})
+});

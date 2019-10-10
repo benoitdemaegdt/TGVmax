@@ -1,14 +1,14 @@
 import { filter, isEmpty, isNil, map, uniq } from 'lodash';
 import * as moment from 'moment-timezone';
 import * as request from 'superagent';
-import * as uuidv4 from 'uuid/v4';
 import Config from '../Config';
-import { IAvailability, ITrainlineTrain } from '../types';
+import { IAvailability, ISncfMobileTrain } from '../types';
+
 /**
- * Trainline
- * Fetch Tgvmax availabilities from trainline.fr
+ * SncfMobile
+ * Fetch Tgvmax availabilities from oui.sncf mobile API
  */
-export class Trainline {
+export class SncfMobile {
   /**
    * departure station
    */
@@ -67,54 +67,64 @@ export class Trainline {
   }
 
   /**
-   * Get Train with a TGVmax seat available from Trainline API
+   * Get Train with a TGVmax seat available from Sncf mobile API
    */
   private async getTgvmaxHours(): Promise<string[]> {
 
-    const results: ITrainlineTrain[] = [];
+    const results: ISncfMobileTrain[] = [];
     let keepSearching: boolean = true;
     let fromTime: string = this.fromTime;
 
     try {
       while (keepSearching) {
         const response: request.Response = await request
-        .post(`${Config.baseTrainlineUrl}/api/v5_1/search`)
+        .post(`${Config.baseSncfMobileUrl}/m650/vmd/maq/v3/proposals/train`)
         .set({
           Accept: 'application/json',
-          'User-Agent': 'CaptainTrain/43(4302) Android/4.4.2(19)',
-          'Accept-Language': 'fr',
-          'Content-Type': 'application/json; charset=UTF-8',
-          Host: 'www.trainline.eu',
+          'User-Agent': 'OUI.sncf/65.1.1 CFNetwork/1107.1 Darwin/19.0.0',
+          'Accept-Language': 'fr-FR ',
+          'Content-Type': 'application/json;charset=UTF8',
+          Host: 'wshoraires.oui.sncf',
+          'x-vsc-locale': 'fr_FR',
+          'X-Device-Type': 'IOS',
         })
         .send({
-          local_currency: 'EUR',
-          search: {
-            passengers: [
-              {
-                age: 25, // random
-                id: uuidv4(), // random uuid
-                label: uuidv4(), // random uuid
-                cards: [{
-                  reference: 'SNCF.HappyCard',
-                  number: this.tgvmaxNumber,
-                }],
-              },
-            ],
-            departure_station_id: this.origin,
-            arrival_station_id: this.destination,
-            departure_date: this.getTrainlineDate(fromTime),
-            systems: [
-              'sncf',
-            ],
+          departureTown: {
+            codes: {
+              resarail: this.origin,
+            },
           },
+          destinationTown: {
+            codes: {
+              resarail: this.destination,
+            },
+          },
+          features: [
+            'TRAIN_AND_BUS',
+            'DIRECT_TRAVEL',
+          ],
+          outwardDate: moment(fromTime).format('YYYY-MM-DD[T]HH:mm:ss.SSSZ'),
+          passengers: [
+            {
+              age: 25, // random
+              ageRank: 'YOUNG',
+              birthday: '1995-03-06', // random
+              commercialCard: {
+                number: this.tgvmaxNumber,
+                type: 'HAPPY_CARD',
+              },
+              type: 'HUMAN',
+            },
+          ],
+          travelClass: 'SECOND',
         });
 
-        const pageResults: {trips: ITrainlineTrain[]} = response.body as {trips: ITrainlineTrain[]};
-        const pageTrips: ITrainlineTrain[] = pageResults.trips;
+        const pageResults: {journeys: ISncfMobileTrain[]} = response.body as {journeys: ISncfMobileTrain[]};
+        const pageJourneys: ISncfMobileTrain[] = pageResults.journeys;
 
-        results.push(...pageTrips);
+        results.push(...pageJourneys);
 
-        const pageLastTripDeparture: string = moment(pageTrips[pageTrips.length - 1].departure_date)
+        const pageLastTripDeparture: string = moment(pageJourneys[pageJourneys.length - 1].departureDate)
         .tz('Europe/Paris').format('YYYY-MM-DD[T]HH:mm:ss');
 
         if (moment(this.toTime).isSameOrBefore(pageLastTripDeparture)
@@ -132,26 +142,16 @@ export class Trainline {
      * 1/ filter out trains with no TGVmax seat available
      * 2/ filter out trains leaving after toTime
      */
-    const tgvmaxTravels: ITrainlineTrain[] = filter(results, (item: ITrainlineTrain) => {
-      const departureDate: string = moment(item.departure_date).tz('Europe/Paris').format('YYYY-MM-DD[T]HH:mm:ss');
+    const tgvmaxTravels: ISncfMobileTrain[] = filter(results, (item: ISncfMobileTrain) => {
+      const departureDate: string = moment(item.departureDate).tz('Europe/Paris').format('YYYY-MM-DD[T]HH:mm:ss');
 
-      return item.cents === 0
-        && moment(departureDate).isSameOrBefore(this.toTime)
-        && isNil(item.short_unsellable_reason);
+      return isNil(item.unsellableReason)
+        && item.price.value === 0
+        && moment(departureDate).isSameOrBefore(this.toTime);
     });
 
-    return map(tgvmaxTravels, (tgvmaxTravel: ITrainlineTrain) => {
-      return moment(tgvmaxTravel.departure_date).tz('Europe/Paris').format('HH:mm');
+    return map(tgvmaxTravels, (tgvmaxTravel: ISncfMobileTrain) => {
+      return moment(tgvmaxTravel.departureDate).tz('Europe/Paris').format('HH:mm');
     });
-  }
-
-  /**
-   * trainline input date is GMT + current UTC/GMT offset
-   */
-  private readonly getTrainlineDate = (time: string): string => {
-    const minInHour: number = 60;
-    const utcOffset: number = moment(new Date()).tz('Europe/Paris').utcOffset() / minInHour;
-
-    return moment(time).add(utcOffset, 'hours').format('YYYY-MM-DD[T]HH:mm:ss');
   }
 }
