@@ -37,6 +37,18 @@ export class Database {
   }
 
   /**
+   * findOne
+   */
+  public async findOne<T>(coll: string, query: object, projection: object = {}): Promise<T | null> {
+    try {
+      return await Database.db.collection(coll).findOne(query, {projection});
+    } catch (err) {
+      const error: {code: number; errmsg: string} = err as {code: number; errmsg: string};
+      throw new DatabaseError(error.code, error.errmsg);
+    }
+  }
+
+  /**
    * insertOne
    */
   public async insertOne<T>(coll: string, doc: object): Promise<InsertOneWriteOpResult<T>> {

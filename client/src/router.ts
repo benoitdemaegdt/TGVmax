@@ -3,10 +3,10 @@ import Router from 'vue-router';
 
 import Home from './views/Home.vue';
 import Alert from './views/Alert.vue';
-import Destination from './views/Destination.vue';
+// import Destination from './views/Destination.vue';
 import Contact from './views/Contact.vue';
 import Login from './views/Login.vue';
-import Logout from './views/Logout.vue';
+import Account from './views/Account.vue';
 import Register from './views/Register.vue';
 import NotFound from './components/NotFound.vue';
 
@@ -44,9 +44,9 @@ const router: Router = new Router({
       component: Login,
     },
     {
-      path: '/deconnexion',
-      name: 'Déconnexion',
-      component: Logout,
+      path: '/compte',
+      name: 'Compte',
+      component: Account,
     },
     {
       path: '*',

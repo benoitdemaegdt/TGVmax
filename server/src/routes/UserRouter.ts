@@ -33,7 +33,24 @@ class UserRouter {
     this.userSchema = new Ajv({allErrors: true}).compile(userSchema);
     this.init();
   }
+  /**
+   * Get a singlee user
+   */
+  private readonly getUser = async(ctx: Context): Promise<void> => {
+    const params: {userId: string} = ctx.params as {userId: string};
 
+    const user: IUser | null = await UserController.getUser(params.userId);
+
+    if (isNil(user)) {
+      ctx.status = HttpStatus.NOT_FOUND;
+    } else {
+      ctx.status = HttpStatus.OK;
+      ctx.body = {
+        email: user.email,
+        tgvmaxNumber: user.tgvmaxNumber,
+      };
+    }
+  }
   /**
    * Add a user to database
    * Log a user in
@@ -77,6 +94,7 @@ class UserRouter {
    * init router
    */
   private init(): void {
+    this.router.get('/:userId', authenticate(), this.getUser);
     this.router.post('/', validate(this.userSchema), this.addUser);
     this.router.delete('/:userId', authenticate(), this.deleteUser);
   }

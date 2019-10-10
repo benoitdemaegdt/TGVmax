@@ -146,6 +146,45 @@ describe('UserRouter', () => {
     });
   });
 
+  it('GET /api/v1/users/:userId 200 OK', async() => {
+    const response: request.Response = await request(server)
+    .post('/api/v1/users?action=login')
+    .send({
+      email: 'jane.doe@yopmail.com',
+      password: 'this-is-my-fake-password',
+    })
+    .expect(HttpStatus.OK);
+
+    const responseUser: request.Response = await request(server)
+    .get(`/api/v1/users/${response.body._id}`)
+    .set({ Authorization: `Bearer ${response.body.token}` })
+    .expect(HttpStatus.OK);
+
+    chai.expect(responseUser.body.email).to.equal('jane.doe@yopmail.com');
+    chai.expect(responseUser.body.tgvmaxNumber).to.equal('HC000054321');
+  });
+
+  it('GET /api/v1/users/:userId 401 UNAUTHORIZED', async() => {
+    return request(server)
+    .get('/api/v1/users/5d9b87920f8408d241a50012') // fakeId
+    .expect(HttpStatus.UNAUTHORIZED);
+  });
+
+  it('GET /api/v1/users/:userId 404 NOT FOUND', async() => {
+    const response: request.Response = await request(server)
+    .post('/api/v1/users?action=login')
+    .send({
+      email: 'jane.doe@yopmail.com',
+      password: 'this-is-my-fake-password',
+    })
+    .expect(HttpStatus.OK);
+
+    return request(server)
+    .get('/api/v1/users/5d9b87920f8408d241a50012') // fakeId
+    .set({ Authorization: `Bearer ${response.body.token}` })
+    .expect(HttpStatus.NOT_FOUND);
+  });
+
   it('DELETE /api/v1/users/:userId 200 OK', async() => {
     const insertedDoc: request.Response = await request(server)
     .post('/api/v1/users?action=register')

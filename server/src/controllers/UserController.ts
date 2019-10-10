@@ -20,6 +20,23 @@ class UserController {
   }
 
   /**
+   * Get user
+   */
+  public async getUser(userId: string): Promise<IUser | null> {
+    return Database.findOne<IUser>(
+      this.collectionUsers,
+      {
+        _id: new ObjectId(userId),
+      },
+      {
+        _id: 0,
+        email: 1,
+        tgvmaxNumber: 1,
+      },
+    );
+  }
+
+  /**
    * Add a user to database
    */
   public async addUser(user: IUser): Promise<string> {
