@@ -15,7 +15,7 @@
     </v-flex>
     <v-flex md6 style="background: #f5f5f5">
       <v-img
-        src='@/assets/img/maxplorateur.png'
+        src='@/../public/maxplorateur.png'
         aspect-ratio='1'
       >
       </v-img>
