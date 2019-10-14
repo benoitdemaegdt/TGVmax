@@ -17,7 +17,7 @@ const MongoClient = require('mongodb').MongoClient;
     },
   }).count();
 
-  const alertsPerUser = await collection.aggregate([
+  const pendingAlertsPerUser = await collection.aggregate([
     {
       $match: {
         status: 'pending',
@@ -36,13 +36,27 @@ const MongoClient = require('mongodb').MongoClient;
     },
   ]).toArray();
 
+  const alertsPerUser = await collection.aggregate([
+    {
+      $group: {
+        _id: '$tgvmaxNumber',
+        alerts: {
+          $sum: 1
+        },
+      },
+    },
+  ]).toArray();
+
   const lastTriggeredAlert = await collection.find({
     status: 'triggered',
   }).sort({ triggeredAt: -1 }).toArray();
 
   console.log(`pending alerts : ${pendingAlerts}`);
 
-  console.log('alerts per user');
+  console.log('pending alerts per user');
+  console.log(pendingAlertsPerUser);
+
+  console.log('created alerts per user');
   console.log(alertsPerUser);
 
   console.log(`last triggered alert : ${lastTriggeredAlert[0].triggeredAt}`);
