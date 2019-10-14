@@ -25,6 +25,7 @@ services:
             - EMAIL=
             - PASSWORD=
             - DELAY=150
+            - MAX_ALERTS_PER_USER=6
             - WHITELIST=http://localhost:8080
         ports:
             - 3000:3000

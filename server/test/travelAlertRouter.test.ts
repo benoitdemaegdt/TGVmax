@@ -1,6 +1,7 @@
 import * as chai from 'chai';
 import * as http from 'http';
 import 'mocha';
+import * as moment from 'moment-timezone';
 import { ObjectId } from 'mongodb';
 import * as request from 'supertest';
 import App from '../src/app';
@@ -98,8 +99,7 @@ describe('TravelAlertRouter', () => {
     .expect(HttpStatus.NOT_FOUND)
     .expect((res: request.Response) => {
       chai.expect(res.body.statusCode).to.equal(HttpStatus.NOT_FOUND);
-      chai.expect(res.body.message)
-        .to.equal('user not found');
+      chai.expect(res.body.message).to.equal('user not found');
     });
   });
 
@@ -318,5 +318,65 @@ describe('TravelAlertRouter', () => {
     });
 
     chai.expect(doc2).to.deep.equal([]);
+  });
+
+  it('POST /api/v1/users/:userId/travels 422 UNPROCESSABLE ENTITY', async() => {
+    /**
+     * A travelAlert is linked to a user
+     * so I first need to insert a user in db and get its id
+     */
+    const res1: request.Response = await request(server)
+    .post('/api/v1/users?action=register')
+    .send({
+      email: 'tom.doe@yopmail.com',
+      password: 'this-is-my-fake-password',
+      tgvmaxNumber: 'HC000065432',
+    })
+    .expect(HttpStatus.CREATED);
+
+    /**
+     * insert a first travel alert
+     */
+    await request(server)
+    .post(`/api/v1/users/${res1.body._id}/travels`)
+    .set({ Authorization: `Bearer ${res1.body.token}` })
+    .send({
+      origin: {name: 'Paris (toutes gares intramuros)', sncfId: 'FRPAR', trainlineId: '1'},
+      destination: {name: 'Lyon (toutes gares intramuros)', sncfId: 'FRLYS', trainlineId: '2'},
+      fromTime: moment(new Date()).add(1, 'days').startOf('day').toISOString(),
+      toTime: moment(new Date()).add(1, 'days').endOf('day').toISOString(),
+    })
+    .expect(HttpStatus.CREATED);
+
+    /**
+     * insert a second travel alert
+     */
+    await request(server)
+    .post(`/api/v1/users/${res1.body._id}/travels`)
+    .set({ Authorization: `Bearer ${res1.body.token}` })
+    .send({
+      origin: {name: 'Paris (toutes gares intramuros)', sncfId: 'FRPAR', trainlineId: '1'},
+      destination: {name: 'Lyon (toutes gares intramuros)', sncfId: 'FRLYS', trainlineId: '2'},
+      fromTime: moment(new Date()).add(1, 'days').startOf('day').toISOString(),
+      toTime: moment(new Date()).add(1, 'days').endOf('day').toISOString(),
+    })
+    .expect(HttpStatus.CREATED);
+
+    /**
+     * insert a third travel alert - should fail
+     */
+    return request(server)
+    .post(`/api/v1/users/${res1.body._id}/travels`)
+    .set({ Authorization: `Bearer ${res1.body.token}` })
+    .send({
+      origin: {name: 'Paris (toutes gares intramuros)', sncfId: 'FRPAR', trainlineId: '1'},
+      destination: {name: 'Lyon (toutes gares intramuros)', sncfId: 'FRLYS', trainlineId: '2'},
+      fromTime: moment(new Date()).add(1, 'days').startOf('day').toISOString(),
+      toTime: moment(new Date()).add(1, 'days').endOf('day').toISOString(),
+    })
+    .expect(HttpStatus.UNPROCESSABLE_ENTITY)
+    .expect((res: request.Response) => {
+      chai.expect(res.body.message).to.equal('too many alerts');
+    });
   });
 });

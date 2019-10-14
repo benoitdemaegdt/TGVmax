@@ -19,7 +19,11 @@
               <template v-slot:activator='{ on }'>
                 <v-btn color='primary' dark v-on='on'>Nouvelle Alerte</v-btn>
               </template>
-              <alert-form @close:dialog='dialog = !dialog' @add:travelAlert='addTravelAlert'/>
+              <alert-form
+                @close:dialog='dialog = !dialog'
+                @add:travelAlert='addTravelAlert'
+                :alerts='alerts'
+              />
             </v-dialog>
           </v-toolbar>
         </template>
@@ -93,7 +97,11 @@
             <v-icon dark>mdi-plus</v-icon>
           </v-btn>
         </template>
-        <alert-form @close:dialog='dialog = !dialog' @add:travelAlert='addTravelAlert'/>
+        <alert-form
+          @close:dialog='dialog = !dialog'
+          @add:travelAlert='addTravelAlert'
+          :alerts='alerts'
+        />
       </v-dialog>
       <!-- End of mobile cards -->
     </div>

@@ -64,6 +64,11 @@ export class Config {
    */
   public delay: number;
 
+  /**
+   * max number of alerts per user
+   */
+  public maxAlertsPerUser: number;
+
   constructor() {
     /* tslint:disable */
     this.baseSncfWebUrl = 'https://www.oui.sncf';
@@ -77,6 +82,7 @@ export class Config {
     this.password = process.env.PASSWORD || config.get('password');
     this.whitelist = process.env.WHITELIST || this.getWhitelist();
     this.delay = Number(process.env.DELAY) || config.get('delay');
+    this.maxAlertsPerUser = Number(process.env.MAX_ALERTS_PER_USER) || config.get('maxAlertsPerUser');
   }
 
   private getWhitelist = (): string => {
