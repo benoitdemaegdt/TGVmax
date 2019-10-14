@@ -1,7 +1,9 @@
 import { isEmpty } from 'lodash';
 import { DeleteWriteOpResultObject, InsertOneWriteOpResult , ObjectId } from 'mongodb';
+import Config from '../Config';
 import Database from '../database/database';
 import { NotFoundError } from '../errors/NotFoundError';
+import { TooManyAlertsError } from '../errors/TooManyAlertsError';
 import { ITravelAlert, IUser } from '../types';
 
 /**
@@ -30,6 +32,23 @@ class TravelAlertController {
       throw new NotFoundError('user not found');
     }
 
+    /**
+     * reject if too many alerts for this user
+     */
+    const userPendingAlerts: ITravelAlert[] = await Database.find<ITravelAlert>(this.collectionAlerts, {
+      status: 'pending',
+      tgvmaxNumber: user[0].tgvmaxNumber,
+      fromTime: {
+        $gt: new Date(),
+      },
+    });
+    if (userPendingAlerts.length >= Config.maxAlertsPerUser) {
+      throw new TooManyAlertsError();
+    }
+
+    /**
+     * insert alert in db
+     */
     const insertOp: InsertOneWriteOpResult<ITravelAlert> =
       await Database.insertOne<ITravelAlert>(this.collectionAlerts, {
       userId: new ObjectId(userId),
