@@ -10,12 +10,23 @@ const MongoClient = require('mongodb').MongoClient;
 
   const collection = client.db('maxplorateur').collection('alerts');
 
-  const pendingAlerts = await collection.find({
+  const pendingAlertsCount = await collection.find({
     status: 'pending',
     fromTime: {
       $gt: new Date(),
     },
   }).count();
+
+  const pendingAlerts = await collection.find({
+    status: 'pending',
+    fromTime: {
+      $gt: new Date(),
+    },
+  }).project({
+    _id: 0,
+    'origin.name': 1,
+    'destination.name': 1,
+  }).toArray();
 
   const pendingAlertsPerUser = await collection.aggregate([
     {
@@ -51,7 +62,8 @@ const MongoClient = require('mongodb').MongoClient;
     status: 'triggered',
   }).sort({ triggeredAt: -1 }).toArray();
 
-  console.log(`pending alerts : ${pendingAlerts}`);
+  console.log(`pending alerts : ${pendingAlertsCount}`);
+  console.log(pendingAlerts);
 
   console.log('pending alerts per user');
   console.log(pendingAlertsPerUser);
