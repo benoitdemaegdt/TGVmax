@@ -40,7 +40,7 @@ describe('TravelAlertRouter', () => {
     const res1: request.Response = await request(server)
     .post('/api/v1/users?action=register')
     .send({
-      email: 'jane.doe@yopmail.com',
+      email: 'jane.doe@gmail.com',
       password: 'this-is-my-fake-password',
       tgvmaxNumber: 'HC000054321',
     })
@@ -78,7 +78,7 @@ describe('TravelAlertRouter', () => {
     const res1: request.Response = await request(server)
     .post('/api/v1/users?action=register')
     .send({
-      email: 'johan.doe@yopmail.com',
+      email: 'johan.doe@gmail.com',
       password: 'this-is-my-fake-password',
       tgvmaxNumber: 'HC000054322',
     })
@@ -107,7 +107,7 @@ describe('TravelAlertRouter', () => {
     const res1: request.Response = await request(server)
     .post('/api/v1/users?action=register')
     .send({
-      email: 'johana.doe@yopmail.com',
+      email: 'johana.doe@gmail.com',
       password: 'this-is-my-fake-password',
       tgvmaxNumber: 'HC000054323',
     })
@@ -136,7 +136,7 @@ describe('TravelAlertRouter', () => {
     const res1: request.Response = await request(server)
     .post('/api/v1/users?action=register')
     .send({
-      email: 'jack.doe@yopmail.com',
+      email: 'jack.doe@gmail.com',
       password: 'this-is-my-fake-password',
       tgvmaxNumber: 'HC000054329',
     })
@@ -174,7 +174,7 @@ describe('TravelAlertRouter', () => {
     const res1: request.Response = await request(server)
     .post('/api/v1/users?action=register')
     .send({
-      email: 'janone.doe@yopmail.com',
+      email: 'janone.doe@gmail.com',
       password: 'this-is-my-fake-password',
       tgvmaxNumber: 'HC000054328',
     })
@@ -199,7 +199,7 @@ describe('TravelAlertRouter', () => {
     const res1: request.Response = await request(server)
     .post('/api/v1/users?action=register')
     .send({
-      email: 'jeff.doe@yopmail.com',
+      email: 'jeff.doe@gmail.com',
       password: 'this-is-my-fake-password',
       tgvmaxNumber: 'HC000054324',
     })
@@ -247,7 +247,7 @@ describe('TravelAlertRouter', () => {
     const res1: request.Response = await request(server)
     .post('/api/v1/users?action=register')
     .send({
-      email: 'ben.doe@yopmail.com',
+      email: 'ben.doe@gmail.com',
       password: 'this-is-my-fake-password',
       tgvmaxNumber: 'HC000054327',
     })
@@ -276,7 +276,7 @@ describe('TravelAlertRouter', () => {
     const res1: request.Response = await request(server)
     .post('/api/v1/users?action=register')
     .send({
-      email: 'joey.doe@yopmail.com',
+      email: 'joey.doe@gmail.com',
       password: 'this-is-my-fake-password',
       tgvmaxNumber: 'HC000054325',
     })
@@ -328,7 +328,7 @@ describe('TravelAlertRouter', () => {
     const res1: request.Response = await request(server)
     .post('/api/v1/users?action=register')
     .send({
-      email: 'tom.doe@yopmail.com',
+      email: 'tom.doe@gmail.com',
       password: 'this-is-my-fake-password',
       tgvmaxNumber: 'HC000065432',
     })

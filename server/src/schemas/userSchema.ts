@@ -4,6 +4,9 @@ export const userSchema: object = {
       type: 'string',
       minLength: 5,
       format: 'email',
+      not: {
+        pattern: 'yopmail',
+      },
     },
     password: {
       type: 'string',

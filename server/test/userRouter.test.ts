@@ -36,7 +36,7 @@ describe('UserRouter', () => {
     const response: request.Response = await request(server)
     .post('/api/v1/users?action=register')
     .send({
-      email: 'jane.doe@yopmail.com',
+      email: 'jane.doe@gmail.com',
       password: 'this-is-my-fake-password',
       tgvmaxNumber: 'HC000054321',
     })
@@ -54,7 +54,7 @@ describe('UserRouter', () => {
       throw new Error('insertedDoc should not be null');
     } else {
       chai.expect(insertedDoc[0].tgvmaxNumber).to.equal('HC000054321');
-      chai.expect(insertedDoc[0].email).to.equal('jane.doe@yopmail.com');
+      chai.expect(insertedDoc[0].email).to.equal('jane.doe@gmail.com');
     }
   });
 
@@ -62,7 +62,7 @@ describe('UserRouter', () => {
     const response: request.Response = await request(server)
     .post('/api/v1/users?action=login')
     .send({
-      email: 'jane.doe@yopmail.com',
+      email: 'jane.doe@gmail.com',
       password: 'this-is-my-fake-password',
     })
     .expect(HttpStatus.OK);
@@ -76,7 +76,7 @@ describe('UserRouter', () => {
     await request(server)
     .post('/api/v1/users?action=login')
     .send({
-      email: 'jane.doe@yopmail.com',
+      email: 'jane.doe@gmail.com',
       password: 'wrong-password',
     })
     .expect(HttpStatus.UNAUTHORIZED)
@@ -90,7 +90,7 @@ describe('UserRouter', () => {
     return request(server)
     .post('/api/v1/users?action=register')
     .send({
-      email: 'jane.doe@yopmail.com',
+      email: 'jane.doe@gmail.com',
       password: 'this-is-my-fake-password',
     })
     .expect(HttpStatus.BAD_REQUEST)
@@ -104,7 +104,7 @@ describe('UserRouter', () => {
     return request(server)
     .post('/api/v1/users?action=register')
     .send({
-      email: 'jane.doe@yopmail.com',
+      email: 'jane.doe@gmail.com',
       password: 'this-is-my-fake-password',
       tgvmaxNumber: 'HC0000',
     })
@@ -119,7 +119,7 @@ describe('UserRouter', () => {
     return request(server)
     .post('/api/v1/users?action=register')
     .send({
-      email: 'jane.doe@yopmail.com',
+      email: 'jane.doe@gmail.com',
       password: 'this-is-my-fake-password',
       tgvmaxNumber: 'AB000054321',
     })
@@ -130,11 +130,26 @@ describe('UserRouter', () => {
     });
   });
 
-  it('POST /api/v1/users/ 422 UNPROCESSABLE ENTITY', async() => {
+  it('POST /api/v1/users/ 400 BAD REQUEST (yopmail)', async() => {
     return request(server)
     .post('/api/v1/users?action=register')
     .send({
       email: 'jane.doe@yopmail.com',
+      password: 'this-is-my-fake-password',
+      tgvmaxNumber: 'HC000054321',
+    })
+    .expect(HttpStatus.BAD_REQUEST)
+    .then((response: request.Response) => {
+      chai.expect(response.body.statusCode).to.equal(HttpStatus.BAD_REQUEST);
+      chai.expect(response.body.message).to.equal('should NOT be valid');
+    });
+  });
+
+  it('POST /api/v1/users/ 422 UNPROCESSABLE ENTITY', async() => {
+    return request(server)
+    .post('/api/v1/users?action=register')
+    .send({
+      email: 'jane.doe@gmail.com',
       password: 'this-is-my-fake-password',
       tgvmaxNumber: 'HC000064321',
     })
@@ -150,7 +165,7 @@ describe('UserRouter', () => {
     const response: request.Response = await request(server)
     .post('/api/v1/users?action=login')
     .send({
-      email: 'jane.doe@yopmail.com',
+      email: 'jane.doe@gmail.com',
       password: 'this-is-my-fake-password',
     })
     .expect(HttpStatus.OK);
@@ -160,7 +175,7 @@ describe('UserRouter', () => {
     .set({ Authorization: `Bearer ${response.body.token}` })
     .expect(HttpStatus.OK);
 
-    chai.expect(responseUser.body.email).to.equal('jane.doe@yopmail.com');
+    chai.expect(responseUser.body.email).to.equal('jane.doe@gmail.com');
     chai.expect(responseUser.body.tgvmaxNumber).to.equal('HC000054321');
   });
 
@@ -174,7 +189,7 @@ describe('UserRouter', () => {
     const response: request.Response = await request(server)
     .post('/api/v1/users?action=login')
     .send({
-      email: 'jane.doe@yopmail.com',
+      email: 'jane.doe@gmail.com',
       password: 'this-is-my-fake-password',
     })
     .expect(HttpStatus.OK);
@@ -189,7 +204,7 @@ describe('UserRouter', () => {
     const insertedDoc: request.Response = await request(server)
     .post('/api/v1/users?action=register')
     .send({
-      email: 'john.doe@yopmail.com',
+      email: 'john.doe@gmail.com',
       password: 'this-is-my-fake-password',
       tgvmaxNumber: 'HC000054322',
     })
