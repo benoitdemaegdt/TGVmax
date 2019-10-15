@@ -1,4 +1,5 @@
 import * as config from 'config';
+import { isNil } from 'lodash';
 
 /**
  * Config class
@@ -69,6 +70,11 @@ export class Config {
    */
   public maxAlertsPerUser: number;
 
+  /**
+   * is registration open
+   */
+  public isRegistrationOpen: boolean;
+
   constructor() {
     /* tslint:disable */
     this.baseSncfWebUrl = 'https://www.oui.sncf';
@@ -83,6 +89,10 @@ export class Config {
     this.whitelist = process.env.WHITELIST || this.getWhitelist();
     this.delay = Number(process.env.DELAY) || config.get('delay');
     this.maxAlertsPerUser = Number(process.env.MAX_ALERTS_PER_USER) || config.get('maxAlertsPerUser');
+    console.log(isNil(process.env.IS_REGISTRATION_OPEN)); // tslint:disable-line
+    this.isRegistrationOpen = isNil(process.env.IS_REGISTRATION_OPEN)
+      ? config.get('isRegistrationOpen')
+      : process.env.IS_REGISTRATION_OPEN === 'true';
   }
 
   private getWhitelist = (): string => {
