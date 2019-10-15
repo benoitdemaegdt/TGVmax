@@ -6,6 +6,7 @@ import { isNil } from 'lodash';
 import Config from '../Config';
 import UserController from '../controllers/UserController';
 import { HttpStatus } from '../Enum';
+import { CredentialError } from '../errors/CredentialError';
 import { ValidationError } from '../errors/ValidationError';
 import { authenticate } from '../middlewares/authenticate';
 import { validate } from '../middlewares/validate';
@@ -58,11 +59,13 @@ class UserRouter {
   private readonly addUser = async(ctx: Context): Promise<void> => {
     const user: IUser = ctx.request.body as IUser;
     const query: {action: string} = ctx.request.query as {action: string};
-
     let userId: string;
     if (query.action === 'register') {
       if (isNil(user.tgvmaxNumber)) {
         throw new ValidationError('should have required property \'tgvmaxNumber\'');
+      }
+      if (!Config.isRegistrationOpen) {
+        throw new CredentialError('Les inscriptions sont temporairement fermées.');
       }
       userId = await UserController.addUser(user);
     } else if (query.action === 'login') {

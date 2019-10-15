@@ -43,7 +43,7 @@ describe('StationRouter', () => {
     const res1: request.Response = await request(server)
     .post('/api/v1/users?action=register')
     .send({
-      email: 'jane.doe@yopmail.com',
+      email: 'jane.doe@gmail.com',
       password: 'this-is-my-fake-password',
       tgvmaxNumber: 'HC000054321',
     })

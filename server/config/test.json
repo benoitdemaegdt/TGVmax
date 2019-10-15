@@ -6,5 +6,6 @@
   "email": "maxplorateur@gmail.com",
   "password": "my-password",
   "delay": 150,
-  "maxAlertsPerUser": 2
+  "maxAlertsPerUser": 2,
+  "isRegistrationOpen": true
 }
