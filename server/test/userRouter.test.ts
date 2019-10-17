@@ -111,7 +111,22 @@ describe('UserRouter', () => {
     .expect(HttpStatus.BAD_REQUEST)
     .then((response: request.Response) => {
       chai.expect(response.body.statusCode).to.equal(HttpStatus.BAD_REQUEST);
-      chai.expect(response.body.message).to.equal('should NOT be shorter than 11 characters');
+      chai.expect(response.body.message).to.equal('Le numéro TGVmax doit contenir 11 caractère');
+    });
+  });
+
+  it('POST /api/v1/users/ 400 BAD REQUEST (invalid format - 2)', async() => {
+    return request(server)
+    .post('/api/v1/users?action=register')
+    .send({
+      email: 'janedoe',
+      password: 'this-is-my-fake-password',
+      tgvmaxNumber: 'HC000054321',
+    })
+    .expect(HttpStatus.BAD_REQUEST)
+    .then((response: request.Response) => {
+      chai.expect(response.body.statusCode).to.equal(HttpStatus.BAD_REQUEST);
+      chai.expect(response.body.message).to.equal('L\'adresse email est invalide');
     });
   });
 
@@ -126,7 +141,7 @@ describe('UserRouter', () => {
     .expect(HttpStatus.BAD_REQUEST)
     .then((response: request.Response) => {
       chai.expect(response.body.statusCode).to.equal(HttpStatus.BAD_REQUEST);
-      chai.expect(response.body.message).to.equal('should match pattern "^HC"');
+      chai.expect(response.body.message).to.equal('Le numéro TGVmax doit commencer par HC');
     });
   });
 
@@ -141,7 +156,7 @@ describe('UserRouter', () => {
     .expect(HttpStatus.BAD_REQUEST)
     .then((response: request.Response) => {
       chai.expect(response.body.statusCode).to.equal(HttpStatus.BAD_REQUEST);
-      chai.expect(response.body.message).to.equal('should NOT be valid');
+      chai.expect(response.body.message).to.equal('Les adresses jetables ne sont pas acceptées');
     });
   });
 
