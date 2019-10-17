@@ -1,5 +1,6 @@
-import Axios, { AxiosResponse } from 'axios';
-import { filter, get, isEmpty, map, pick } from 'lodash';
+import Axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
+import * as httpsProxyAgent from 'https-proxy-agent';
+import { filter, get, isEmpty, isNil, map, pick, random } from 'lodash';
 import * as moment from 'moment-timezone';
 import Config from '../Config';
 import { IAvailability, ITrain } from '../types';
@@ -103,7 +104,7 @@ export class SncfWeb {
    * This function returns the min price of the 5 trains leaving after the given time
    */
   private async getMinPrices(time: string): Promise<ITrain[]> {
-    const response: AxiosResponse = await Axios.request({
+    const config: AxiosRequestConfig = {
       url: `${Config.baseSncfWebUrl}/proposition/rest/travels/outward/train/next`,
       method: 'POST',
       data: {
@@ -141,7 +142,19 @@ export class SncfWeb {
           salesMarket: 'fr-FR',
         },
       },
-    });
+    };
+
+    /**
+     * split load between multiple servers
+     */
+    if (process.env.NODE_ENV === 'production' && !isNil(Config.proxyUrl) && random(0, 1) === 0) {
+      config.httpsAgent = new httpsProxyAgent(Config.proxyUrl);
+    }
+
+    /**
+     * get data from oui.sncf
+     */
+    const response: AxiosResponse = await Axios.request(config);
 
     /**
      * filter out the noise (everything except trains details)

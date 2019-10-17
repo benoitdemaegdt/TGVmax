@@ -75,6 +75,11 @@ export class Config {
    */
   public isRegistrationOpen: boolean;
 
+  /**
+   * proxy url
+   */
+  public proxyUrl: string | undefined;
+
   constructor() {
     /* tslint:disable */
     this.baseSncfWebUrl = 'https://www.oui.sncf';
@@ -92,6 +97,7 @@ export class Config {
     this.isRegistrationOpen = isNil(process.env.IS_REGISTRATION_OPEN)
       ? config.get('isRegistrationOpen')
       : process.env.IS_REGISTRATION_OPEN === 'true';
+    this.proxyUrl = process.env.PROXY_URL || config.get('proxyUrl')
   }
 
   private getWhitelist = (): string => {

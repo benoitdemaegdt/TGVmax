@@ -7,5 +7,6 @@
   "password": "my-password",
   "delay": 150,
   "maxAlertsPerUser": 2,
-  "isRegistrationOpen": true
+  "isRegistrationOpen": true,
+  "proxyUrl": null
 }

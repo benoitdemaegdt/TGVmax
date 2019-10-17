@@ -1,5 +1,6 @@
-import Axios, { AxiosResponse } from 'axios';
-import { filter, isEmpty, isNil, map, uniq } from 'lodash';
+import Axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
+import * as httpsProxyAgent from 'https-proxy-agent';
+import { filter, isEmpty, isNil, map, random, uniq } from 'lodash';
 import * as moment from 'moment-timezone';
 import * as uuidv4 from 'uuid/v4';
 import Config from '../Config';
@@ -77,7 +78,7 @@ export class Trainline {
 
     try {
       while (keepSearching) {
-        const response: AxiosResponse = await Axios.request({
+        const config: AxiosRequestConfig = {
           url: `${Config.baseTrainlineUrl}/api/v5_1/search`,
           method: 'POST',
           headers: {
@@ -109,7 +110,19 @@ export class Trainline {
               ],
             },
           },
-        });
+        };
+
+        /**
+         * split load between multiple servers
+         */
+        if (process.env.NODE_ENV === 'production' && !isNil(Config.proxyUrl) && random(0, 1) === 0) {
+          config.httpsAgent = new httpsProxyAgent(Config.proxyUrl);
+        }
+
+        /**
+         * get data from trainline
+         */
+        const response: AxiosResponse = await Axios.request(config);
 
         const pageResults: {trips: ITrainlineTrain[]} = response.data as {trips: ITrainlineTrain[]};
         const pageTrips: ITrainlineTrain[] = pageResults.trips;

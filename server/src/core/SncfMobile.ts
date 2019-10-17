@@ -1,5 +1,6 @@
-import Axios, { AxiosResponse } from 'axios';
-import { filter, isEmpty, isNil, map, uniq } from 'lodash';
+import Axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
+import * as httpsProxyAgent from 'https-proxy-agent';
+import { filter, isEmpty, isNil, map, random, uniq } from 'lodash';
 import * as moment from 'moment-timezone';
 import Config from '../Config';
 import { IAvailability, ISncfMobileTrain } from '../types';
@@ -77,7 +78,7 @@ export class SncfMobile {
 
     try {
       while (keepSearching) {
-        const response: AxiosResponse = await Axios.request({
+        const config: AxiosRequestConfig = {
           url: `${Config.baseSncfMobileUrl}/m650/vmd/maq/v3/proposals/train`,
           method: 'POST',
           headers: {
@@ -119,7 +120,19 @@ export class SncfMobile {
             ],
             travelClass: 'SECOND',
           },
-        });
+        };
+
+        /**
+         * split load between multiple servers
+         */
+        if (process.env.NODE_ENV === 'production' && !isNil(Config.proxyUrl) && random(0, 1) === 0) {
+          config.httpsAgent = new httpsProxyAgent(Config.proxyUrl);
+        }
+
+        /**
+         * get data from oui.sncf
+         */
+        const response: AxiosResponse = await Axios.request(config);
 
         const pageResults: {journeys: ISncfMobileTrain[]} = response.data as {journeys: ISncfMobileTrain[]};
         const pageJourneys: ISncfMobileTrain[] = pageResults.journeys;
