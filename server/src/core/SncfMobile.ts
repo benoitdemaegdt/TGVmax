@@ -1,6 +1,7 @@
-import { filter, isEmpty, isNil, map, uniq } from 'lodash';
+import Axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
+import * as httpsProxyAgent from 'https-proxy-agent';
+import { filter, isEmpty, isNil, map, random, uniq } from 'lodash';
 import * as moment from 'moment-timezone';
-import * as request from 'superagent';
 import Config from '../Config';
 import { IAvailability, ISncfMobileTrain } from '../types';
 
@@ -77,49 +78,63 @@ export class SncfMobile {
 
     try {
       while (keepSearching) {
-        const response: request.Response = await request
-        .post(`${Config.baseSncfMobileUrl}/m650/vmd/maq/v3/proposals/train`)
-        .set({
-          Accept: 'application/json',
-          'User-Agent': 'OUI.sncf/65.1.1 CFNetwork/1107.1 Darwin/19.0.0',
-          'Accept-Language': 'fr-FR ',
-          'Content-Type': 'application/json;charset=UTF8',
-          Host: 'wshoraires.oui.sncf',
-          'x-vsc-locale': 'fr_FR',
-          'X-Device-Type': 'IOS',
-        })
-        .send({
-          departureTown: {
-            codes: {
-              resarail: this.origin,
-            },
+        const config: AxiosRequestConfig = {
+          url: `${Config.baseSncfMobileUrl}/m650/vmd/maq/v3/proposals/train`,
+          method: 'POST',
+          headers: {
+            Accept: 'application/json',
+            'User-Agent': 'OUI.sncf/65.1.1 CFNetwork/1107.1 Darwin/19.0.0',
+            'Accept-Language': 'fr-FR ',
+            'Content-Type': 'application/json;charset=UTF8',
+            Host: 'wshoraires.oui.sncf',
+            'x-vsc-locale': 'fr_FR',
+            'X-Device-Type': 'IOS',
           },
-          destinationTown: {
-            codes: {
-              resarail: this.destination,
-            },
-          },
-          features: [
-            'TRAIN_AND_BUS',
-            'DIRECT_TRAVEL',
-          ],
-          outwardDate: moment(fromTime).format('YYYY-MM-DD[T]HH:mm:ss.SSSZ'),
-          passengers: [
-            {
-              age: 25, // random
-              ageRank: 'YOUNG',
-              birthday: '1995-03-06', // random
-              commercialCard: {
-                number: this.tgvmaxNumber,
-                type: 'HAPPY_CARD',
+          data: {
+            departureTown: {
+              codes: {
+                resarail: this.origin,
               },
-              type: 'HUMAN',
             },
-          ],
-          travelClass: 'SECOND',
-        });
+            destinationTown: {
+              codes: {
+                resarail: this.destination,
+              },
+            },
+            features: [
+              'TRAIN_AND_BUS',
+              'DIRECT_TRAVEL',
+            ],
+            outwardDate: moment(fromTime).format('YYYY-MM-DD[T]HH:mm:ss.SSSZ'),
+            passengers: [
+              {
+                age: 25, // random
+                ageRank: 'YOUNG',
+                birthday: '1995-03-06', // random
+                commercialCard: {
+                  number: this.tgvmaxNumber,
+                  type: 'HAPPY_CARD',
+                },
+                type: 'HUMAN',
+              },
+            ],
+            travelClass: 'SECOND',
+          },
+        };
 
-        const pageResults: {journeys: ISncfMobileTrain[]} = response.body as {journeys: ISncfMobileTrain[]};
+        /**
+         * split load between multiple servers
+         */
+        if (process.env.NODE_ENV === 'production' && !isNil(Config.proxyUrl) && random(0, 1) === 0) {
+          config.httpsAgent = new httpsProxyAgent(Config.proxyUrl);
+        }
+
+        /**
+         * get data from oui.sncf
+         */
+        const response: AxiosResponse = await Axios.request(config);
+
+        const pageResults: {journeys: ISncfMobileTrain[]} = response.data as {journeys: ISncfMobileTrain[]};
         const pageJourneys: ISncfMobileTrain[] = pageResults.journeys;
 
         results.push(...pageJourneys);

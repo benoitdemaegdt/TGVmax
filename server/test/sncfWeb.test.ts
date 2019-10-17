@@ -219,7 +219,7 @@ describe('SncfWeb', () => {
     try {
       await sncf.isTgvmaxAvailable();
     } catch (e) {
-      chai.expect(e.status).to.equal(500);
+      chai.expect(e.response.status).to.equal(500);
     }
   });
 });

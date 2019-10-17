@@ -75,6 +75,11 @@ export class Config {
    */
   public isRegistrationOpen: boolean;
 
+  /**
+   * proxy url
+   */
+  public proxyUrl: string | undefined;
+
   constructor() {
     /* tslint:disable */
     this.baseSncfWebUrl = 'https://www.oui.sncf';
@@ -89,10 +94,10 @@ export class Config {
     this.whitelist = process.env.WHITELIST || this.getWhitelist();
     this.delay = Number(process.env.DELAY) || config.get('delay');
     this.maxAlertsPerUser = Number(process.env.MAX_ALERTS_PER_USER) || config.get('maxAlertsPerUser');
-    console.log(isNil(process.env.IS_REGISTRATION_OPEN)); // tslint:disable-line
     this.isRegistrationOpen = isNil(process.env.IS_REGISTRATION_OPEN)
       ? config.get('isRegistrationOpen')
       : process.env.IS_REGISTRATION_OPEN === 'true';
+    this.proxyUrl = process.env.PROXY_URL || config.get('proxyUrl')
   }
 
   private getWhitelist = (): string => {

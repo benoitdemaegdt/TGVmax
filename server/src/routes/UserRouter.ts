@@ -65,7 +65,7 @@ class UserRouter {
         throw new ValidationError('should have required property \'tgvmaxNumber\'');
       }
       if (!Config.isRegistrationOpen) {
-        throw new CredentialError('Les inscriptions sont temporairement fermées.');
+        throw new CredentialError('Les inscriptions sont temporairement fermées');
       }
       userId = await UserController.addUser(user);
     } else if (query.action === 'login') {
