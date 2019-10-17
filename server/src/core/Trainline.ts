@@ -1,6 +1,6 @@
+import Axios, { AxiosResponse } from 'axios';
 import { filter, isEmpty, isNil, map, uniq } from 'lodash';
 import * as moment from 'moment-timezone';
-import * as request from 'superagent';
 import * as uuidv4 from 'uuid/v4';
 import Config from '../Config';
 import { IAvailability, ITrainlineTrain } from '../types';
@@ -77,39 +77,41 @@ export class Trainline {
 
     try {
       while (keepSearching) {
-        const response: request.Response = await request
-        .post(`${Config.baseTrainlineUrl}/api/v5_1/search`)
-        .set({
-          Accept: 'application/json',
-          'User-Agent': 'CaptainTrain/43(4302) Android/4.4.2(19)',
-          'Accept-Language': 'fr',
-          'Content-Type': 'application/json; charset=UTF-8',
-          Host: 'www.trainline.eu',
-        })
-        .send({
-          local_currency: 'EUR',
-          search: {
-            passengers: [
-              {
-                age: 25, // random
-                id: uuidv4(), // random uuid
-                label: uuidv4(), // random uuid
-                cards: [{
-                  reference: 'SNCF.HappyCard',
-                  number: this.tgvmaxNumber,
-                }],
-              },
-            ],
-            departure_station_id: this.origin,
-            arrival_station_id: this.destination,
-            departure_date: this.getTrainlineDate(fromTime),
-            systems: [
-              'sncf',
-            ],
+        const response: AxiosResponse = await Axios.request({
+          url: `${Config.baseTrainlineUrl}/api/v5_1/search`,
+          method: 'POST',
+          headers: {
+            Accept: 'application/json',
+            'User-Agent': 'CaptainTrain/43(4302) Android/4.4.2(19)',
+            'Accept-Language': 'fr',
+            'Content-Type': 'application/json; charset=UTF-8',
+            Host: 'www.trainline.eu',
+          },
+          data: {
+            local_currency: 'EUR',
+            search: {
+              passengers: [
+                {
+                  age: 25, // random
+                  id: uuidv4(), // random uuid
+                  label: uuidv4(), // random uuid
+                  cards: [{
+                    reference: 'SNCF.HappyCard',
+                    number: this.tgvmaxNumber,
+                  }],
+                },
+              ],
+              departure_station_id: this.origin,
+              arrival_station_id: this.destination,
+              departure_date: this.getTrainlineDate(fromTime),
+              systems: [
+                'sncf',
+              ],
+            },
           },
         });
 
-        const pageResults: {trips: ITrainlineTrain[]} = response.body as {trips: ITrainlineTrain[]};
+        const pageResults: {trips: ITrainlineTrain[]} = response.data as {trips: ITrainlineTrain[]};
         const pageTrips: ITrainlineTrain[] = pageResults.trips;
 
         results.push(...pageTrips);

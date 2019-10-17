@@ -1,6 +1,6 @@
+import Axios, { AxiosResponse } from 'axios';
 import { filter, get, isEmpty, map, pick } from 'lodash';
 import * as moment from 'moment-timezone';
-import * as request from 'superagent';
 import Config from '../Config';
 import { IAvailability, ITrain } from '../types';
 
@@ -103,9 +103,10 @@ export class SncfWeb {
    * This function returns the min price of the 5 trains leaving after the given time
    */
   private async getMinPrices(time: string): Promise<ITrain[]> {
-    const response: request.Response = await request
-      .post(`${Config.baseSncfWebUrl}/proposition/rest/travels/outward/train/next`)
-      .send({
+    const response: AxiosResponse = await Axios.request({
+      url: `${Config.baseSncfWebUrl}/proposition/rest/travels/outward/train/next`,
+      method: 'POST',
+      data: {
         context: {
           paginationContext: {
             travelSchedule: {
@@ -140,12 +141,12 @@ export class SncfWeb {
           salesMarket: 'fr-FR',
         },
       },
-    );
+    });
 
     /**
      * filter out the noise (everything except trains details)
      */
-    const body: {travelProposals: ITrain[]} = get(response, 'body') as {travelProposals: ITrain[]};
+    const body: {travelProposals: ITrain[]} = get(response, 'data') as {travelProposals: ITrain[]};
     const travelProposals: ITrain[] = get(body, ['travelProposals']);
 
     /**
