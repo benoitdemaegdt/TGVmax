@@ -35,7 +35,7 @@
     "koa-router": "^7.4.0",
     "koa-static": "^5.0.0",
     "lodash": "^4.17.15",
-    "moment-timezone": "^0.5.26",
+    "moment-timezone": "^0.5.27",
     "mongodb": "^3.3.2",
     "node-cron": "^2.0.3",
     "nodemailer": "^6.3.1",
