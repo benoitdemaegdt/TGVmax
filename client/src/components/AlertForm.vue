@@ -18,9 +18,7 @@
     <v-form v-model='valid' ref='alertForm'>
       <v-card>
         <v-card-title class='primary white--text'>
-          <span class='headline'>Ajouter une nouvelle alerte</span>
-          <v-spacer></v-spacer>
-          <v-icon color='white' @click='closeForm();'>mdi-close</v-icon>
+          <span class='formTitle'>Ajouter une nouvelle alerte</span>
         </v-card-title>
         <v-card-text>
           <v-container>
@@ -261,5 +259,18 @@ export default {
 </script>
 
 <style scoped>
+/** form is max-width: 600px; */
+/* If the screen size is 601px wide or more, set the font-size of title to 80px */
+@media screen and (min-width: 601px) {
+  .formTitle {
+    font-size: 30px;
+  }
+}
 
+/* If the screen size is 600px wide or less, set the font-size of <div> to 30px */
+@media screen and (max-width: 600px) {
+  .formTitle {
+    font-size: 5vw;
+  }
+}
 </style>
