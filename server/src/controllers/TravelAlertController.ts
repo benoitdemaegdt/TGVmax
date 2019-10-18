@@ -1,9 +1,10 @@
 import { isEmpty } from 'lodash';
+import * as moment from 'moment-timezone';
 import { DeleteWriteOpResultObject, InsertOneWriteOpResult , ObjectId } from 'mongodb';
 import Config from '../Config';
 import Database from '../database/database';
+import { BusinessError } from '../errors/BusinessError';
 import { NotFoundError } from '../errors/NotFoundError';
-import { TooManyAlertsError } from '../errors/TooManyAlertsError';
 import { ITravelAlert, IUser } from '../types';
 
 /**
@@ -43,7 +44,20 @@ class TravelAlertController {
       },
     });
     if (userPendingAlerts.length >= Config.maxAlertsPerUser) {
-      throw new TooManyAlertsError();
+      throw new BusinessError(`Limite atteinte : ${Config.maxAlertsPerUser} alertes en cours`);
+    }
+
+    /**
+     * reject if a similar alert exists on the same day
+     */
+    for (const alert of userPendingAlerts) {
+      if (
+        travelAlert.origin.name === alert.origin.name
+        && travelAlert.destination.name === alert.destination.name
+        && moment(travelAlert.fromTime).isSame(alert.fromTime, 'day')
+      ) {
+        throw new BusinessError('Une alerte similaire existe déjà');
+      }
     }
 
     /**

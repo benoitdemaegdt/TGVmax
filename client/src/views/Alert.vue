@@ -167,18 +167,8 @@ export default {
         console.log(err);
       }
     },
-    async addTravelAlert(alert) {
-      try {
-        const response =
-          await this.$http.post(`${process.env.VUE_APP_API_BASE_URL}/api/v1/users/${this.$store.state.userId}/travels`, {
-          ...alert,
-        });
-        const body = await response.data;
-        alert = {...alert, _id: body._id };
-        this.alerts = [...this.alerts, alert];
-      } catch (err) {
-        console.log(err);
-      }
+    addTravelAlert(alert) {
+      this.alerts = [...this.alerts, alert];
     },
   },
   computed: {

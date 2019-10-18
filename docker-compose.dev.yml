@@ -18,6 +18,7 @@ services:
             context: ./server
             dockerfile: Dockerfile.dev
         environment:
+            - NODE_ENV=development
             - DB_URL=mongodb://host.docker.internal:27017/maxplorateur
             - JWT_SECRET=myJwtSecret
             - JWT_DURATION=365 days
