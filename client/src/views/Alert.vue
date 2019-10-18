@@ -75,14 +75,14 @@
       </p>
       <v-card v-for='alert of alerts' :key='alert.id' class='hidden-md-and-up elevation-6 mx-auto mb-5' max-width='90%'>
         <v-card-title class='primary white--text'>
-          {{alert.origin.name}}<br>{{alert.destination.name}}
+          <div class='cardTitle'>{{alert.origin.name}}<br>{{alert.destination.name}}</div>
         </v-card-title>
         <v-card-text class='primary white--text pt-3'>
           {{getFrenchDate(alert.fromTime)}} : {{getHour(alert.fromTime)}} - {{getHour(alert.toTime)}}
         </v-card-text>
         <v-card-actions>
-          <div v-if='!alert.lastCheck'>Dernière recherche : prochainement</div>
-          <div v-else>Dernière recherche : {{getFrenchDate(alert.lastCheck)}} à {{getHour(alert.lastCheck)}}</div>
+          <div class="checkDate" v-if='!alert.lastCheck'>Dernière vérification de disponibilité : prochainement</div>
+          <div class="checkDate" v-else>Dernière vérification de disponibilité : {{getFrenchDate(alert.lastCheck)}} à {{getHour(alert.lastCheck)}}</div>
           <v-spacer></v-spacer>
           <v-btn icon>
             <v-icon medium @click='deleteTravelAlert(alert)'>mdi-delete</v-icon>
@@ -180,5 +180,14 @@ export default {
 </script>
 
 <style scoped>
+.cardTitle {
+  font-size: 15px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 
+.checkDate {
+  font-size: 10px;
+}
 </style>
