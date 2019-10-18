@@ -19,6 +19,8 @@
       <v-card>
         <v-card-title class='primary white--text'>
           <span class='formTitle'>Ajouter une nouvelle alerte</span>
+          <v-spacer></v-spacer>
+          <v-icon color='white' @click='closeDialog();'>mdi-close</v-icon>
         </v-card-title>
         <v-card-text>
           <v-container>
