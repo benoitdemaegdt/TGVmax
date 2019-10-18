@@ -1,4 +1,11 @@
 [
+  { "name": "Paris (toutes gares intramuros)", "sncfId": "FRPAR", "trainlineId": "4916" },
+  { "name": "Lyon (toutes gares intramuros)", "sncfId": "FRLYS", "trainlineId": "4718" },
+  { "name": "Bordeaux Saint-Jean", "sncfId": "FRBOJ", "trainlineId": "828" },
+  { "name": "Nantes (toutes gares)", "sncfId": "FRTNE", "trainlineId": "5317" },
+  { "name": "Marseille (toutes gares)", "sncfId": "FRMRS", "trainlineId": "4790" },
+  { "name": "Lille (toutes gares)", "sncfId": "FRLIL", "trainlineId": "4652" },
+  { "name": "Niort", "sncfId": "FRNIT", "trainlineId": "4853" },
   { "name": "Nogent-sur-Seine", "sncfId": "FRAPM", "trainlineId": "400" },
   {
     "name": "Nogent-sur-Seine - De Gaulle",
@@ -253,7 +260,6 @@
   { "name": "Morgny", "sncfId": "FRDNQ", "trainlineId": "1897" },
   { "name": "Salomé", "sncfId": "FRCYJ", "trainlineId": "1594" },
   { "name": "Andelot Jura", "sncfId": "FRAND", "trainlineId": "343" },
-  { "name": "Bordeaux Saint-Jean", "sncfId": "FRBOJ", "trainlineId": "828" },
   { "name": "Lourches", "sncfId": "FRLOU", "trainlineId": "4674" },
   { "name": "Courthézon", "sncfId": "FRIHX", "trainlineId": "4345" },
   {
@@ -660,7 +666,6 @@
     "trainlineId": "2708"
   },
   { "name": "L'Ariane", "sncfId": "FRHXV", "trainlineId": "4115" },
-  { "name": "Niort", "sncfId": "FRNIT", "trainlineId": "4853" },
   { "name": "Beauvoir-sur-Niort", "sncfId": "FREIX", "trainlineId": "2240" },
   { "name": "Mouans-Sartoux", "sncfId": "FRMSE", "trainlineId": "4795" },
   { "name": "Portet - Saint-Simon", "sncfId": "FRPSS", "trainlineId": "4998" },
@@ -1199,7 +1204,6 @@
   },
   { "name": "Viviez - Decazeville", "sncfId": "FRVZD", "trainlineId": "25" },
   { "name": "Avenay", "sncfId": "FRBCK", "trainlineId": "609" },
-  { "name": "Nantes (toutes gares)", "sncfId": "FRTNE", "trainlineId": "5317" },
   { "name": "Nantes", "sncfId": "FRNTE", "trainlineId": "4866" },
   { "name": "Nantes Pirmil", "sncfId": "FRHJQ", "trainlineId": "3807" },
   { "name": "Gallargues", "sncfId": "FRIJT", "trainlineId": "4379" },
@@ -2205,10 +2209,6 @@
     "sncfId": "FRPMO",
     "trainlineId": "4920"
   },
-  { "name": "Paris (toutes gares intramuros)", "sncfId": "FRPAR", "trainlineId": "4916" },
-  { "name": "Marseille (toutes gares)", "sncfId": "FRMRS", "trainlineId": "4790" },
-  { "name": "Lille (toutes gares)", "sncfId": "FRLIL", "trainlineId": "4652" },
-  { "name": "Lyon (toutes gares intramuros)", "sncfId": "FRLYS", "trainlineId": "4718" },
   { "name": "La Meaugon", "sncfId": "FRDYA", "trainlineId": "2052" },
   { "name": "Urmatt", "sncfId": "FRBYT", "trainlineId": "1043" },
   { "name": "Dardilly-les-Mouilles", "sncfId": "FRGSP", "trainlineId": "3464" },
