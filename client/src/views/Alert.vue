@@ -93,8 +93,8 @@
       <!-- add an alert on mobile -->
       <v-dialog v-model='dialog' persistent max-width='600px'>
         <template v-slot:activator='{ on }'>
-          <v-btn class='hidden-md-and-up' fab dark large color='#757575' fixed right bottom @click='dialog = true'>
-            <v-icon dark>mdi-plus</v-icon>
+          <v-btn class='hidden-md-and-up' fab dark large color='primary' fixed right bottom @click='dialog = true'>
+            <v-icon>mdi-plus</v-icon>
           </v-btn>
         </template>
         <alert-form
