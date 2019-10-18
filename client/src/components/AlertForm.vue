@@ -18,9 +18,9 @@
     <v-form v-model='valid' ref='alertForm'>
       <v-card>
         <v-card-title class='primary white--text'>
-          <span class='headline'>Ajouter une nouvelle alerte</span>
+          <div class='formTitle'>Ajouter une nouvelle alerte</div>
           <v-spacer></v-spacer>
-          <v-icon color='white' @click='closeForm();'>mdi-close</v-icon>
+          <v-icon color='white' @click='closeDialog();'>mdi-close</v-icon>
         </v-card-title>
         <v-card-text>
           <v-container>
@@ -122,6 +122,9 @@
               </v-col>
             </v-row>
           </v-container>
+          <p v-if='error' class="text-center subtitle-2 red--text mt-2 mb-0">
+            {{this.errorMessage}}
+          </p>
         </v-card-text>
         <v-card-actions class='justify-center'>
           <v-btn color='primary' text @click='closeForm();'>Fermer</v-btn>
@@ -153,6 +156,8 @@ export default {
   data() {
     return {
       valid: false,
+      error: false,
+      errorMessage: '',
       menu: false,
       dateFormatted: getFrenchDate(this.date),
       origin: '',
@@ -193,17 +198,35 @@ export default {
     closeDialog() {
       this.$emit('close:dialog');
     },
-    handleSubmit() {
+    async handleSubmit() {
       if (this.$refs.alertForm.validate()) {
-        this.$emit('add:travelAlert', {
-          origin: this.origin,
-          destination: this.destination,
-          fromTime: this.getISOString(this.date, this.fromTime),
-          toTime: this.getISOString(this.date, this.toTime),
-        });
-        this.closeForm();
+        try {
+          const alert = {
+            origin: this.origin,
+            destination: this.destination,
+            fromTime: this.getISOString(this.date, this.fromTime),
+            toTime: this.getISOString(this.date, this.toTime),
+          };
+          const response = await this.$http.post(
+            `${process.env.VUE_APP_API_BASE_URL}/api/v1/users/${this.$store.state.userId}/travels`,
+            alert,
+          );
+          const body = await response.data;
+          this.$emit('add:travelAlert', { ...alert, _id: body._id });
+          this.clearState();
+          this.closeForm();
+        } catch (err) {
+          this.error = true;
+          this.errorMessage = err.response && err.response.data
+          ? `⚠️ ${err.response.data.message}`
+          : '⚠️ Erreur réseau. Veuillez réessayer plus tard'
+        }
       }
       return;
+    },
+    clearState() {
+      this.error = false;
+      this.errorMessage = '';
     },
   },
   computed: {
@@ -238,5 +261,18 @@ export default {
 </script>
 
 <style scoped>
+/** form is max-width: 600px; */
+/* If the screen size is 601px wide or more, set the font-size of title to 80px */
+@media screen and (min-width: 601px) {
+  .formTitle {
+    font-size: 30px;
+  }
+}
 
+/* If the screen size is 600px wide or less, set the font-size of <div> to 30px */
+@media screen and (max-width: 600px) {
+  .formTitle {
+    font-size: 5vw;
+  }
+}
 </style>

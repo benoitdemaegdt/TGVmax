@@ -103,7 +103,7 @@ describe('TravelAlertRouter', () => {
     });
   });
 
-  it('POST /api/v1/users/:userId/travels 400 BAD REQUEST', async() => {
+  it('POST /api/v1/users/:userId/travels 400 BAD REQUEST (missing  property)', async() => {
     const res1: request.Response = await request(server)
     .post('/api/v1/users?action=register')
     .send({
@@ -125,6 +125,47 @@ describe('TravelAlertRouter', () => {
     .expect((res: request.Response) => {
       chai.expect(res.body.statusCode).to.equal(HttpStatus.BAD_REQUEST);
       chai.expect(res.body.message).to.equal("should have required property 'toTime'");
+    });
+  });
+
+  it('POST /api/v1/users/:userId/travels 400 BAD REQUEST (alert already exists)', async() => {
+    /**
+     * A travelAlert is linked to a user
+     * so I first need to insert a user in db and get its id
+     */
+    const res1: request.Response = await request(server)
+    .post('/api/v1/users?action=register')
+    .send({
+      email: 'bane.doe@gmail.com',
+      password: 'this-is-my-fake-password',
+      tgvmaxNumber: 'HC000076543',
+    })
+    .expect(HttpStatus.CREATED);
+
+    await request(server)
+    .post(`/api/v1/users/${res1.body._id}/travels`)
+    .set({ Authorization: `Bearer ${res1.body.token}` })
+    .send({
+      origin: {name: 'Paris (toutes gares intramuros)', sncfId: 'FRPAR', trainlineId: '1'},
+      destination: {name: 'Lyon (toutes gares intramuros)', sncfId: 'FRLYS', trainlineId: '2'},
+      fromTime: moment(new Date()).add(1, 'days').startOf('day').toISOString(),
+      toTime: moment(new Date()).add(1, 'days').endOf('day').toISOString(),
+    })
+    .expect(HttpStatus.CREATED);
+
+    return request(server)
+    .post(`/api/v1/users/${res1.body._id}/travels`)
+    .set({ Authorization: `Bearer ${res1.body.token}` })
+    .send({
+      origin: {name: 'Paris (toutes gares intramuros)', sncfId: 'FRPAR', trainlineId: '1'},
+      destination: {name: 'Lyon (toutes gares intramuros)', sncfId: 'FRLYS', trainlineId: '2'},
+      fromTime: moment(new Date()).add(1, 'days').startOf('day').toISOString(),
+      toTime: moment(new Date()).add(1, 'days').endOf('day').toISOString(),
+    })
+    .expect(HttpStatus.UNPROCESSABLE_ENTITY)
+    .expect((res: request.Response) => {
+      chai.expect(res.body.statusCode).to.equal(HttpStatus.UNPROCESSABLE_ENTITY);
+      chai.expect(res.body.message).to.equal('Une alerte similaire existe déjà');
     });
   });
 
@@ -357,8 +398,8 @@ describe('TravelAlertRouter', () => {
     .send({
       origin: {name: 'Paris (toutes gares intramuros)', sncfId: 'FRPAR', trainlineId: '1'},
       destination: {name: 'Lyon (toutes gares intramuros)', sncfId: 'FRLYS', trainlineId: '2'},
-      fromTime: moment(new Date()).add(1, 'days').startOf('day').toISOString(),
-      toTime: moment(new Date()).add(1, 'days').endOf('day').toISOString(),
+      fromTime: moment(new Date()).add(2, 'days').startOf('day').toISOString(),
+      toTime: moment(new Date()).add(2, 'days').endOf('day').toISOString(),
     })
     .expect(HttpStatus.CREATED);
 
@@ -371,12 +412,12 @@ describe('TravelAlertRouter', () => {
     .send({
       origin: {name: 'Paris (toutes gares intramuros)', sncfId: 'FRPAR', trainlineId: '1'},
       destination: {name: 'Lyon (toutes gares intramuros)', sncfId: 'FRLYS', trainlineId: '2'},
-      fromTime: moment(new Date()).add(1, 'days').startOf('day').toISOString(),
-      toTime: moment(new Date()).add(1, 'days').endOf('day').toISOString(),
+      fromTime: moment(new Date()).add(3, 'days').startOf('day').toISOString(),
+      toTime: moment(new Date()).add(3, 'days').endOf('day').toISOString(),
     })
     .expect(HttpStatus.UNPROCESSABLE_ENTITY)
     .expect((res: request.Response) => {
-      chai.expect(res.body.message).to.equal('too many alerts');
+      chai.expect(res.body.message).to.equal(`Limite atteinte : ${Config.maxAlertsPerUser} alertes en cours`);
     });
   });
 });

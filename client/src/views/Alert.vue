@@ -75,14 +75,14 @@
       </p>
       <v-card v-for='alert of alerts' :key='alert.id' class='hidden-md-and-up elevation-6 mx-auto mb-5' max-width='90%'>
         <v-card-title class='primary white--text'>
-          {{alert.origin.name}}<br>{{alert.destination.name}}
+          <div class='cardTitle'>{{alert.origin.name}}<br>{{alert.destination.name}}</div>
         </v-card-title>
         <v-card-text class='primary white--text pt-3'>
           {{getFrenchDate(alert.fromTime)}} : {{getHour(alert.fromTime)}} - {{getHour(alert.toTime)}}
         </v-card-text>
         <v-card-actions>
-          <div v-if='!alert.lastCheck'>Dernière recherche : prochainement</div>
-          <div v-else>Dernière recherche : {{getFrenchDate(alert.lastCheck)}} à {{getHour(alert.lastCheck)}}</div>
+          <div class="checkDate" v-if='!alert.lastCheck'>Dernière vérification de disponibilité : prochainement</div>
+          <div class="checkDate" v-else>Dernière vérification de disponibilité : {{getFrenchDate(alert.lastCheck)}} à {{getHour(alert.lastCheck)}}</div>
           <v-spacer></v-spacer>
           <v-btn icon>
             <v-icon medium @click='deleteTravelAlert(alert)'>mdi-delete</v-icon>
@@ -93,8 +93,8 @@
       <!-- add an alert on mobile -->
       <v-dialog v-model='dialog' persistent max-width='600px'>
         <template v-slot:activator='{ on }'>
-          <v-btn class='hidden-md-and-up' fab dark large color='#757575' fixed right bottom @click='dialog = true'>
-            <v-icon dark>mdi-plus</v-icon>
+          <v-btn class='hidden-md-and-up' fab dark large color='primary' fixed right bottom @click='dialog = true'>
+            <v-icon>mdi-plus</v-icon>
           </v-btn>
         </template>
         <alert-form
@@ -167,18 +167,8 @@ export default {
         console.log(err);
       }
     },
-    async addTravelAlert(alert) {
-      try {
-        const response =
-          await this.$http.post(`${process.env.VUE_APP_API_BASE_URL}/api/v1/users/${this.$store.state.userId}/travels`, {
-          ...alert,
-        });
-        const body = await response.data;
-        alert = {...alert, _id: body._id };
-        this.alerts = [...this.alerts, alert];
-      } catch (err) {
-        console.log(err);
-      }
+    addTravelAlert(alert) {
+      this.alerts = [...this.alerts, alert];
     },
   },
   computed: {
@@ -190,5 +180,14 @@ export default {
 </script>
 
 <style scoped>
+.cardTitle {
+  font-size: 15px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 
+.checkDate {
+  font-size: 10px;
+}
 </style>
