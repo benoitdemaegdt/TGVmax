@@ -4,7 +4,7 @@
       <p class='text-center' v-if='alerts.length === 0'>
         Aucune alerte en cours
       </p>
-      <v-card v-for='alert of alerts' :key='alert.id' class='elevation-6 mx-auto mb-5' max-width='90%'>
+      <v-card v-for='alert of alerts' :key='alert.id' class='elevation-6 mx-auto mb-5 alertCard'>
         <v-card-title class='primary white--text'>
           <div class='cardTitle'>{{alert.origin.name}}<br>{{alert.destination.name}}</div>
         </v-card-title>
@@ -118,5 +118,19 @@ export default {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+/* If the screen size is 601px wide or more, set the max-width to 600px */
+@media screen and (min-width: 601px) {
+  .alertCard {
+    max-width: 600px;
+  }
+}
+
+/* If the screen size is 600px wide or less, set the max-width to 95% */
+@media screen and (max-width: 600px) {
+  .alertCard {
+    max-width: 100%;
+  }
 }
 </style>
