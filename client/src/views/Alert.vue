@@ -4,7 +4,7 @@
       <p class='text-center' v-if='alerts.length === 0'>
         Aucune alerte en cours
       </p>
-      <v-card v-for='alert of alerts' :key='alert.id' class='elevation-6 mx-auto mb-5' max-width='75%'>
+      <v-card v-for='alert of alerts' :key='alert.id' class='elevation-6 mx-auto mb-5' max-width='90%'>
         <v-card-title class='primary white--text'>
           <div class='cardTitle'>{{alert.origin.name}}<br>{{alert.destination.name}}</div>
         </v-card-title>
