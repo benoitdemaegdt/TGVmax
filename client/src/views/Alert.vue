@@ -1,109 +1,42 @@
 <template>
   <v-container class='mt-5'>
     <div v-if='isLoggedIn'>
-      <!-- Start of app data table -->
-      <v-data-table
-      :headers='headers'
-      :items='alerts'
-      hide-default-footer
-      disable-sort
-      disable-pagination
-      class='elevation-1 hidden-sm-and-down'
-      >
-        <!-- add toolbar for the datatable -->
-        <template v-slot:top>
-          <v-toolbar flat color='#E0E0E0'>
-            <v-toolbar-title>Alertes en cours</v-toolbar-title>
-            <v-spacer></v-spacer>
-            <v-dialog v-model='dialog' persistent max-width='600px'>
-              <template v-slot:activator='{ on }'>
-                <v-btn color='primary' dark v-on='on'>Nouvelle Alerte</v-btn>
-              </template>
-              <alert-form
-                @close:dialog='dialog = !dialog'
-                @add:travelAlert='addTravelAlert'
-                :alerts='alerts'
-              />
-            </v-dialog>
-          </v-toolbar>
-        </template>
-
-        <!-- display train station name -->
-        <template v-slot:item.origin='{ item }'>
-          {{item.origin.name}}
-        </template>
-
-        <template v-slot:item.destination='{ item }'>
-          {{item.destination.name}}
-        </template>
-
-        <!-- human readable dates -->
-        <template v-slot:item.date='{ item }'>
-          {{getFrenchDate(item.fromTime)}}
-        </template>
-
-        <template v-slot:item.fromTime='{ item }'>
-          {{getHour(item.fromTime)}}
-        </template>
-
-        <template v-slot:item.toTime='{ item }'>
-          {{getHour(item.toTime)}}
-        </template>
-
-        <template v-slot:item.lastCheck='{ item }'>
-          <div v-if='!item.lastCheck'>Prochainement</div>
-          <div v-else>{{getFrenchDate(item.lastCheck)}} à {{getHour(item.lastCheck)}}</div>
-        </template>
-
-        <!-- add a column for deleting an alert -->
-        <template v-slot:item.action='{ item }'>
-          <v-icon medium @click='deleteTravelAlert(item)'>
-            mdi-delete
-          </v-icon>
-        </template>
-
-        <!-- message to display when there is no alert -->
-        <template slot='no-data'>
-          Aucune alerte en cours
-        </template>
-      </v-data-table>
-      <!-- End of app data table -->
-
-      <!-- Start of mobile cards -->
-      <p class='hidden-md-and-up text-center' v-if='alerts.length === 0'>
+      <p class='text-center' v-if='alerts.length === 0'>
         Aucune alerte en cours
       </p>
-      <v-card v-for='alert of alerts' :key='alert.id' class='hidden-md-and-up elevation-6 mx-auto mb-5' max-width='90%'>
+      <v-card v-for='alert of alerts' :key='alert.id' class='elevation-6 mx-auto mb-5' max-width='75%'>
         <v-card-title class='primary white--text'>
           <div class='cardTitle'>{{alert.origin.name}}<br>{{alert.destination.name}}</div>
         </v-card-title>
-        <v-card-text class='primary white--text pt-3'>
+        <v-card-subtitle class='primary white--text pt-3'>
           {{getFrenchDate(alert.fromTime)}} : {{getHour(alert.fromTime)}} - {{getHour(alert.toTime)}}
-        </v-card-text>
+        </v-card-subtitle>
         <v-card-actions>
-          <div class="checkDate" v-if='!alert.lastCheck'>Dernière vérification de disponibilité : prochainement</div>
-          <div class="checkDate" v-else>Dernière vérification de disponibilité : {{getFrenchDate(alert.lastCheck)}} à {{getHour(alert.lastCheck)}}</div>
-          <v-spacer></v-spacer>
-          <v-btn icon>
-            <v-icon medium @click='deleteTravelAlert(alert)'>mdi-delete</v-icon>
-          </v-btn>
+          <!-- info -->
+          <v-dialog v-model='dialogInfo' persistent max-width='600px'>
+            <template v-slot:activator='{ on }'>
+              <v-btn color="#616161" text @click='displayInfo(alert)'>Info</v-btn>
+            </template>
+            <alert-info @close:dialog='dialogInfo = !dialogInfo' :alert='currentAlert'/>
+          </v-dialog>
+          <!-- delete alert -->
+          <v-btn color="#616161" text @click='dialogDeletion=true'>Supprimer</v-btn>
+          <alert-deletion v-model='dialogDeletion' @delete:travelAlert='deleteTravelAlert(alert)'/>
         </v-card-actions>
       </v-card>
-
-      <!-- add an alert on mobile -->
-      <v-dialog v-model='dialog' persistent max-width='600px'>
+      <!-- add  alert -->
+      <v-dialog v-model='dialogForm' persistent max-width='600px'>
         <template v-slot:activator='{ on }'>
-          <v-btn class='hidden-md-and-up' fab dark large color='primary' fixed right bottom @click='dialog = true'>
+          <v-btn fab dark large color='primary' fixed right bottom @click='dialogForm = true'>
             <v-icon>mdi-plus</v-icon>
           </v-btn>
         </template>
         <alert-form
-          @close:dialog='dialog = !dialog'
+          @close:dialog='dialogForm = !dialogForm'
           @add:travelAlert='addTravelAlert'
           :alerts='alerts'
         />
       </v-dialog>
-      <!-- End of mobile cards -->
     </div>
     <div v-else>
       <h1 class="display-1">Pour créer une alerte TGVmax, vous devez être connecté</h1>
@@ -116,37 +49,37 @@
 <script>
 import { getFrenchDate, getHour } from '@/helper/date.ts';
 import AlertForm from '@/components/AlertForm.vue';
+import AlertInfo from '@/components/AlertInfo.vue';
+import AlertDeletion from '@/components/AlertDeletion.vue';
 
 export default {
   name: 'Alert',
   components: {
     AlertForm,
+    AlertInfo,
+    AlertDeletion,
   },
   created() {
     this.getFrenchDate = getFrenchDate;
     this.getHour = getHour;
-  },
-  mounted() {
     if (this.isLoggedIn) {
       this.getTravelAlerts();
     }
   },
   data() {
     return {
-      dialog: false,
-      headers: [
-        { text: 'Départ', value: 'origin' },
-        { text: 'Arrivée', value: 'destination' },
-        { text: 'Date', value: 'date' },
-        { text: 'Heure min', value: 'fromTime' },
-        { text: 'Heure max', value: 'toTime' },
-        { text: 'Dernière recherche', value: 'lastCheck' },
-        { text: 'Action', value: 'action' },
-      ],
+      dialogForm: false,
+      dialogInfo: false,
+      dialogDeletion: false,
+      currentAlert: {},
       alerts: [],
     };
   },
   methods: {
+    displayInfo(alert) {
+      this.dialogInfo = true;
+      this.currentAlert = alert;
+    },
     async getTravelAlerts() {
       try {
         const response = await this.$http.get(`${process.env.VUE_APP_API_BASE_URL}/api/v1/users/${this.$store.state.userId}/travels`);
@@ -185,9 +118,5 @@ export default {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-}
-
-.checkDate {
-  font-size: 10px;
 }
 </style>
