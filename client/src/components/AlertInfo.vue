@@ -5,7 +5,9 @@
     </v-card-title>
 
     <v-card-text class='mt-3'>
-      Dernière vérification de la disponibilité en TGVmax de ce trajet :<br>{{getFrenchDate(alert.lastCheck)}} à {{getHour(alert.lastCheck)}}
+      Dernière vérification de la disponibilité en TGVmax de ce trajet :<br>
+      <div v-if='!alert.lastCheck'>Prochainement</div>
+      <div v-else>{{getFrenchDate(alert.lastCheck)}} à {{getHour(alert.lastCheck)}}</div>
     </v-card-text>
 
     <v-divider></v-divider>
