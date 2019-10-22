@@ -72,6 +72,7 @@ export default {
       navigation: [
           { icon: 'mdi-home', title: 'Accueil', path: '/' },
           { icon: 'mdi-bell', title: 'Alertes', path: '/alertes' },
+          { icon: 'mdi-bookmark-multiple', title: 'Articles', path: '/articles' },
           { icon: 'mdi-email', title: 'Contact', path: '/contact' },
       ],
     };
