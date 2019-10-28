@@ -664,6 +664,11 @@
     "sncfId": "FREAM",
     "trainlineId": "2094"
   },
+  {
+    "name": "Nancy",
+    "sncfId": "FRENC",
+    "trainlineId": "2312"
+  },
   { "name": "Poix-de-Picardie", "sncfId": "FRCRH", "trainlineId": "1443" },
   {
     "name": "Peyrilhac - Saint-Jouvent",
