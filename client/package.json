@@ -6,7 +6,8 @@
     "serve": "node_modules/.bin/vue-cli-service serve",
     "build": "node_modules/.bin/vue-cli-service build",
     "lint": "node_modules/.bin/vue-cli-service lint",
-    "clean": "rm -fR ./node_modules ./dist"
+    "clean": "rm -fR ./node_modules ./dist ./coverage",
+    "test": "jest"
   },
   "dependencies": {
     "axios": "^0.19.0",
@@ -18,15 +19,22 @@
     "vuex": "^3.1.1"
   },
   "devDependencies": {
+    "@babel/core": "^7.6.4",
     "@mdi/font": "^4.5.95",
+    "@types/jest": "^24.0.20",
     "@vue/cli-plugin-babel": "^4.0.5",
     "@vue/cli-plugin-pwa": "^4.0.5",
     "@vue/cli-plugin-typescript": "^4.0.5",
     "@vue/cli-service": "^4.0.5",
+    "@vue/test-utils": "^1.0.0-beta.29",
+    "babel-core": "^7.0.0-bridge.0",
+    "jest": "^24.9.0",
     "sass": "^1.23.1",
     "sass-loader": "^7.1.0",
+    "ts-jest": "^24.1.0",
     "typescript": "^3.6.4",
     "vue-cli-plugin-vuetify": "^1.1.1",
+    "vue-jest": "^3.0.5",
     "vue-template-compiler": "^2.6.10",
     "vuetify-loader": "^1.2.2"
   },
@@ -38,5 +46,22 @@
   "browserslist": [
     "> 1%",
     "last 2 versions"
-  ]
+  ],
+  "jest": {
+    "collectCoverage": true,
+    "coverageDirectory": "<rootDir>/coverage",
+    "coveragePathIgnorePatterns": ["/node_modules/"],
+    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
+    "moduleFileExtensions": [
+      "js",
+      "ts",
+      "json",
+      "vue"
+    ],
+    "transform": {
+      ".*\\.(vue)$": "vue-jest",
+      "^.+\\.tsx?$": "ts-jest"
+    },
+    "testURL": "http://localhost/"
+  }
 }

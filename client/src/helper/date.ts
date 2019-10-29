@@ -13,9 +13,9 @@ export function getFrenchDate(date: string): string | undefined {
 }
 
 /**
- * get hour from isodate
+ * get hour from isodate. Takes summer/winter time into account
  * input : 2019-09-10T06:55:00Z
- * output: 06h55
+ * output: 08:55
  */
 export function getHour(isodate: string): string {
   const date = new Date(isodate);
@@ -36,7 +36,7 @@ export function convertToDatePickerFormat(date: Date): string {
 /**
  * convert to isostring. Takes timezone into account.
  * inputs: '2019-08-27', '22h15'
- * output: 2019-08-27T20:15:00Z'
+ * output: '2019-08-27T20:15:00Z'
  */
 export function getISOString(date: string, time: string) {
   const [year, month, day]: string[] = date.split('T')[0].split('-');
