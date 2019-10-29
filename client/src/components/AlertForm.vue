@@ -212,6 +212,7 @@ export default {
             alert,
           );
           const body = await response.data;
+          window.dataLayer.push({event: 'travelAlertCreated'});
           this.$emit('add:travelAlert', { ...alert, _id: body._id });
           this.clearState();
           this.closeForm();
