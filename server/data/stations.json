@@ -212,6 +212,11 @@
     "sncfId": "FRMLV",
     "trainlineId": "4757"
   },
+  {
+    "name": "Paris Aéroport Roissy Charles-de-Gaulle (Gare TGV et Ouigo - CDG 2, à 25 km de Paris)",
+    "sncfId": "FRMLW",
+    "trainlineId": "1144"
+  },
   { "name": "Chessy Rhône", "sncfId": "FRHDH", "trainlineId": "3678" },
   { "name": "Chasse-sur-Rhône", "sncfId": "FRCSR", "trainlineId": "1475" },
   { "name": "Les Pélerins", "sncfId": "FRHUX", "trainlineId": "4052" },
@@ -658,6 +663,11 @@
     "name": "Lorraine TGV (à environ 30km de Metz et Nancy)",
     "sncfId": "FREAM",
     "trainlineId": "2094"
+  },
+  {
+    "name": "Nancy",
+    "sncfId": "FRENC",
+    "trainlineId": "2312"
   },
   { "name": "Poix-de-Picardie", "sncfId": "FRCRH", "trainlineId": "1443" },
   {

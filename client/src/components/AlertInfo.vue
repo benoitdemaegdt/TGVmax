@@ -6,8 +6,8 @@
 
     <v-card-text class='mt-3'>
       Dernière vérification de la disponibilité en TGVmax de ce trajet :<br>
-      <div v-if='!alert.lastCheck'>Prochainement</div>
-      <div v-else>{{getFrenchDate(alert.lastCheck)}} à {{getHour(alert.lastCheck)}}</div>
+      <div v-if='!alert.lastCheck' class='lastCheck'>Prochainement</div>
+      <div v-else class='lastCheck'>{{getFrenchDate(alert.lastCheck)}} à {{getHour(alert.lastCheck)}}</div>
     </v-card-text>
 
     <v-divider></v-divider>
@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import { getFrenchDate, getHour } from '@/helper/date.ts';
+import { getFrenchDate, getHour } from '../helper/date.ts';
 
 export default {
   name: 'alert-info',

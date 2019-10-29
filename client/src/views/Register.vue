@@ -74,6 +74,7 @@ export default {
         const tgvmaxNumber = this.tgvmaxNumber;
         try {
           await this.$store.dispatch('register', { email, password, tgvmaxNumber });
+          window.dataLayer.push({event: 'accountCreated'});
           this.clearState();
           this.$router.push('/alertes');
         } catch (err) {
