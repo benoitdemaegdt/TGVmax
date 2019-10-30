@@ -32,7 +32,7 @@ export default {
   methods: {
     deleteTravelAlert() {
       this.$emit('delete:travelAlert');
-      this.show=false;
+      this.show = false;
     },
   },
   computed: {
@@ -41,9 +41,9 @@ export default {
         return this.value;
       },
       set(value) {
-        this.$emit('input', value)
+        this.$emit('input', value);
       },
     },
   },
-}
+};
 </script>

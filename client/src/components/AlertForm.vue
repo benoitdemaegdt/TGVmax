@@ -211,7 +211,7 @@ export default {
             `${process.env.VUE_APP_API_BASE_URL}/api/v1/users/${this.$store.state.userId}/travels`,
             alert,
           );
-          const body = await response.data;
+          const body = response.data;
           window.dataLayer.push({event: 'travelAlertCreated'});
           this.$emit('add:travelAlert', { ...alert, _id: body._id });
           this.clearState();
@@ -220,7 +220,7 @@ export default {
           this.error = true;
           this.errorMessage = err.response && err.response.data
           ? `⚠️ ${err.response.data.message}`
-          : '⚠️ Erreur réseau. Veuillez réessayer plus tard'
+          : '⚠️ Erreur réseau. Veuillez réessayer plus tard';
         }
       }
       return;

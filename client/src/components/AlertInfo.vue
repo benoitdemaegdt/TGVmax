@@ -37,5 +37,5 @@ export default {
       this.$emit('close:dialog');
     },
   },
-}
+};
 </script>
