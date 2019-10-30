@@ -1,4 +1,4 @@
-import { createLocalVue, mount } from '@vue/test-utils';
+import { mount, shallowMount } from '@vue/test-utils';
 import Vue from 'vue';
 import AlertInfo from '../src/components/AlertInfo.vue';
 import vuetify from 'vuetify';
@@ -13,7 +13,7 @@ describe('AlertInfo', () => {
     /**
      * mount component without field 'lastCheck'
      */
-    const wrapper = mount(AlertInfo, {
+    const wrapper = shallowMount(AlertInfo, {
       propsData: {
         alert: {
           _id: 1,
@@ -26,14 +26,14 @@ describe('AlertInfo', () => {
     });
     expect(wrapper.find('.lastCheck').exists()).toBe(true);
     expect(wrapper.find('.lastCheck').text()).toBe('Prochainement');
-    expect(wrapper.find('.v-card__title').text()).toBe('Information');
+    expect(wrapper.find('.cardTitle').text()).toBe('Information');
   });
 
   it('should display the actual date when lastCheck is defined (summer time)', () => {
     /**
      * mount component with field 'lastCheck'
      */
-    const wrapper = mount(AlertInfo, {
+    const wrapper = shallowMount(AlertInfo, {
       propsData: {
         alert: {
           _id: 1,
@@ -53,7 +53,7 @@ describe('AlertInfo', () => {
     /**
      * mount component with field 'lastCheck'
      */
-    const wrapper = mount(AlertInfo, {
+    const wrapper = shallowMount(AlertInfo, {
       propsData: {
         alert: {
           _id: 1,
@@ -70,6 +70,10 @@ describe('AlertInfo', () => {
   });
 
   it('should fire event "emit:close" after clicking button', () => {
+    /**
+     * use mount instead of shallowMount here
+     * because testing event emit
+     */
     const wrapper = mount(AlertInfo, {
       propsData: {
         alert: {
@@ -83,12 +87,12 @@ describe('AlertInfo', () => {
       },
     });
 
-    expect(wrapper.find('.v-btn__content').text()).toBe('Fermer');
+    expect(wrapper.find('.closeBtn').text()).toBe('Fermer');
     expect(wrapper.emitted()).toEqual({});
     /**
      * click button and check event emit
      */
-    wrapper.find('.v-btn__content').trigger('click');
+    wrapper.find('.closeBtn').trigger('click');
     expect(wrapper.emitted()).toHaveProperty('close:dialog');
   });
 });

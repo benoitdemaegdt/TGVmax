@@ -20,8 +20,12 @@
             <alert-info @close:dialog='dialogInfo = !dialogInfo' :alert='currentAlert'/>
           </v-dialog>
           <!-- delete alert -->
-          <v-btn color="#616161" text @click='dialogDeletion=true'>Supprimer</v-btn>
-          <alert-deletion v-model='dialogDeletion' @delete:travelAlert='deleteTravelAlert(alert)'/>
+          <v-dialog v-model='dialogDeletion' persistent max-width='600px'>
+            <template v-slot:activator='{ on }'>
+              <v-btn color="#616161" text @click='displayDelete(alert)'>Supprimer</v-btn>
+            </template>
+            <alert-deletion @close:dialog='dialogDeletion = !dialogDeletion' @delete:travelAlert='deleteTravelAlert(currentAlert)'/>
+          </v-dialog>
         </v-card-actions>
       </v-card>
       <!-- add  alert -->
@@ -78,6 +82,10 @@ export default {
   methods: {
     displayInfo(alert) {
       this.dialogInfo = true;
+      this.currentAlert = alert;
+    },
+    displayDelete(alert) {
+      this.dialogDeletion = true;
       this.currentAlert = alert;
     },
     async getTravelAlerts() {

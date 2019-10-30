@@ -1,6 +1,6 @@
 <template>
   <v-card>
-    <v-card-title class='primary white--text'>
+    <v-card-title class='cardTitle primary white--text'>
       Information
     </v-card-title>
 
@@ -13,7 +13,7 @@
     <v-divider></v-divider>
 
     <v-card-actions>
-      <v-btn color="primary" text @click="closeDialog()">
+      <v-btn class='closeBtn' color="primary" text @click="closeDialog()">
         Fermer
       </v-btn>
     </v-card-actions>
@@ -37,5 +37,5 @@ export default {
       this.$emit('close:dialog');
     },
   },
-}
+};
 </script>
