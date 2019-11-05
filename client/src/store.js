@@ -8,7 +8,7 @@ export default new Vuex.Store({
   state: {
     status: '',
     token: localStorage.getItem('token') || '',
-    userId: localStorage.getItem('userId') || '',
+    userId: localStorage.getItem('userId') || ''
   },
   mutations: {
     auth_request(state) {
@@ -25,62 +25,72 @@ export default new Vuex.Store({
     logout(state) {
       state.token = '';
       state.userId = '';
-    },
+    }
   },
   actions: {
-    async register({commit}, user) {
+    async register({ commit }, user) {
       commit('auth_request');
       try {
-        const response = await axios.post(`${process.env.VUE_APP_API_BASE_URL}/api/v1/users?action=register`, {
-          ...user,
-        });
+        const response = await axios.post(
+          `${process.env.VUE_APP_API_BASE_URL}/api/v1/users?action=register`,
+          {
+            ...user
+          }
+        );
         const token = response.data.token;
         const userId = response.data._id;
         localStorage.setItem('token', token);
         localStorage.setItem('userId', userId);
         axios.defaults.headers.common.Authorization = `Bearer ${token}`;
-        commit('auth_success', {token, userId});
+        commit('auth_success', { token, userId });
       } catch (err) {
         commit('auth_error');
         localStorage.removeItem('token');
         localStorage.removeItem('userId');
-        throw new Error(err.response && err.response.data
-          ? err.response.data.message
-          : 'Erreur réseau. Veuillez réessayer plus tard');
+        throw new Error(
+          err.response && err.response.data
+            ? err.response.data.message
+            : 'Erreur réseau. Veuillez réessayer plus tard'
+        );
       }
     },
-    async login({commit}, user) {
+    async login({ commit }, user) {
       commit('auth_request');
       try {
         /**
          * user is not the same type than above (no tgvmaxNumber here)
          */
-        const response = await axios.post(`${process.env.VUE_APP_API_BASE_URL}/api/v1/users?action=login`, {
-          ...user,
-        });
+        const response = await axios.post(
+          `${process.env.VUE_APP_API_BASE_URL}/api/v1/users?action=login`,
+          {
+            ...user
+          }
+        );
         const token = response.data.token;
         const userId = response.data._id;
         localStorage.setItem('token', token);
         localStorage.setItem('userId', userId);
         axios.defaults.headers.common.Authorization = `Bearer ${token}`;
-        commit('auth_success', {token, userId});
+        commit('auth_success', { token, userId });
       } catch (err) {
         commit('auth_error');
         localStorage.removeItem('token');
         localStorage.removeItem('userId');
-        throw new Error(err.response && err.response.data
-          ? err.response.data.message
-          : 'Erreur réseau. Veuillez réessayer plus tard');
+        throw new Error(
+          err.response && err.response.data
+            ? err.response.data.message
+            : 'Erreur réseau. Veuillez réessayer plus tard'
+        );
       }
     },
-    logout({commit}) {
+    logout({ commit }) {
       commit('logout');
       delete axios.defaults.headers.common.Authorization;
       localStorage.removeItem('token');
       localStorage.removeItem('userId');
-    },
+    }
   },
-  getters : {
-    isLoggedIn: (state) => !!state.token,
-  },
+  getters: {
+    isLoggedIn: state => !!state.token
+  }
 });

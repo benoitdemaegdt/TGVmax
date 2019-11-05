@@ -9,7 +9,9 @@ export function getFrenchDate(date) {
   }
   const [year, month, day] = date.split('T')[0].split('-');
   const jsDate = new Date(Number(year), Number(month) - 1, Number(day));
-  return `${getFrenchDay(jsDate.getDay())} ${jsDate.getDate()} ${getFrenchMonth(jsDate.getMonth())}`;
+  return `${getFrenchDay(jsDate.getDay())} ${jsDate.getDate()} ${getFrenchMonth(
+    jsDate.getMonth()
+  )}`;
 }
 
 /**
@@ -41,7 +43,13 @@ export function convertToDatePickerFormat(date) {
 export function getISOString(date, time) {
   const [year, month, day] = date.split('T')[0].split('-');
   const [hour, min] = time.split('h');
-  const jsDate = new Date(Number(year), Number(month) - 1, Number(day), Number(hour), Number(min));
+  const jsDate = new Date(
+    Number(year),
+    Number(month) - 1,
+    Number(day),
+    Number(hour),
+    Number(min)
+  );
   return jsDate.toISOString();
 }
 

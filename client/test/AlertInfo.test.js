@@ -4,7 +4,6 @@ import AlertInfo from '../src/components/AlertInfo.vue';
 import vuetify from 'vuetify';
 
 describe('AlertInfo', () => {
-
   beforeAll(() => {
     Vue.use(vuetify);
   });
@@ -20,9 +19,9 @@ describe('AlertInfo', () => {
           fromTime: new Date(),
           toTime: new Date(),
           tgvmaxNumber: 'HC000054321',
-          status: 'inprogress',
-        },
-      },
+          status: 'inprogress'
+        }
+      }
     });
     expect(wrapper.find('.lastCheck').exists()).toBe(true);
     expect(wrapper.find('.lastCheck').text()).toBe('Prochainement');
@@ -41,9 +40,9 @@ describe('AlertInfo', () => {
           toTime: new Date(),
           tgvmaxNumber: 'HC000054321',
           status: 'inprogress',
-          lastCheck: '2019-08-29T12:18:45.549+00:00',
-        },
-      },
+          lastCheck: '2019-08-29T12:18:45.549+00:00'
+        }
+      }
     });
     expect(wrapper.find('.lastCheck').exists()).toBe(true);
     expect(wrapper.find('.lastCheck').text()).toBe('jeudi 29 août à 14:18');
@@ -61,9 +60,9 @@ describe('AlertInfo', () => {
           toTime: new Date(),
           tgvmaxNumber: 'HC000054321',
           status: 'inprogress',
-          lastCheck: '2019-10-29T12:18:45.549+00:00',
-        },
-      },
+          lastCheck: '2019-10-29T12:18:45.549+00:00'
+        }
+      }
     });
     expect(wrapper.find('.lastCheck').exists()).toBe(true);
     expect(wrapper.find('.lastCheck').text()).toBe('mardi 29 octobre à 13:18');
@@ -82,9 +81,9 @@ describe('AlertInfo', () => {
           toTime: new Date(),
           tgvmaxNumber: 'HC000054321',
           status: 'inprogress',
-          lastCheck: '2019-10-29T12:18:45.549+00:00',
-        },
-      },
+          lastCheck: '2019-10-29T12:18:45.549+00:00'
+        }
+      }
     });
 
     expect(wrapper.find('.closeBtn').text()).toBe('Fermer');

@@ -23,100 +23,108 @@ const router = new Router({
       name: 'Accueil',
       component: Home,
       meta: {
-        title: 'Maxplorateur | Création d\'alertes TGVmax',
-        description: 'Maxplorateurs, optimisez l\'expérience TGVmax ! Recevez une notification lorsque votre trajet TGVmax est disponible !',
-      },
+        title: "Maxplorateur | Création d'alertes TGVmax",
+        description:
+          "Maxplorateurs, optimisez l'expérience TGVmax ! Recevez une notification lorsque votre trajet TGVmax est disponible !"
+      }
     },
     {
       path: '/alertes',
       name: 'Alertes',
       component: Alert,
       meta: {
-        title: 'Maxplorateur | Création d\'alertes TGVmax',
-        description: 'Créez une alerte et recevez une notification lorsque votre trajet TGVmax est disponible !',
-      },
+        title: "Maxplorateur | Création d'alertes TGVmax",
+        description:
+          'Créez une alerte et recevez une notification lorsque votre trajet TGVmax est disponible !'
+      }
     },
     {
       path: '/contact',
       name: 'Contact',
       component: Contact,
       meta: {
-        title: 'Maxplorateur | Création d\'alertes TGVmax',
-        description: 'Une question ? Une remarque ? Contactez moi !',
-      },
+        title: "Maxplorateur | Création d'alertes TGVmax",
+        description: 'Une question ? Une remarque ? Contactez moi !'
+      }
     },
     {
       path: '/articles',
       name: 'Articles',
       component: Article,
       meta: {
-        title: 'Maxplorateur | Création d\'alertes TGVmax',
-        description: 'Apprenez en plus sur l\'abonnement TGVmax : est-ce rentable ? Comment mettre une alerte de disponibilité ?',
-      },
+        title: "Maxplorateur | Création d'alertes TGVmax",
+        description:
+          "Apprenez en plus sur l'abonnement TGVmax : est-ce rentable ? Comment mettre une alerte de disponibilité ?"
+      }
     },
     {
       path: '/articles/tgvmax-rentable',
       name: 'Tgvmax',
       component: ArticleTgvmax,
       meta: {
-        title: 'Maxplorateur | Création d\'alertes TGVmax',
-        description: 'Est-ce qu\'un abonnement TGVmax sera rentable pour vous ? Lisez l\'article pour le savoir !',
-      },
+        title: "Maxplorateur | Création d'alertes TGVmax",
+        description:
+          "Est-ce qu'un abonnement TGVmax sera rentable pour vous ? Lisez l'article pour le savoir !"
+      }
     },
     {
       path: '/articles/tgvmax-alerte',
       name: 'Alerte TGVmax',
       component: ArticleAlert,
       meta: {
-        title: 'Maxplorateur | Création d\'alertes TGVmax',
-        description: 'Apprenez tout de suite à créer une alerte TGVmax et optimisez enfin votre abonnement !',
-      },
+        title: "Maxplorateur | Création d'alertes TGVmax",
+        description:
+          'Apprenez tout de suite à créer une alerte TGVmax et optimisez enfin votre abonnement !'
+      }
     },
     {
       path: '/articles/application-maxplorateur',
       name: 'Application',
       component: ArticleApplication,
       meta: {
-        title: 'Maxplorateur | Création d\'alertes TGVmax',
-        description: 'L\'application Maxplorateur est désormais disponible sur Android et iOS. Suivez le guide pour l\'installer !',
-      },
+        title: "Maxplorateur | Création d'alertes TGVmax",
+        description:
+          "L'application Maxplorateur est désormais disponible sur Android et iOS. Suivez le guide pour l'installer !"
+      }
     },
     {
       path: '/inscription',
-      name: 'Création d\'un compte',
+      name: "Création d'un compte",
       component: Register,
       meta: {
-        title: 'Maxplorateur | Création d\'alertes TGVmax',
-        description: 'Créez votre compte maxplorateur pour pouvoir mettre des alertes TGVmax',
-      },
+        title: "Maxplorateur | Création d'alertes TGVmax",
+        description:
+          'Créez votre compte maxplorateur pour pouvoir mettre des alertes TGVmax'
+      }
     },
     {
       path: '/connexion',
       name: 'Connexion',
       component: Login,
       meta: {
-        title: 'Maxplorateur | Création d\'alertes TGVmax',
-        description: 'Connectez-vous à votre compte maxplorateur pour pouvoir mettre des alertes TGVmax',
-      },
+        title: "Maxplorateur | Création d'alertes TGVmax",
+        description:
+          'Connectez-vous à votre compte maxplorateur pour pouvoir mettre des alertes TGVmax'
+      }
     },
     {
       path: '/compte',
       name: 'Compte',
       component: Account,
       meta: {
-        title: 'Maxplorateur | Création d\'alertes TGVmax',
-        description: 'Votre compte maxplorateur !',
-      },
+        title: "Maxplorateur | Création d'alertes TGVmax",
+        description: 'Votre compte maxplorateur !'
+      }
     },
     {
       path: '*',
       component: NotFound,
       meta: {
-        title: 'Maxplorateur | Création d\'alertes TGVmax',
-        description: '',
-      },
-    },
-  ],
+        title: "Maxplorateur | Création d'alertes TGVmax",
+        description: ''
+      }
+    }
+  ]
 });
 
 /**

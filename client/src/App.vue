@@ -16,26 +16,26 @@ import Navigation from '@/components/Navigation.vue';
 export default Vue.extend({
   name: 'App',
   components: {
-    Navigation,
+    Navigation
   },
   created() {
     /**
      * if jwt is expired : logout
      */
-    $http.interceptors.response.use(undefined, (err) => {
+    this.$http.interceptors.response.use(undefined, err => {
       const errorResponse = err.response;
-      return new Promise((resolve, reject) => {
-        if (errorResponse.status === 401
-          && errorResponse.config
-          && !errorResponse.config.__isRetryRequest
-          && errorResponse.data
-          && errorResponse.data.message === 'jwt expired') {
-          this.$store.dispatch('logout');
-          this.$router.push('/');
-        }
-        throw err;
-      });
+      if (
+        errorResponse.status === 401 &&
+        errorResponse.config &&
+        !errorResponse.config.__isRetryRequest &&
+        errorResponse.data &&
+        errorResponse.data.message === 'jwt expired'
+      ) {
+        this.$store.dispatch('logout');
+        this.$router.push('/');
+      }
+      throw err;
     });
-  },
+  }
 });
 </script>
