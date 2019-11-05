@@ -38,7 +38,9 @@
           </v-card-actions>
           <v-divider class="mt-5"></v-divider>
           <v-card-actions class="justify-center">
-            <v-btn text small to="/inscription">Je n'ai pas de compte</v-btn>
+            <v-btn text small :to="{ name: 'Inscription' }"
+              >Je n'ai pas de compte</v-btn
+            >
           </v-card-actions>
         </v-card>
       </v-flex>

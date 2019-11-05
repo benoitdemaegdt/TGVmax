@@ -2,7 +2,10 @@
   <v-container>
     <v-row>
       <v-col md="6" sm="12" class="pa-10" style="background: white">
-        <h1 class="display-1">Optimisez l'expérience <span>TGVmax</span></h1>
+        <h1 class="display-1">
+          Optimisez l'expérience
+          <span>TGVmax</span>
+        </h1>
         <br />
         <h2 class="headline mb-2">C'est quoi le problème ? 🤔</h2>
         <p>
@@ -22,7 +25,7 @@
         </p>
         <br />
         <div style="text-align:center;">
-          <v-btn color="primary" to="/alertes">Créer une alerte</v-btn>
+          <v-btn color="primary" :to="{name: 'Alertes'}">Créer une alerte</v-btn>
         </div>
       </v-col>
       <v-col md="6" class="hidden-sm-and-down" style="background: #f5f5f5">

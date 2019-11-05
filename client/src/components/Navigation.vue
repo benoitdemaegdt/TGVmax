@@ -9,9 +9,11 @@
       ></v-app-bar-nav-icon>
       <v-toolbar-title>
         <div class="hidden-md-and-up">{{ this.getRouteName }}</div>
-        <router-link to="/" class="toolbar-title hidden-sm-and-down">{{
-          title
-        }}</router-link>
+        <router-link
+          :to="{ name: 'Accueil' }"
+          class="toolbar-title hidden-sm-and-down"
+          >{{ title }}</router-link
+        >
       </v-toolbar-title>
       <v-spacer class="hidden-sm-and-down"></v-spacer>
       <v-toolbar-items class="hidden-sm-and-down">
@@ -20,15 +22,16 @@
           :key="item.title"
           :to="item.path"
           text
+          >{{ item.title }}</v-btn
         >
-          {{ item.title }}
-        </v-btn>
-        <v-btn v-if="!this.isLoggedIn" key="Connexion" to="/inscription" text>
-          Connexion
-        </v-btn>
-        <v-btn v-else key="Compte" to="/compte" text>
-          Compte
-        </v-btn>
+        <v-btn
+          v-if="!this.isLoggedIn"
+          key="Connexion"
+          :to="{ name: 'Inscription' }"
+          text
+          >Connexion</v-btn
+        >
+        <v-btn v-else key="Compte" :to="{ name: 'Compte' }" text>Compte</v-btn>
       </v-toolbar-items>
     </v-app-bar>
     <!-- End of app navbar -->
@@ -58,7 +61,7 @@
         <v-list-item
           v-if="!this.isLoggedIn"
           key="Connexion"
-          to="/inscription"
+          :to="{ name: 'Inscription' }"
           link
         >
           <v-list-item-icon>
@@ -68,7 +71,12 @@
             <v-list-item-title>Connexion</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-        <v-list-item v-if="this.isLoggedIn" key="Compte" to="/compte" link>
+        <v-list-item
+          v-if="this.isLoggedIn"
+          key="Compte"
+          :to="{ name: 'Compte' }"
+          link
+        >
           <v-list-item-icon>
             <v-icon>mdi-account</v-icon>
           </v-list-item-icon>

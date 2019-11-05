@@ -13,10 +13,8 @@
       <v-btn color="primary" @click="logout()">Me déconnecter</v-btn>
     </div>
     <div v-else>
-      <h1 class="display-1">
-        Vous devez être connecté pour avoir accès à votre compte
-      </h1>
-      <v-btn to="/connexion" class="primary mt-5">Je me connecte</v-btn>
+      <h1 class="display-1">Vous devez être connecté pour avoir accès à votre compte</h1>
+      <v-btn :to="{ name: 'Connexion' }" class="primary mt-5">Je me connecte</v-btn>
     </div>
   </v-container>
 </template>

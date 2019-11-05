@@ -51,7 +51,9 @@
           </v-card-actions>
           <v-divider class="mt-5"></v-divider>
           <v-card-actions class="justify-center">
-            <v-btn text small to="/connexion">J'ai déjà un compte</v-btn>
+            <v-btn text small :to="{ name: 'Connexion' }"
+              >J'ai déjà un compte</v-btn
+            >
           </v-card-actions>
         </v-card>
       </v-flex>

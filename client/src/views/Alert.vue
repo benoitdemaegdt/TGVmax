@@ -1,17 +1,13 @@
 <template>
   <v-container class="mt-5">
     <div v-if="isLoggedIn">
-      <p class="text-center" v-if="alerts.length === 0">
-        Aucune alerte en cours
-      </p>
-      <v-card
-        v-for="alert of alerts"
-        :key="alert.id"
-        class="elevation-6 mx-auto mb-5 alertCard"
-      >
+      <p class="text-center" v-if="alerts.length === 0">Aucune alerte en cours</p>
+      <v-card v-for="alert of alerts" :key="alert.id" class="elevation-6 mx-auto mb-5 alertCard">
         <v-card-title class="primary white--text">
           <div class="cardTitle">
-            {{ alert.origin.name }}<br />{{ alert.destination.name }}
+            {{ alert.origin.name }}
+            <br />
+            {{ alert.destination.name }}
           </div>
         </v-card-title>
         <v-card-subtitle class="primary white--text pt-3">
@@ -22,21 +18,14 @@
           <!-- info -->
           <v-dialog v-model="dialogInfo" persistent max-width="600px">
             <template v-slot:activator="{ on }">
-              <v-btn color="#616161" text @click="displayInfo(alert)"
-                >Info</v-btn
-              >
+              <v-btn color="#616161" text @click="displayInfo(alert)">Info</v-btn>
             </template>
-            <alert-info
-              @close:dialog="dialogInfo = !dialogInfo"
-              :alert="currentAlert"
-            />
+            <alert-info @close:dialog="dialogInfo = !dialogInfo" :alert="currentAlert" />
           </v-dialog>
           <!-- delete alert -->
           <v-dialog v-model="dialogDeletion" persistent max-width="600px">
             <template v-slot:activator="{ on }">
-              <v-btn color="#616161" text @click="displayDelete(alert)"
-                >Supprimer</v-btn
-              >
+              <v-btn color="#616161" text @click="displayDelete(alert)">Supprimer</v-btn>
             </template>
             <alert-deletion
               @close:dialog="dialogDeletion = !dialogDeletion"
@@ -48,16 +37,7 @@
       <!-- add  alert -->
       <v-dialog v-model="dialogForm" persistent max-width="600px">
         <template v-slot:activator="{ on }">
-          <v-btn
-            fab
-            dark
-            large
-            color="primary"
-            fixed
-            right
-            bottom
-            @click="dialogForm = true"
-          >
+          <v-btn fab dark large color="primary" fixed right bottom @click="dialogForm = true">
             <v-icon>mdi-plus</v-icon>
           </v-btn>
         </template>
@@ -69,14 +49,12 @@
       </v-dialog>
     </div>
     <div v-else>
-      <h1 class="display-1">
-        Pour créer une alerte TGVmax, vous devez être connecté
-      </h1>
+      <h1 class="display-1">Pour créer une alerte TGVmax, vous devez être connecté</h1>
       <p>
         Avoir un compte vous permet de recevoir par email les alertes de
         disponibilité des TGVmax
       </p>
-      <v-btn to="/inscription" class="primary">Je créé un compte</v-btn>
+      <v-btn :to="{name: 'Inscription'}" class="primary">Je créé un compte</v-btn>
     </div>
   </v-container>
 </template>

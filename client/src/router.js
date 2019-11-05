@@ -59,7 +59,7 @@ const router = new Router({
     },
     {
       path: '/articles/tgvmax-rentable',
-      name: 'Tgvmax',
+      name: 'TgvmaxRentable',
       component: ArticleTgvmax,
       meta: {
         title: "Maxplorateur | Création d'alertes TGVmax",
@@ -69,7 +69,7 @@ const router = new Router({
     },
     {
       path: '/articles/tgvmax-alerte',
-      name: 'Alerte TGVmax',
+      name: 'TgvmaxAlerte',
       component: ArticleAlert,
       meta: {
         title: "Maxplorateur | Création d'alertes TGVmax",
@@ -89,7 +89,7 @@ const router = new Router({
     },
     {
       path: '/inscription',
-      name: "Création d'un compte",
+      name: 'Inscription',
       component: Register,
       meta: {
         title: "Maxplorateur | Création d'alertes TGVmax",
