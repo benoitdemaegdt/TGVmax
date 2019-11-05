@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import { getFrenchDate, getHour } from '../helper/date.ts';
+import { getFrenchDate, getHour } from '../helper/date.js';
 
 export default {
   name: 'alert-info',

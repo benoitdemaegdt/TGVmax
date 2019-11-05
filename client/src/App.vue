@@ -9,7 +9,7 @@
   </v-app>
 </template>
 
-<script lang="ts">
+<script>
 import Vue from 'vue';
 import Navigation from '@/components/Navigation.vue';
 
@@ -22,8 +22,8 @@ export default Vue.extend({
     /**
      * if jwt is expired : logout
      */
-    (this as any).$http.interceptors.response.use(undefined, (err: any) => {
-      const errorResponse: any = err.response;
+    $http.interceptors.response.use(undefined, (err) => {
+      const errorResponse = err.response;
       return new Promise((resolve, reject) => {
         if (errorResponse.status === 401
           && errorResponse.config

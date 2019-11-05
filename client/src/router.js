@@ -15,7 +15,7 @@ import NotFound from './components/NotFound.vue';
 
 Vue.use(Router);
 
-const router: Router = new Router({
+const router = new Router({
   mode: 'history',
   routes: [
     {
@@ -123,8 +123,8 @@ const router: Router = new Router({
  * change description for SERP
  */
 router.beforeEach((to, from, next) => {
-  const googleDescription: HTMLMetaElement = document.head.querySelector('[name=description]') as HTMLMetaElement;
-  googleDescription!.content = to.meta.description;
+  const googleDescription = document.head.querySelector('[name=description]');
+  googleDescription.content = to.meta.description;
   next();
 });
 

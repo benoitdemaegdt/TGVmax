@@ -51,7 +51,7 @@
 </template>
 
 <script>
-import { getFrenchDate, getHour } from '@/helper/date.ts';
+import { getFrenchDate, getHour } from '@/helper/date.js';
 import AlertForm from '@/components/AlertForm.vue';
 import AlertInfo from '@/components/AlertInfo.vue';
 import AlertDeletion from '@/components/AlertDeletion.vue';

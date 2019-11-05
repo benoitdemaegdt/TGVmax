@@ -136,7 +136,7 @@
 </template>
 
 <script>
-import { convertToDatePickerFormat, getISOString, getFrenchDate } from '@/helper/date.ts';
+import { convertToDatePickerFormat, getISOString, getFrenchDate } from '@/helper/date.js';
 
 export default {
   name: 'alert-form',

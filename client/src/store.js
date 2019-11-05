@@ -4,37 +4,25 @@ import axios from 'axios';
 
 Vue.use(Vuex);
 
-interface IState {
-  status: string;
-  token: string;
-  userId: string;
-}
-
-interface IPayload {
-  token: string;
-  userId: string;
-}
-
 export default new Vuex.Store({
   state: {
     status: '',
     token: localStorage.getItem('token') || '',
     userId: localStorage.getItem('userId') || '',
   },
-  // @ts-ignore
   mutations: {
-    auth_request(state: IState) {
+    auth_request(state) {
       state.status = 'loading';
     },
-    auth_success(state: IState, payload: IPayload) {
+    auth_success(state, payload) {
       state.status = 'success';
       state.token = payload.token;
       state.userId = payload.userId;
     },
-    auth_error(state: IState) {
+    auth_error(state) {
       state.status = 'error';
     },
-    logout(state: IState) {
+    logout(state) {
       state.token = '';
       state.userId = '';
     },
@@ -93,6 +81,6 @@ export default new Vuex.Store({
     },
   },
   getters : {
-    isLoggedIn: (state: IState) => !!state.token,
+    isLoggedIn: (state) => !!state.token,
   },
 });
