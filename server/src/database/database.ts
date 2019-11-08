@@ -31,8 +31,7 @@ export class Database {
     try {
       return await Database.db.collection(coll).find(query).project(projection).toArray();
     } catch (err) {
-      const error: {code: number; errmsg: string} = err as {code: number; errmsg: string};
-      throw new DatabaseError(error.code, error.errmsg);
+      throw new DatabaseError(err as Error);
     }
   }
 
@@ -41,10 +40,9 @@ export class Database {
    */
   public async findOne<T>(coll: string, query: object, projection: object = {}): Promise<T | null> {
     try {
-      return await Database.db.collection(coll).findOne(query, {projection});
+      return await Database.db.collection(coll).findOne(query, { projection });
     } catch (err) {
-      const error: {code: number; errmsg: string} = err as {code: number; errmsg: string};
-      throw new DatabaseError(error.code, error.errmsg);
+      throw new DatabaseError(err as Error);
     }
   }
 
@@ -55,8 +53,7 @@ export class Database {
     try {
       return await Database.db.collection(coll).insertOne(doc);
     } catch (err) {
-      const error: {code: number; errmsg: string} = err as {code: number; errmsg: string};
-      throw new DatabaseError(error.code, error.errmsg);
+      throw new DatabaseError(err as Error);
     }
   }
 
@@ -67,8 +64,7 @@ export class Database {
     try {
       return await Database.db.collection(coll).updateOne(query, update);
     } catch (err) {
-      const error: {code: number; errmsg: string} = err as {code: number; errmsg: string};
-      throw new DatabaseError(error.code, error.errmsg);
+      throw new DatabaseError(err as Error);
     }
   }
 
