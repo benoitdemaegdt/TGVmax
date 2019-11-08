@@ -11,25 +11,25 @@ export default new Vuex.Store({
     userId: localStorage.getItem('userId') || ''
   },
   mutations: {
-    auth_request(state) {
+    AUTH_REQUEST(state) {
       state.status = 'loading';
     },
-    auth_success(state, payload) {
+    AUTH_SUCCESS(state, payload) {
       state.status = 'success';
       state.token = payload.token;
       state.userId = payload.userId;
     },
-    auth_error(state) {
+    AUTH_ERROR(state) {
       state.status = 'error';
     },
-    logout(state) {
+    LOGOUT(state) {
       state.token = '';
       state.userId = '';
     }
   },
   actions: {
     async register({ commit }, user) {
-      commit('auth_request');
+      commit('AUTH_REQUEST');
       try {
         const response = await axios.post(
           `${process.env.VUE_APP_API_BASE_URL}/api/v1/users?action=register`,
@@ -42,9 +42,9 @@ export default new Vuex.Store({
         localStorage.setItem('token', token);
         localStorage.setItem('userId', userId);
         axios.defaults.headers.common.Authorization = `Bearer ${token}`;
-        commit('auth_success', { token, userId });
+        commit('AUTH_SUCCESS', { token, userId });
       } catch (err) {
-        commit('auth_error');
+        commit('AUTH_ERROR');
         localStorage.removeItem('token');
         localStorage.removeItem('userId');
         throw new Error(
@@ -55,7 +55,7 @@ export default new Vuex.Store({
       }
     },
     async login({ commit }, user) {
-      commit('auth_request');
+      commit('AUTH_REQUEST');
       try {
         /**
          * user is not the same type than above (no tgvmaxNumber here)
@@ -71,9 +71,9 @@ export default new Vuex.Store({
         localStorage.setItem('token', token);
         localStorage.setItem('userId', userId);
         axios.defaults.headers.common.Authorization = `Bearer ${token}`;
-        commit('auth_success', { token, userId });
+        commit('AUTH_SUCCESS', { token, userId });
       } catch (err) {
-        commit('auth_error');
+        commit('AUTH_ERROR');
         localStorage.removeItem('token');
         localStorage.removeItem('userId');
         throw new Error(
@@ -84,7 +84,7 @@ export default new Vuex.Store({
       }
     },
     logout({ commit }) {
-      commit('logout');
+      commit('LOGOUT');
       delete axios.defaults.headers.common.Authorization;
       localStorage.removeItem('token');
       localStorage.removeItem('userId');
