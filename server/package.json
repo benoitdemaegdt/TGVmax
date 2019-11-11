@@ -59,7 +59,7 @@
     "@types/lodash": "^4.14.144",
     "@types/mocha": "^5.2.7",
     "@types/moment-timezone": "^0.5.12",
-    "@types/mongodb": "^3.3.8",
+    "@types/mongodb": "^3.3.10",
     "@types/nock": "^11.1.0",
     "@types/node": "^12.12.6",
     "@types/node-cron": "^2.0.2",
