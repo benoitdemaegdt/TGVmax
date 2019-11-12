@@ -25,7 +25,9 @@
         </p>
         <br />
         <div style="text-align:center;">
-          <v-btn color="primary" :to="{name: 'Alertes'}">Créer une alerte</v-btn>
+          <v-btn color="primary" :to="{ name: 'Alertes' }"
+            >Créer une alerte</v-btn
+          >
         </div>
       </v-col>
       <v-col md="6" class="hidden-sm-and-down" style="background: #f5f5f5">

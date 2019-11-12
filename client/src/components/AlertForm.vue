@@ -91,8 +91,12 @@
                     :min="minDate"
                     :max="maxDate"
                   >
-                    <v-btn text color="primary" @click="menu = false">Fermer</v-btn>
-                    <v-btn text color="primary" @click="$refs.menu.save(date)">OK</v-btn>
+                    <v-btn text color="primary" @click="menu = false"
+                      >Fermer</v-btn
+                    >
+                    <v-btn text color="primary" @click="$refs.menu.save(date)"
+                      >OK</v-btn
+                    >
                   </v-date-picker>
                 </v-menu>
               </v-col>
@@ -123,11 +127,15 @@
               </v-col>
             </v-row>
           </v-container>
-          <p v-if="error" class="text-center subtitle-2 red--text mt-2 mb-0">{{ this.errorMessage }}</p>
+          <p v-if="error" class="text-center subtitle-2 red--text mt-2 mb-0">
+            {{ this.errorMessage }}
+          </p>
         </v-card-text>
         <v-card-actions class="justify-center">
           <v-btn color="primary" text @click="closeForm()">Fermer</v-btn>
-          <v-btn color="primary" text @click="handleSubmit()">Enregistrer</v-btn>
+          <v-btn color="primary" text @click="handleSubmit()"
+            >Enregistrer</v-btn
+          >
         </v-card-actions>
       </v-card>
     </v-form>
@@ -135,6 +143,9 @@
 </template>
 
 <script>
+import StationService from '@/services/StationService.js';
+import UserService from '@/services/UserService.js';
+
 import {
   convertToDatePickerFormat,
   getISOString,
@@ -217,9 +228,7 @@ export default {
   methods: {
     async getTrainStations() {
       try {
-        const response = await this.$http.get(
-          `${process.env.VUE_APP_API_BASE_URL}/api/v1/stations`
-        );
+        const response = await StationService.getStations();
         const body = await response.data;
         this.trainStations = body;
       } catch (err) {
@@ -242,8 +251,8 @@ export default {
             fromTime: this.getISOString(this.date, this.fromTime),
             toTime: this.getISOString(this.date, this.toTime)
           };
-          const response = await this.$http.post(
-            `${process.env.VUE_APP_API_BASE_URL}/api/v1/users/${this.$store.state.userId}/travels`,
+          const response = await UserService.createTravelAlert(
+            this.$store.state.userId,
             alert
           );
           const body = response.data;

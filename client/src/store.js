@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-import axios from 'axios';
+import UserService from '@/services/UserService.js';
 
 Vue.use(Vuex);
 
@@ -31,17 +31,11 @@ export default new Vuex.Store({
     async register({ commit }, user) {
       commit('AUTH_REQUEST');
       try {
-        const response = await axios.post(
-          `${process.env.VUE_APP_API_BASE_URL}/api/v1/users?action=register`,
-          {
-            ...user
-          }
-        );
+        const response = await UserService.registerUser(user);
         const token = response.data.token;
         const userId = response.data._id;
         localStorage.setItem('token', token);
         localStorage.setItem('userId', userId);
-        axios.defaults.headers.common.Authorization = `Bearer ${token}`;
         commit('AUTH_SUCCESS', { token, userId });
       } catch (err) {
         commit('AUTH_ERROR');
@@ -60,17 +54,11 @@ export default new Vuex.Store({
         /**
          * user is not the same type than above (no tgvmaxNumber here)
          */
-        const response = await axios.post(
-          `${process.env.VUE_APP_API_BASE_URL}/api/v1/users?action=login`,
-          {
-            ...user
-          }
-        );
+        const response = await UserService.loginUser(user);
         const token = response.data.token;
         const userId = response.data._id;
         localStorage.setItem('token', token);
         localStorage.setItem('userId', userId);
-        axios.defaults.headers.common.Authorization = `Bearer ${token}`;
         commit('AUTH_SUCCESS', { token, userId });
       } catch (err) {
         commit('AUTH_ERROR');
@@ -85,7 +73,6 @@ export default new Vuex.Store({
     },
     logout({ commit }) {
       commit('LOGOUT');
-      delete axios.defaults.headers.common.Authorization;
       localStorage.removeItem('token');
       localStorage.removeItem('userId');
     }

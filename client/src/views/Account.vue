@@ -13,13 +13,19 @@
       <v-btn color="primary" @click="logout()">Me déconnecter</v-btn>
     </div>
     <div v-else>
-      <h1 class="display-1">Vous devez être connecté pour avoir accès à votre compte</h1>
-      <v-btn :to="{ name: 'Connexion' }" class="primary mt-5">Je me connecte</v-btn>
+      <h1 class="display-1">
+        Vous devez être connecté pour avoir accès à votre compte
+      </h1>
+      <v-btn :to="{ name: 'Connexion' }" class="primary mt-5"
+        >Je me connecte</v-btn
+      >
     </div>
   </v-container>
 </template>
 
 <script>
+import UserService from '@/services/UserService.js';
+
 export default {
   name: 'Account',
   mounted() {
@@ -40,9 +46,7 @@ export default {
     },
     async getUser() {
       try {
-        const response = await this.$http.get(
-          `${process.env.VUE_APP_API_BASE_URL}/api/v1/users/${this.$store.state.userId}`
-        );
+        const response = await UserService.getUser(this.$store.state.userId);
         const body = await response.data;
         this.email = body.email;
         this.tgvmaxNumber = body.tgvmaxNumber;
