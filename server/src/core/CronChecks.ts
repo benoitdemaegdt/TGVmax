@@ -22,7 +22,7 @@ class CronChecks {
    * init CronJob
    */
   public readonly init = (schedule: string): void => {
-    cron.schedule(schedule, async() =>  {
+    cron.schedule(schedule, async() => {
       try {
         const travelAlerts: ITravelAlert[] = await this.fetchPendingTravelAlerts();
         if (isEmpty(travelAlerts)) {
@@ -83,8 +83,9 @@ class CronChecks {
           /**
            * update travelALert status
            */
-          await Database.updateOne('alerts', {_id: new ObjectId(travelAlert._id)}, {
-            $set: {status: 'triggered', triggeredAt: new Date()}},
+          await Database.updateOne('alerts', { _id: new ObjectId(travelAlert._id) }, {
+            $set: { status: 'triggered', triggeredAt: new Date() },
+          },
           );
           await this.delay(Config.delay);
         }
@@ -108,7 +109,7 @@ class CronChecks {
    * fetch all pending travelAlert in database
    */
   private readonly fetchEmailAddress = async(userId: string): Promise<string> => {
-    const user: IUser[] = await  Database.find<IUser>('users', {
+    const user: IUser[] = await Database.find<IUser>('users', {
       _id: new ObjectId(userId),
     });
 
