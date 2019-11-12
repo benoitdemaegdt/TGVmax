@@ -3,13 +3,15 @@
  * input : 2019-09-10T06:55:00Z | 2019-09-10
  * output: mardi 10 septembre
  */
-export function getFrenchDate(date: string): string | undefined {
+export function getFrenchDate(date) {
   if (!date) {
     return;
   }
-  const [year, month, day]: string[] = date.split('T')[0].split('-');
+  const [year, month, day] = date.split('T')[0].split('-');
   const jsDate = new Date(Number(year), Number(month) - 1, Number(day));
-  return `${getFrenchDay(jsDate.getDay())} ${jsDate.getDate()} ${getFrenchMonth(jsDate.getMonth())}`;
+  return `${getFrenchDay(jsDate.getDay())} ${jsDate.getDate()} ${getFrenchMonth(
+    jsDate.getMonth()
+  )}`;
 }
 
 /**
@@ -17,7 +19,7 @@ export function getFrenchDate(date: string): string | undefined {
  * input : 2019-09-10T06:55:00Z
  * output: 08:55
  */
-export function getHour(isodate: string): string {
+export function getHour(isodate) {
   const date = new Date(isodate);
   const hour = `0${date.getHours()}`.slice(-2);
   const min = `0${date.getMinutes()}`.slice(-2);
@@ -29,7 +31,7 @@ export function getHour(isodate: string): string {
  * input: Tue Aug 27 2019 16:55:46 GMT+0200 (Central European Summer Time)
  * output: 2019-08-27
  */
-export function convertToDatePickerFormat(date: Date): string {
+export function convertToDatePickerFormat(date) {
   return date.toISOString().split('T')[0];
 }
 
@@ -38,17 +40,23 @@ export function convertToDatePickerFormat(date: Date): string {
  * inputs: '2019-08-27', '22h15'
  * output: '2019-08-27T20:15:00Z'
  */
-export function getISOString(date: string, time: string) {
-  const [year, month, day]: string[] = date.split('T')[0].split('-');
-  const [hour, min]: string[] = time.split('h');
-  const jsDate: Date = new Date(Number(year), Number(month) - 1, Number(day), Number(hour), Number(min));
+export function getISOString(date, time) {
+  const [year, month, day] = date.split('T')[0].split('-');
+  const [hour, min] = time.split('h');
+  const jsDate = new Date(
+    Number(year),
+    Number(month) - 1,
+    Number(day),
+    Number(hour),
+    Number(min)
+  );
   return jsDate.toISOString();
 }
 
 /**
  * convert the nth day of the week to the actual french name
  */
-function getFrenchDay(dayNumber: number) {
+function getFrenchDay(dayNumber) {
   switch (dayNumber) {
     case 0:
       return 'dimanche';
@@ -71,7 +79,7 @@ function getFrenchDay(dayNumber: number) {
  * convert the nth month to the actual french name
  * !! starts at 0 !!
  */
-function getFrenchMonth(monthNumber: number) {
+function getFrenchMonth(monthNumber) {
   switch (monthNumber) {
     case 0:
       return 'janvier';

@@ -17,42 +17,41 @@ describe('StationRouter', () => {
   /**
    * before running every test
    */
-  before(async() => {
+  before(async () => {
     server = App.listen(Config.port);
-    await Promise.all([ Database.deleteAll('alerts'), Database.deleteAll('users'), Database.deleteAll('stations') ]);
+    await Promise.all([Database.deleteAll('alerts'), Database.deleteAll('users'), Database.deleteAll('stations')]);
 
     return Promise.all([
-      Database.insertOne('stations', {name: 'Gare Montparnasse (Paris)', sncfId: 'FRPMO', trainlineId: '4920' }),
-      Database.insertOne('stations', {name: 'Lyon Part-Dieu', sncfId: 'FRLPD', trainlineId: '4676' }),
-      Database.insertOne('stations', {name: 'Marseille Saint-Charles', sncfId: 'FRMSC', trainlineId: '4791' }),
+      Database.insertOne('stations', { name: 'Gare Montparnasse (Paris)', sncfId: 'FRPMO', trainlineId: '4920' }),
+      Database.insertOne('stations', { name: 'Lyon Part-Dieu', sncfId: 'FRLPD', trainlineId: '4676' }),
+      Database.insertOne('stations', { name: 'Marseille Saint-Charles', sncfId: 'FRMSC', trainlineId: '4791' }),
     ]);
   });
 
   /**
    * after running every test
    */
-  after(async() => {
-    await Database.disconnect();
+  after(async () => {
     server.close();
   });
 
-  it('GET /api/v1/stations 200 OK', async() => {
+  it('GET /api/v1/stations 200 OK', async () => {
     /**
      * insert a user for auth purpose
      */
     const res1: request.Response = await request(server)
-    .post('/api/v1/users?action=register')
-    .send({
-      email: 'jane.doe@gmail.com',
-      password: 'this-is-my-fake-password',
-      tgvmaxNumber: 'HC000054321',
-    })
-    .expect(HttpStatus.CREATED);
+      .post('/api/v1/users?action=register')
+      .send({
+        email: 'jane.doe@gmail.com',
+        password: 'this-is-my-fake-password',
+        tgvmaxNumber: 'HC000054321',
+      })
+      .expect(HttpStatus.CREATED);
 
     const res2: request.Response = await request(server)
-    .get('/api/v1/stations')
-    .set({ Authorization: `Bearer ${res1.body.token}` })
-    .expect(HttpStatus.OK);
+      .get('/api/v1/stations')
+      .set({ Authorization: `Bearer ${res1.body.token}` })
+      .expect(HttpStatus.OK);
 
     chai.expect(res2.body.length).to.equal(3);
 
@@ -73,9 +72,9 @@ describe('StationRouter', () => {
     chai.expect(sncfIds.includes('FRMSC')).to.equal(true);
   });
 
-  it('GET /api/v1/stations 401 UNAUTHORIZED', async() => {
+  it('GET /api/v1/stations 401 UNAUTHORIZED', async () => {
     return request(server)
-    .get('/api/v1/stations')
-    .expect(HttpStatus.UNAUTHORIZED);
+      .get('/api/v1/stations')
+      .expect(HttpStatus.UNAUTHORIZED);
   });
 });

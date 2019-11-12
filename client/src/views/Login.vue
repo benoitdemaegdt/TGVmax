@@ -3,40 +3,44 @@
     <v-layout align-center justify-center>
       <v-flex xs12 sm8 md4>
         <v-card>
-          <v-card-title class='primary white--text'>
-            <span class='headline'>Se connecter</span>
+          <v-card-title class="primary white--text">
+            <span class="headline">Se connecter</span>
           </v-card-title>
-          <v-card-text class='mt-5'>
-            <v-form ref='loginForm' @submit.prevent='login'>
+          <v-card-text class="mt-5">
+            <v-form ref="loginForm" @submit.prevent="login">
               <v-text-field
-                label='email'
+                label="email"
                 :rules="[v => !!v || 'email obligatoire']"
-                v-model='email'
-                prepend-icon='mdi-account'
+                v-model="email"
+                prepend-icon="mdi-account"
               />
               <v-text-field
                 :type="showPassword ? 'text' : 'password'"
-                label='mot de passe'
+                label="mot de passe"
                 :rules="[
                   v => !!v || 'mot de passe obligatoire',
-                  v => v.length >= 8 || 'Le mot de passe doit comporter au moins 8 caractères'
+                  v =>
+                    v.length >= 8 ||
+                    'Le mot de passe doit comporter au moins 8 caractères'
                 ]"
-                v-model='password'
-                prepend-icon='mdi-lock'
+                v-model="password"
+                prepend-icon="mdi-lock"
                 :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
-                @click:append='showPassword = !showPassword'
+                @click:append="showPassword = !showPassword"
               />
             </v-form>
-            <p v-if='error' class="text-center subtitle-2 red--text mt-2 mb-0">
-              {{this.errorMessage}}
+            <p v-if="error" class="text-center subtitle-2 red--text mt-2 mb-0">
+              {{ this.errorMessage }}
             </p>
           </v-card-text>
           <v-card-actions class="justify-center">
-            <v-btn color='primary' @click='login();'>Se connecter</v-btn>
+            <v-btn color="primary" @click="login()">Se connecter</v-btn>
           </v-card-actions>
-          <v-divider class='mt-5'></v-divider>
+          <v-divider class="mt-5"></v-divider>
           <v-card-actions class="justify-center">
-            <v-btn text small to="/inscription">Je n'ai pas de compte</v-btn>
+            <v-btn text small :to="{ name: 'Inscription' }"
+              >Je n'ai pas de compte</v-btn
+            >
           </v-card-actions>
         </v-card>
       </v-flex>
@@ -52,7 +56,7 @@ export default {
       error: false,
       errorMessage: '',
       email: '',
-      password: '',
+      password: ''
     };
   },
   methods: {
@@ -73,11 +77,9 @@ export default {
     clearState() {
       this.error = false;
       this.errorMessage = '';
-    },
-  },
+    }
+  }
 };
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>
