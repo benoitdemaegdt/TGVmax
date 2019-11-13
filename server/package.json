@@ -46,7 +46,7 @@
   "devDependencies": {
     "@types/ajv": "^1.0.0",
     "@types/bcryptjs": "^2.4.2",
-    "@types/chai": "^4.2.4",
+    "@types/chai": "^4.2.5",
     "@types/config": "0.0.36",
     "@types/jsonwebtoken": "^8.3.5",
     "@types/koa": "^2.0.52",
