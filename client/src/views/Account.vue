@@ -47,9 +47,8 @@ export default {
     async getUser() {
       try {
         const response = await UserService.getUser(this.$store.state.userId);
-        const body = response.data;
-        this.email = body.email;
-        this.tgvmaxNumber = body.tgvmaxNumber;
+        this.email = response.data.email;
+        this.tgvmaxNumber = response.data.tgvmaxNumber;
       } catch (err) {
         console.log(err);
       }

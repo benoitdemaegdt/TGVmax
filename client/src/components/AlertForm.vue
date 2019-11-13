@@ -229,8 +229,7 @@ export default {
     async getTrainStations() {
       try {
         const response = await StationService.getStations();
-        const body = response.data;
-        this.trainStations = body;
+        this.trainStations = response.data;
       } catch (err) {
         console.log(err);
       }
@@ -255,9 +254,8 @@ export default {
             this.$store.state.userId,
             alert
           );
-          const body = response.data;
           window.dataLayer.push({ event: 'travelAlertCreated' });
-          this.$emit('add:travelAlert', { ...alert, _id: body._id });
+          this.$emit('add:travelAlert', { ...alert, _id: response.data._id });
           this.clearState();
           this.closeForm();
         } catch (err) {
