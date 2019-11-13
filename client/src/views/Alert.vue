@@ -129,7 +129,7 @@ export default {
         const response = await UserService.getTravelAlerts(
           this.$store.state.userId
         );
-        const body = await response.data;
+        const body = response.data;
         this.alerts = body;
       } catch (err) {
         console.log(err);

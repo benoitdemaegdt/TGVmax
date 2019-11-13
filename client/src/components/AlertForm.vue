@@ -229,7 +229,7 @@ export default {
     async getTrainStations() {
       try {
         const response = await StationService.getStations();
-        const body = await response.data;
+        const body = response.data;
         this.trainStations = body;
       } catch (err) {
         console.log(err);
