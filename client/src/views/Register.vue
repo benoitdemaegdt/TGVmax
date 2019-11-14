@@ -85,12 +85,11 @@ export default {
             password,
             tgvmaxNumber
           });
-          window.dataLayer.push({ event: 'accountCreated' });
           this.clearState();
           this.$router.push('/alertes');
         } catch (err) {
           this.error = true;
-          this.errorMessage = `⚠️ ${err.message}`;
+          this.errorMessage = err.message;
         }
       }
     },

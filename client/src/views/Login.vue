@@ -70,7 +70,7 @@ export default {
           this.$router.push('/alertes');
         } catch (err) {
           this.error = true;
-          this.errorMessage = `⚠️ ${err.message}`;
+          this.errorMessage = err.message;
         }
       }
     },

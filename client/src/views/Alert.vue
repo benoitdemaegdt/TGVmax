@@ -1,11 +1,11 @@
 <template>
   <v-container class="mt-5">
     <div v-if="isLoggedIn">
-      <p class="text-center" v-if="alerts.length === 0">
+      <p class="text-center" v-if="alert.alerts.length === 0">
         Aucune alerte en cours
       </p>
       <v-card
-        v-for="alert of alerts"
+        v-for="alert of alert.alerts"
         :key="alert.id"
         class="elevation-6 mx-auto mb-5 alertCard"
       >
@@ -65,8 +65,7 @@
         </template>
         <alert-form
           @close:dialog="dialogForm = !dialogForm"
-          @add:travelAlert="addTravelAlert"
-          :alerts="alerts"
+          :alerts="alert.alerts"
         />
       </v-dialog>
     </div>
@@ -86,8 +85,8 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
 import { getFrenchDate, getHour } from '@/helper/date.js';
-import UserService from '@/services/UserService.js';
 import AlertForm from '@/components/AlertForm.vue';
 import AlertInfo from '@/components/AlertInfo.vue';
 import AlertDeletion from '@/components/AlertDeletion.vue';
@@ -103,7 +102,7 @@ export default {
     this.getFrenchDate = getFrenchDate;
     this.getHour = getHour;
     if (this.isLoggedIn) {
-      this.getTravelAlerts();
+      this.$store.dispatch('fetchAlerts');
     }
   },
   data() {
@@ -111,8 +110,7 @@ export default {
       dialogForm: false,
       dialogInfo: false,
       dialogDeletion: false,
-      currentAlert: {},
-      alerts: []
+      currentAlert: {}
     };
   },
   methods: {
@@ -124,34 +122,15 @@ export default {
       this.dialogDeletion = true;
       this.currentAlert = alert;
     },
-    async getTravelAlerts() {
-      try {
-        const response = await UserService.getTravelAlerts(
-          this.$store.state.userId
-        );
-        this.alerts = response.data;
-      } catch (err) {
-        console.log(err);
-      }
-    },
     async deleteTravelAlert(alert) {
-      try {
-        const _id = alert._id;
-        await UserService.deleteTravelAlert(this.$store.state.userId, _id);
-        const index = this.alerts.indexOf(alert);
-        this.alerts.splice(index, 1);
-      } catch (err) {
-        console.log(err);
-      }
-    },
-    addTravelAlert(alert) {
-      this.alerts = [...this.alerts, alert];
+      this.$store.dispatch('deleteAlert', alert);
     }
   },
   computed: {
     isLoggedIn() {
       return this.$store.getters.isLoggedIn;
-    }
+    },
+    ...mapState(['alert'])
   }
 };
 </script>

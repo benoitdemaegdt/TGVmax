@@ -144,7 +144,6 @@
 
 <script>
 import StationService from '@/services/StationService.js';
-import UserService from '@/services/UserService.js';
 
 import {
   convertToDatePickerFormat,
@@ -250,20 +249,12 @@ export default {
             fromTime: this.getISOString(this.date, this.fromTime),
             toTime: this.getISOString(this.date, this.toTime)
           };
-          const response = await UserService.createTravelAlert(
-            this.$store.state.userId,
-            alert
-          );
-          window.dataLayer.push({ event: 'travelAlertCreated' });
-          this.$emit('add:travelAlert', { ...alert, _id: response.data._id });
+          await this.$store.dispatch('createAlert', alert);
           this.clearState();
           this.closeForm();
         } catch (err) {
           this.error = true;
-          this.errorMessage =
-            err.response && err.response.data
-              ? `⚠️ ${err.response.data.message}`
-              : '⚠️ Erreur réseau. Veuillez réessayer plus tard';
+          this.errorMessage = err.message;
         }
       }
       return;
