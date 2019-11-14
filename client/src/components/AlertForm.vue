@@ -153,21 +153,18 @@ import {
 
 export default {
   name: 'alert-form',
-  props: {
-    alerts: Array
-  },
   created() {
     this.convertToDatePickerFormat = convertToDatePickerFormat;
     this.getFrenchDate = getFrenchDate;
     this.getISOString = getISOString;
-  },
-  mounted() {
     if (this.isLoggedIn) {
       this.getTrainStations();
+      this.alerts = this.$store.state.alert.alerts;
     }
   },
   data() {
     return {
+      alerts: [],
       valid: false,
       error: false,
       errorMessage: '',
