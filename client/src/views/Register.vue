@@ -42,9 +42,16 @@
                 hint="ex: HC000054321"
               />
             </v-form>
-            <p v-if="error" class="text-center subtitle-2 red--text mt-2 mb-0">
-              {{ this.errorMessage }}
-            </p>
+            <div class="text-center">
+              <v-progress-circular
+                v-show="loading"
+                indeterminate
+                color="primary"
+              ></v-progress-circular>
+              <p v-if="error" class="subtitle-2 red--text mt-2 mb-0">
+                {{ this.errorMessage }}
+              </p>
+            </div>
           </v-card-text>
           <v-card-actions class="justify-center">
             <v-btn color="primary" @click="register()">Créer mon compte</v-btn>
@@ -65,6 +72,7 @@
 export default {
   data() {
     return {
+      loading: false,
       showPassword: false,
       error: false,
       errorMessage: '',
@@ -76,18 +84,18 @@ export default {
   methods: {
     async register() {
       if (this.$refs.registerForm.validate()) {
-        const email = this.email;
-        const password = this.password;
-        const tgvmaxNumber = this.tgvmaxNumber;
         try {
-          await this.$store.dispatch('register', {
-            email,
-            password,
-            tgvmaxNumber
-          });
           this.clearState();
+          this.loading = true;
+          await this.$store.dispatch('register', {
+            email: this.email,
+            password: this.password,
+            tgvmaxNumber: this.tgvmaxNumber
+          });
+          this.loading = false;
           this.$router.push('/alertes');
         } catch (err) {
+          this.loading = false;
           this.error = true;
           this.errorMessage = err.message;
         }

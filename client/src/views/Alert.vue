@@ -41,8 +41,8 @@
               >
             </template>
             <alert-deletion
+              :alert="currentAlert"
               @close:dialog="dialogDeletion = !dialogDeletion"
-              @delete:travelAlert="deleteTravelAlert(currentAlert)"
             />
           </v-dialog>
         </v-card-actions>
@@ -63,10 +63,7 @@
             <v-icon>mdi-plus</v-icon>
           </v-btn>
         </template>
-        <alert-form
-          @close:dialog="dialogForm = !dialogForm"
-          :alerts="alert.alerts"
-        />
+        <alert-form @close:dialog="dialogForm = !dialogForm" />
       </v-dialog>
     </div>
     <div v-else>
@@ -121,9 +118,6 @@ export default {
     displayDelete(alert) {
       this.dialogDeletion = true;
       this.currentAlert = alert;
-    },
-    async deleteTravelAlert(alert) {
-      this.$store.dispatch('deleteAlert', alert);
     }
   },
   computed: {

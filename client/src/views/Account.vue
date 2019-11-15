@@ -4,8 +4,18 @@
       <h2 class="headline mb-2">Mon statut</h2>
       <p>Connecté ✅</p>
       <h2 class="headline mb-2">Mon adresse email</h2>
+      <v-progress-circular
+        v-show="loading"
+        indeterminate
+        color="primary"
+      ></v-progress-circular>
       <p>{{ email }}</p>
       <h2 class="headline mb-2">Mon numéro TGVmax</h2>
+      <v-progress-circular
+        v-show="loading"
+        indeterminate
+        color="primary"
+      ></v-progress-circular>
       <p>{{ tgvmaxNumber }}</p>
       <br />
       <h2 class="headline mb-2">Déconnexion</h2>
@@ -35,6 +45,7 @@ export default {
   },
   data() {
     return {
+      loading: false,
       email: '',
       tgvmaxNumber: ''
     };
@@ -46,12 +57,15 @@ export default {
     },
     async getUser() {
       try {
+        this.loading = true;
         const response = await UserService.getUser(
           this.$store.state.auth.userId
         );
         this.email = response.data.email;
         this.tgvmaxNumber = response.data.tgvmaxNumber;
+        this.loading = false;
       } catch (err) {
+        this.loading = false;
         console.log(err);
       }
     }
