@@ -990,6 +990,16 @@
     "sncfId": "FRMPL",
     "trainlineId": "4786"
   },
+  {
+    "name": "Montpellier (toutes gares)",
+    "sncfId": "FRMPT",
+    "trainlineId": "22598"
+  },
+  {
+    "name": "Montpellier - Sud de France",
+    "sncfId": "FRSUF",
+    "trainlineId": "33317"
+  },
   { "name": "Saint-Roch Somme", "sncfId": "FRSRO", "trainlineId": "5238" },
   { "name": "Ludon", "sncfId": "FREZR", "trainlineId": "2546" },
   { "name": "Veuves - Monteaux", "sncfId": "FREUM", "trainlineId": "2448" },

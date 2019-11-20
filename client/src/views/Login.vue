@@ -29,9 +29,19 @@
                 @click:append="showPassword = !showPassword"
               />
             </v-form>
-            <p v-if="error" class="text-center subtitle-2 red--text mt-2 mb-0">
-              {{ this.errorMessage }}
-            </p>
+            <div class="text-center">
+              <v-progress-circular
+                v-show="loading"
+                indeterminate
+                color="primary"
+              ></v-progress-circular>
+              <p
+                v-if="error"
+                class="text-center subtitle-2 red--text mt-2 mb-0"
+              >
+                {{ this.errorMessage }}
+              </p>
+            </div>
           </v-card-text>
           <v-card-actions class="justify-center">
             <v-btn color="primary" @click="login()">Se connecter</v-btn>
@@ -52,6 +62,7 @@
 export default {
   data() {
     return {
+      loading: false,
       showPassword: false,
       error: false,
       errorMessage: '',
@@ -62,15 +73,19 @@ export default {
   methods: {
     async login() {
       if (this.$refs.loginForm.validate()) {
-        const email = this.email;
-        const password = this.password;
         try {
-          await this.$store.dispatch('login', { email, password });
           this.clearState();
+          this.loading = true;
+          await this.$store.dispatch('login', {
+            email: this.email,
+            password: this.password
+          });
+          this.loading = false;
           this.$router.push('/alertes');
         } catch (err) {
+          this.loading = false;
           this.error = true;
-          this.errorMessage = `⚠️ ${err.message}`;
+          this.errorMessage = err.message;
         }
       }
     },
