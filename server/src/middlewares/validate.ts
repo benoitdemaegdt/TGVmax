@@ -34,7 +34,7 @@ function format(message: string): string {
     case 'should match pattern "^HC"':
       return 'Le numéro TGVmax doit commencer par HC';
     case 'should NOT be valid':
-      return 'Les adresses jetables ne sont pas acceptées';
+      return 'Les données indiquées ne sont pas valides';
     case 'should match format "email"':
       return 'L\'adresse email est invalide';
     default:

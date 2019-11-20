@@ -129,6 +129,21 @@ describe('UserRouter', () => {
       });
   });
 
+  it('POST /api/v1/users/ 400 BAD REQUEST (invalid format HC555555555 - 3)', async () => {
+    return request(server)
+      .post('/api/v1/users?action=register')
+      .send({
+        email: 'jane.doe@gmail.com',
+        password: 'this-is-my-fake-password',
+        tgvmaxNumber: 'HC555555555',
+      })
+      .expect(HttpStatus.BAD_REQUEST)
+      .then((response: request.Response) => {
+        chai.expect(response.body.statusCode).to.equal(HttpStatus.BAD_REQUEST);
+        chai.expect(response.body.message).to.equal('Les données indiquées ne sont pas valides');
+      });
+  });
+
   it('POST /api/v1/users/ 400 BAD REQUEST (invalid pattern)', async () => {
     return request(server)
       .post('/api/v1/users?action=register')
@@ -155,7 +170,7 @@ describe('UserRouter', () => {
       .expect(HttpStatus.BAD_REQUEST)
       .then((response: request.Response) => {
         chai.expect(response.body.statusCode).to.equal(HttpStatus.BAD_REQUEST);
-        chai.expect(response.body.message).to.equal('Les adresses jetables ne sont pas acceptées');
+        chai.expect(response.body.message).to.equal('Les données indiquées ne sont pas valides');
       });
   });
 
