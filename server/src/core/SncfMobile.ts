@@ -150,7 +150,7 @@ export class SncfMobile {
         fromTime = pageLastTripDeparture;
       }
     } catch (error) {
-      console.log(error); // tslint:disable-line
+      console.log(`SNCF API ERROR : ${error.response.status} ${error.response.statusText} | ${error.response.data.label}`); // tslint:disable-line
     }
 
     /**
