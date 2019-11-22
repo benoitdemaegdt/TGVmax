@@ -140,7 +140,7 @@ export class Trainline {
         fromTime = pageLastTripDeparture;
       }
     } catch (error) {
-      console.log(`TRAINLINE API ERROR : ${error.response.status} ${error.response.statusText} | ${error.response.data.error}`); // tslint:disable-line
+      console.log(`TRAINLINE API ERROR : ${error.response.status} ${error.response.statusText} | ${JSON.stringify(error.response.data.error, null, 2)}`); // tslint:disable-line
     }
 
     /**
