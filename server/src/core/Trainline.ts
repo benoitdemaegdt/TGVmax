@@ -83,7 +83,7 @@ export class Trainline {
           method: 'POST',
           headers: {
             Accept: 'application/json',
-            'User-Agent': 'CaptainTrain/43(4302) Android/4.4.2(19)',
+            'User-Agent': 'CaptainTrain/5221(d109181b0) (iPhone8,4; iOS 13.1.2; Scale/2.00)',
             'Accept-Language': 'fr',
             'Content-Type': 'application/json; charset=UTF-8',
             Host: 'www.trainline.eu',
