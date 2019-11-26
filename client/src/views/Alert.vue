@@ -22,7 +22,7 @@
         </v-card-subtitle>
         <v-card-actions>
           <!-- info -->
-          <v-dialog v-model="dialogInfo" persistent max-width="600px">
+          <v-dialog v-model="dialogInfo" persistent max-width="600px" :retain-focus="false">
             <template v-slot:activator="{}">
               <v-btn color="#616161" text @click="displayInfo(alert)"
                 >Info</v-btn
@@ -34,7 +34,7 @@
             />
           </v-dialog>
           <!-- delete alert -->
-          <v-dialog v-model="dialogDeletion" persistent max-width="600px">
+          <v-dialog v-model="dialogDeletion" persistent max-width="600px" :retain-focus="false">
             <template v-slot:activator="{}">
               <v-btn color="#616161" text @click="displayDelete(alert)"
                 >Supprimer</v-btn
