@@ -8,5 +8,6 @@
   "delay": 150,
   "maxAlertsPerUser": 2,
   "isRegistrationOpen": true,
-  "proxyUrl": null
+  "proxyUrl": null,
+  "disableCronCheck": false
 }
