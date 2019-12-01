@@ -40,7 +40,7 @@ describe('SncfMobile', () => {
      * create oui.sncf fake server
      */
     fakeServer
-    .post('/m650/vmd/maq/v3/proposals/train')
+    .post('/m680/vmd/maq/v3/proposals/train')
     .twice()
     .reply(200, {
       journeys: [
@@ -85,7 +85,7 @@ describe('SncfMobile', () => {
      * create oui.sncf mobile fake server
      */
     fakeServer
-    .post('/m650/vmd/maq/v3/proposals/train')
+    .post('/m680/vmd/maq/v3/proposals/train')
     .twice()
     .reply(200, {
       journeys: [
@@ -130,7 +130,7 @@ describe('SncfMobile', () => {
      * create oui.sncf mobile fake server
      */
     fakeServer
-    .post('/m650/vmd/maq/v3/proposals/train')
+    .post('/m680/vmd/maq/v3/proposals/train')
     .twice()
     .reply(200, {
       journeys: [

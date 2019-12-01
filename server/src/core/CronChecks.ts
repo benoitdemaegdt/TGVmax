@@ -25,7 +25,7 @@ class CronChecks {
     cron.schedule(schedule, async() => {
       try {
         const travelAlerts: ITravelAlert[] = await this.fetchPendingTravelAlerts();
-        if (isEmpty(travelAlerts)) {
+        if (isEmpty(travelAlerts) || Config.disableCronCheck) {
           return;
         }
 
