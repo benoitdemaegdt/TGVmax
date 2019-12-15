@@ -32,3 +32,4 @@ docker-compose.yml
 server/Dockerfile
 client/Dockerfile
 client/nginx
+init-letsencrypt.sh
