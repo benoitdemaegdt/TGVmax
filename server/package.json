@@ -1,6 +1,6 @@
 {
   "name": "maxplorateur-server",
-  "version": "1.7.6",
+  "version": "1.7.7",
   "description": "find a tgvmax seat",
   "scripts": {
     "clean": "rm -fR ./node_modules ./.nyc_output ./coverage ./dist",
@@ -38,7 +38,7 @@
     "koa-static": "^5.0.0",
     "lodash": "^4.17.15",
     "moment-timezone": "^0.5.27",
-    "mongodb": "^3.4.0",
+    "mongodb": "^3.4.1",
     "node-cron": "^2.0.3",
     "nodemailer": "^6.4.2",
     "uuid": "^3.3.3"
@@ -59,22 +59,22 @@
     "@types/lodash": "^4.14.149",
     "@types/mocha": "^5.2.7",
     "@types/moment-timezone": "^0.5.12",
-    "@types/mongodb": "^3.3.12",
+    "@types/mongodb": "^3.3.13",
     "@types/nock": "^11.1.0",
-    "@types/node": "^12.12.17",
+    "@types/node": "^13.1.1",
     "@types/node-cron": "^2.0.2",
-    "@types/nodemailer": "^6.2.2",
+    "@types/nodemailer": "^6.4.0",
     "@types/supertest": "^2.0.8",
     "@types/uuid": "^3.4.6",
     "chai": "^4.2.0",
     "mocha": "^6.2.2",
     "nock": "^11.7.0",
     "nodemon": "^2.0.2",
-    "nyc": "^14.1.1",
+    "nyc": "^15.0.0",
     "supertest": "^4.0.2",
     "ts-node": "^8.5.4",
     "tslint": "^5.20.1",
-    "typescript": "^3.7.3"
+    "typescript": "^3.7.4"
   },
   "nyc": {
     "check-coverage": true,
