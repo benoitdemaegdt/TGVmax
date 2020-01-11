@@ -1,4 +1,11 @@
-import { Db, DeleteWriteOpResultObject, InsertOneWriteOpResult, MongoClient, UpdateWriteOpResult } from 'mongodb';
+import {
+  Db,
+  DeleteWriteOpResultObject,
+  InsertOneWriteOpResult,
+  MongoClient,
+  ObjectId,
+  UpdateWriteOpResult,
+} from 'mongodb';
 import Config from '../Config';
 import { DatabaseError } from '../errors/DatabaseError';
 
@@ -49,7 +56,7 @@ export class Database {
   /**
    * insertOne
    */
-  public async insertOne<T>(coll: string, doc: object): Promise<InsertOneWriteOpResult<T>> {
+  public async insertOne<T>(coll: string, doc: object): Promise<InsertOneWriteOpResult<T & { _id: ObjectId }>> {
     try {
       return await Database.db.collection(coll).insertOne(doc);
     } catch (err) {
