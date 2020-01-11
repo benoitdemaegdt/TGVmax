@@ -1,6 +1,6 @@
 import Axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 import * as httpsProxyAgent from 'https-proxy-agent';
-import { filter, isEmpty, isNil, map, random, uniq } from 'lodash';
+import { filter, get, isEmpty, isNil, map, random, uniq } from 'lodash';
 import * as moment from 'moment-timezone';
 import Config from '../Config';
 import { IAvailability, ISncfMobileTrain } from '../types';
@@ -79,7 +79,7 @@ export class SncfMobile {
     try {
       while (keepSearching) {
         const config: AxiosRequestConfig = {
-          url: `${Config.baseSncfMobileUrl}/m680/vmd/maq/v3/proposals/train`,
+          url: `${Config.baseSncfMobileUrl}/m690/vmd/maq/v3/proposals/train`,
           method: 'POST',
           headers: {
             Accept: 'application/json',
@@ -130,6 +130,23 @@ export class SncfMobile {
         }
 
         /**
+         * interceptor for handling sncf 200 ok that should be 500 or 301
+         */
+        Axios.interceptors.response.use(async(res: AxiosResponse) => {
+          const data: {exceptionType?: string} = res.data as {exceptionType?: string};
+          if (!isNil(data.exceptionType)) {
+            return Promise.reject({
+              response: {
+                status: 500,
+                statusText: data.exceptionType,
+              },
+            });
+          }
+
+          return res;
+        });
+
+        /**
          * get data from oui.sncf
          */
         const response: AxiosResponse = await Axios.request(config);
@@ -150,7 +167,10 @@ export class SncfMobile {
         fromTime = pageLastTripDeparture;
       }
     } catch (error) {
-      console.log(`SNCF API ERROR : ${error.response.status} ${error.response.statusText} | ${error.response.data.label}`); // tslint:disable-line
+      const status: number = get(error, 'response.status', ''); // tslint:disable-line
+      const statusText: string = get(error, 'response.statusText', ''); // tslint:disable-line
+      const label: string = get(error, 'response.data.label', ''); // tslint:disable-line
+      console.log(`SNCF API ERROR : ${status} ${statusText} ${label}`); // tslint:disable-line
     }
 
     /**

@@ -40,7 +40,7 @@ class CronChecks {
           /**
            * split load on trainline and sncf mobile APIs
            */
-          if (random(0, 1) === 0) {
+          if (random(0, 1) === Config.disableTrainline) {
             console.log(`${moment(new Date()).tz('Europe/Paris').format('DD-MM-YYYY HH:mm:ss')} - processing travelAlert ${travelAlert._id} - trainline API`); // tslint:disable-line
             const trainline: Trainline = new Trainline(
               travelAlert.origin.trainlineId,

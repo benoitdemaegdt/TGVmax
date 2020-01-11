@@ -85,6 +85,11 @@ export class Config {
    */
   public disableCronCheck: boolean;
 
+  /**
+   * disable trainline calls
+   */
+  public disableTrainline: number;
+
   constructor() {
     /* tslint:disable */
     this.baseSncfWebUrl = 'https://www.oui.sncf';
@@ -106,6 +111,7 @@ export class Config {
     this.disableCronCheck = isNil(process.env.DISABLE_CRON_CHECK)
       ? config.get('disableCronCheck')
       : process.env.DISABLE_CRON_CHECK === 'true';
+    this.disableTrainline = 2;
   }
 
   private getWhitelist = (): string => {
