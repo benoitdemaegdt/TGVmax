@@ -27,7 +27,7 @@
     "ajv": "^6.10.2",
     "axios": "^0.19.1",
     "bcryptjs": "^2.4.3",
-    "config": "^3.2.4",
+    "config": "^3.2.5",
     "https-proxy-agent": "^4.0.0",
     "jsonwebtoken": "^8.5.1",
     "koa": "^2.11.0",
