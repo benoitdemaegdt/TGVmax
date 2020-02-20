@@ -1,6 +1,6 @@
 {
   "name": "maxplorateur-server",
-  "version": "1.7.9",
+  "version": "1.7.11",
   "description": "find a tgvmax seat",
   "scripts": {
     "clean": "rm -fR ./node_modules ./.nyc_output ./coverage ./dist",
@@ -61,7 +61,7 @@
     "@types/moment-timezone": "^0.5.12",
     "@types/mongodb": "^3.3.14",
     "@types/nock": "^11.1.0",
-    "@types/node": "^13.1.6",
+    "@types/node": "^13.1.8",
     "@types/node-cron": "^2.0.2",
     "@types/nodemailer": "^6.4.0",
     "@types/supertest": "^2.0.8",
@@ -74,7 +74,7 @@
     "supertest": "^4.0.2",
     "ts-node": "^8.6.1",
     "tslint": "^5.20.1",
-    "typescript": "^3.7.4"
+    "typescript": "^3.7.5"
   },
   "nyc": {
     "check-coverage": true,
