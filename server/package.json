@@ -73,7 +73,7 @@
     "nyc": "^15.0.0",
     "supertest": "^4.0.2",
     "ts-node": "^8.6.2",
-    "tslint": "^5.20.1",
+    "tslint": "^6.0.0",
     "typescript": "^3.7.5"
   },
   "nyc": {
