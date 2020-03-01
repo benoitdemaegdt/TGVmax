@@ -26,6 +26,16 @@
             required
           ></v-autocomplete>
         </v-col>
+        
+        <!-- Swap Button -->
+        <v-btn
+          v-if="origin && destination"
+          class="form-item" 
+          icon
+          @click="swapTrainStations()"
+        >
+          <v-icon>mdi-swap-vertical</v-icon>
+        </v-btn>
 
         <!-- Destination Train Station -->
         <v-col cols="12">
@@ -69,7 +79,8 @@
             </template>
             <v-date-picker
               v-model="date"
-              color="primary"
+              header-color="primary"
+              color="grey darken-1"
               locale="fr-fr"
               :first-day-of-week="1"
               :min="minDate"
@@ -165,8 +176,8 @@ export default {
       errorMessage: '',
       menu: false,
       dateFormatted: getFrenchDate(this.date),
-      origin: '',
-      destination: '',
+      origin: undefined,
+      destination: undefined,
       date: new Date().toISOString().substr(0, 10),
       fromTime: '',
       toTime: '',
@@ -199,6 +210,12 @@ export default {
       return this.alert.alerts.map(alert => {
         return alert.fromTime.substr(0, 10);
       });
+    },
+    swapTrainStations() {
+      if (!this.origin || !this.destination) return;
+      const tmp = this.origin;
+      this.origin = this.destination
+      this.destination = tmp;
     },
     closeForm() {
       this.$refs.alertForm.reset();
