@@ -264,7 +264,7 @@ export default {
     maxDate() {
       const today = new Date();
       return convertToDatePickerFormat(
-        new Date(today.setDate(today.getDate() + 30))
+        new Date(today.setDate(today.getDate() + 90))
       );
     },
     minAfterMaxError() {
