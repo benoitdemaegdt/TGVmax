@@ -1,113 +1,118 @@
 <template>
-  <v-form v-model="valid" ref="alertForm">
-    <v-card>
-      <v-card-title class="primary white--text">
-        <div class="formTitle">Ajouter une nouvelle alerte</div>
-        <v-spacer></v-spacer>
-        <v-icon color="white" @click="closeDialog()">mdi-close</v-icon>
-      </v-card-title>
-      <v-card-text>
-        <v-container>
-          <v-row>
-            <!-- Origin Train Station -->
-            <v-col cols="12">
-              <v-autocomplete
-                v-model="origin"
-                label="Gare de départ"
-                hint="ex: Paris (toutes gares intramuros)"
-                :items="trainStations"
-                item-text="name"
-                return-object
-                :rules="[v => !!v || 'Champ obligatoire']"
-                :error-messages="sameTrainStationError"
-                no-data-text="Gare non disponible"
-                prepend-icon="mdi-map-marker"
-                required
-              ></v-autocomplete>
-            </v-col>
+  <v-card>
+    <v-toolbar dark class="mb-3" color="primary">
+      <v-btn icon dark @click="closeDialog()">
+        <v-icon v-if="isMobile">mdi-arrow-left</v-icon>
+        <v-icon v-if="!isMobile">mdi-close</v-icon>
+      </v-btn>
+      <v-toolbar-title>Nouvelle alerte</v-toolbar-title>
+    </v-toolbar>
+    <v-form v-model="valid" ref="alertForm">
+      <v-row>
+        <!-- Origin Train Station -->
+        <v-col cols="12">
+          <v-autocomplete
+            class="form-item"
+            v-model="origin"
+            label="Gare de départ"
+            hint="ex: Paris (toutes gares intramuros)"
+            :items="trainStations"
+            item-text="name"
+            return-object
+            :rules="[v => !!v || 'Champ obligatoire']"
+            :error-messages="sameTrainStationError"
+            no-data-text="Gare non disponible"
+            prepend-icon="mdi-map-marker"
+            required
+          ></v-autocomplete>
+        </v-col>
 
-            <!-- Destination Train Station -->
-            <v-col cols="12">
-              <v-autocomplete
-                v-model="destination"
-                label="Gare d'arrivée"
-                hint="ex: Lyon (toutes gares intramuros)"
-                :items="trainStations"
-                item-text="name"
-                return-object
-                :rules="[v => !!v || 'Champ obligatoire']"
-                no-data-text="Gare non disponible"
-                prepend-icon="mdi-map-marker"
-                required
-              ></v-autocomplete>
-            </v-col>
+        <!-- Destination Train Station -->
+        <v-col cols="12">
+          <v-autocomplete
+            class="form-item"
+            v-model="destination"
+            label="Gare d'arrivée"
+            hint="ex: Lyon (toutes gares intramuros)"
+            :items="trainStations"
+            item-text="name"
+            return-object
+            :rules="[v => !!v || 'Champ obligatoire']"
+            no-data-text="Gare non disponible"
+            prepend-icon="mdi-map-marker"
+            required
+          ></v-autocomplete>
+        </v-col>
 
-            <!-- Departure Date -->
-            <v-col cols="12">
-              <v-menu
-                ref="menu"
-                v-model="menu"
-                :close-on-content-click="false"
-                :return-value.sync="date"
-                transition="scale-transition"
-                offset-y
-                min-width="290px"
+        <!-- Departure Date -->
+        <v-col cols="12">
+          <v-menu
+            ref="menu"
+            v-model="menu"
+            :close-on-content-click="false"
+            :return-value.sync="date"
+            transition="scale-transition"
+            offset-y
+            min-width="290px"
+          >
+            <template v-slot:activator="{ on }">
+              <v-text-field
+                class="form-item"
+                v-model="dateFormatted"
+                :rules="[v => !!v || 'Champ obligatoire']"
+                label="Date de départ"
+                prepend-icon="mdi-calendar"
+                readonly
+                required
+                v-on="on"
+              ></v-text-field>
+            </template>
+            <v-date-picker
+              v-model="date"
+              color="primary"
+              locale="fr-fr"
+              :first-day-of-week="1"
+              :min="minDate"
+              :max="maxDate"
+            >
+              <v-btn text color="primary" @click="menu = false"
+                >Fermer</v-btn
               >
-                <template v-slot:activator="{ on }">
-                  <v-text-field
-                    v-model="dateFormatted"
-                    :rules="[v => !!v || 'Champ obligatoire']"
-                    label="Date de départ"
-                    prepend-icon="mdi-calendar"
-                    readonly
-                    required
-                    v-on="on"
-                  ></v-text-field>
-                </template>
-                <v-date-picker
-                  v-model="date"
-                  color="primary"
-                  locale="fr-fr"
-                  :first-day-of-week="1"
-                  :min="minDate"
-                  :max="maxDate"
-                >
-                  <v-btn text color="primary" @click="menu = false"
-                    >Fermer</v-btn
-                  >
-                  <v-btn text color="primary" @click="$refs.menu.save(date)"
-                    >OK</v-btn
-                  >
-                </v-date-picker>
-              </v-menu>
-            </v-col>
+              <v-btn text color="primary" @click="$refs.menu.save(date)"
+                >OK</v-btn
+              >
+            </v-date-picker>
+          </v-menu>
+        </v-col>
 
-            <!-- From Hour -->
-            <v-col cols="12" sm="6">
-              <v-select
-                v-model="fromTime"
-                prepend-icon="mdi-clock-outline"
-                :items="hours"
-                :rules="[v => !!v || 'Champ obligatoire']"
-                :error-messages="minAfterMaxError"
-                label="Heure min"
-                required
-              ></v-select>
-            </v-col>
+        <!-- From Hour -->
+        <v-col cols="12" sm="6">
+          <v-select
+            class="form-item"
+            v-model="fromTime"
+            prepend-icon="mdi-clock-outline"
+            :items="hours"
+            :rules="[v => !!v || 'Champ obligatoire']"
+            :error-messages="minAfterMaxError"
+            label="Heure min"
+            required
+          ></v-select>
+        </v-col>
 
-            <!-- To Hour -->
-            <v-col cols="12" sm="6">
-              <v-select
-                v-model="toTime"
-                prepend-icon="mdi-clock-outline"
-                :items="hours"
-                :rules="[v => !!v || 'Champ obligatoire']"
-                label="Heure max"
-                required
-              ></v-select>
-            </v-col>
-          </v-row>
-        </v-container>
+        <!-- To Hour -->
+        <v-col cols="12" sm="6">
+          <v-select
+            class="form-item"
+            v-model="toTime"
+            prepend-icon="mdi-clock-outline"
+            :items="hours"
+            :rules="[v => !!v || 'Champ obligatoire']"
+            label="Heure max"
+            required
+          ></v-select>
+        </v-col>
+
+        <!-- Error message if any -->
         <div class="text-center">
           <v-progress-circular
             v-show="loading"
@@ -118,13 +123,16 @@
             {{ this.errorMessage }}
           </p>
         </div>
-      </v-card-text>
-      <v-card-actions class="justify-center">
-        <v-btn color="primary" text @click="closeForm()">Fermer</v-btn>
-        <v-btn color="primary" text @click="handleSubmit()">Enregistrer</v-btn>
-      </v-card-actions>
-    </v-card>
-  </v-form>
+        
+        <!-- Submit & close buttons -->
+        <v-card-actions class="form-item">
+          <v-btn color="primary" text @click="closeForm()">Fermer</v-btn>
+          <v-btn color="primary" text @click="handleSubmit()">Enregistrer</v-btn>
+        </v-card-actions>
+
+      </v-row>
+    </v-form>
+  </v-card>
 </template>
 
 <script>
@@ -161,41 +169,11 @@ export default {
       toTime: '',
       trainStations: [],
       hours: [
-        '05h00',
-        '05h30',
-        '06h00',
-        '06h30',
-        '07h00',
-        '07h30',
-        '08h00',
-        '08h30',
-        '09h00',
-        '09h30',
-        '10h00',
-        '10h30',
-        '11h00',
-        '11h30',
-        '12h00',
-        '12h30',
-        '13h00',
-        '13h30',
-        '14h00',
-        '14h30',
-        '15h00',
-        '15h30',
-        '16h00',
-        '16h30',
-        '17h00',
-        '17h30',
-        '18h00',
-        '18h30',
-        '19h00',
-        '19h30',
-        '20h00',
-        '20h30',
-        '21h00',
-        '21h30',
-        '22h00',
+        '05h00', '05h30', '06h00', '06h30', '07h00', '07h30', '08h00',
+        '08h30', '09h00', '09h30', '10h00', '10h30', '11h00', '11h30',
+        '12h00', '12h30', '13h00', '13h30', '14h00', '14h30', '15h00',
+        '15h30', '16h00', '16h30', '17h00', '17h30', '18h00', '18h30',
+        '19h00', '19h30', '20h00', '20h30', '21h00', '21h30', '22h00',
         '22h30'
       ]
     };
@@ -252,6 +230,9 @@ export default {
     isLoggedIn() {
       return this.$store.getters.isLoggedIn;
     },
+    isMobile() {
+      return window.innerWidth < 420;
+    },
     minDate() {
       return convertToDatePickerFormat(new Date());
     },
@@ -283,6 +264,11 @@ export default {
 </script>
 
 <style scoped>
+.form-item {
+  max-width: 90%;
+  margin: auto;
+}
+
 /** form is max-width: 600px; */
 /* If the screen size is 601px wide or more, set the font-size of title to 80px */
 @media screen and (min-width: 601px) {
