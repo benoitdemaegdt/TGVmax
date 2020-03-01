@@ -99,9 +99,14 @@ class CronChecks {
    * fetch all pending travelAlert in database
    */
   private readonly fetchPendingTravelAlerts = async(): Promise<ITravelAlert[]> => {
+    const TGVMAX_BOOKING_RANGE: number = 30;
+
     return Database.find<ITravelAlert>('alerts', {
       status: 'pending',
-      fromTime: { $gt: new Date() },
+      fromTime: {
+        $gt: new Date(),
+        $lt: moment(new Date()).add(TGVMAX_BOOKING_RANGE, 'days').endOf('day').toDate(),
+      },
     });
   }
 

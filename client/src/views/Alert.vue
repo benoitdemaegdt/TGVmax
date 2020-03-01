@@ -57,24 +57,34 @@
           </v-dialog>
         </v-card-actions>
       </v-card>
-      <!-- add  alert -->
-      <v-dialog v-model="dialogForm" persistent max-width="600px">
-        <template v-slot:activator="{}">
-          <v-btn
-            fab
-            dark
-            large
-            color="primary"
-            fixed
-            right
-            bottom
-            @click="dialogForm = true"
-          >
-            <v-icon>mdi-plus</v-icon>
-          </v-btn>
-        </template>
-        <alert-form @close:dialog="dialogForm = !dialogForm" />
-      </v-dialog>
+      
+      <!-- add alert -->
+      <template>
+        <v-dialog
+          v-model="dialogForm"
+          :fullscreen="isMobile"
+          :hide-overlay="isMobile"
+          :persistent="!isMobile"
+          :transition="isMobile ? 'dialog-bottom-transition' : 'dialog-transition'"
+          max-width="600px"
+        > 
+          <template v-slot:activator="{ on }">
+            <v-btn
+              fab
+              dark
+              large
+              color="primary"
+              fixed
+              right
+              bottom
+              v-on="on"
+            >
+              <v-icon>mdi-plus</v-icon>
+            </v-btn>
+          </template>
+          <alert-form @close:dialog="dialogForm = false" />
+        </v-dialog>
+      </template>
     </div>
     <div v-else>
       <h1 class="display-1">
@@ -133,6 +143,9 @@ export default {
   computed: {
     isLoggedIn() {
       return this.$store.getters.isLoggedIn;
+    },
+    isMobile() {
+      return window.innerWidth < 420;
     },
     ...mapState(['alert'])
   }
