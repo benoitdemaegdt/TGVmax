@@ -74,6 +74,8 @@
               :first-day-of-week="1"
               :min="minDate"
               :max="maxDate"
+              :events="getDates()"
+              event-color="primary"
             >
               <v-btn text color="primary" @click="menu = false"
                 >Fermer</v-btn
@@ -136,6 +138,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
 import StationService from '@/services/StationService.js';
 
 import {
@@ -191,6 +194,11 @@ export default {
       } catch (err) {
         console.log(err);
       }
+    },
+    getDates() {
+      return this.alert.alerts.map(alert => {
+        return alert.fromTime.substr(0, 10);
+      });
     },
     closeForm() {
       this.$refs.alertForm.reset();
@@ -258,7 +266,8 @@ export default {
           : "La gare de départ doit être différente de la gare d'arrivée";
       }
       return '';
-    }
+    },
+    ...mapState(['alert'])
   }
 };
 </script>
