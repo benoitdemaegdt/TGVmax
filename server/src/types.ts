@@ -108,3 +108,25 @@ export interface IStation {
   sncfId: string;
   trainlineId: string;
 }
+
+export interface IConnector {
+  name: string;
+  isTgvmaxAvailable: any; // tslint:disable-line
+  weight: number;
+}
+
+export interface IConnectorParams {
+  origin: {
+    name: string;
+    sncfId: string;
+    trainlineId: string;
+  };
+  destination: {
+    name: string;
+    sncfId: string;
+    trainlineId: string;
+  };
+  fromTime: string;
+  toTime: string;
+  tgvmaxNumber: string;
+}

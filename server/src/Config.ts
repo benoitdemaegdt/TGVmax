@@ -86,9 +86,14 @@ export class Config {
   public disableCronCheck: boolean;
 
   /**
-   * disable trainline calls
+   * zeit username
    */
-  public disableTrainline: number;
+  public zeitUsername: string | undefined;
+
+  /**
+   * zeit username
+   */
+  public zeitPassword: string | undefined;
 
   constructor() {
     /* tslint:disable */
@@ -111,7 +116,8 @@ export class Config {
     this.disableCronCheck = isNil(process.env.DISABLE_CRON_CHECK)
       ? config.get('disableCronCheck')
       : process.env.DISABLE_CRON_CHECK === 'true';
-    this.disableTrainline = 2;
+    this.zeitUsername = process.env.ZEIT_USERNAME;
+    this.zeitPassword = process.env.ZEIT_PASSWORD;
   }
 
   private getWhitelist = (): string => {
