@@ -5,9 +5,9 @@ import * as cron from 'node-cron';
 import Config from '../Config';
 import Notification from '../core/Notification';
 import Database from '../database/database';
-import { IAvailability, ITravelAlert, IUser } from '../types';
-import { SncfMobile } from './SncfMobile';
-import { Trainline } from './Trainline';
+import { IAvailability, IConnector, IConnectorParams, ITravelAlert, IUser } from '../types';
+import Sncf from './connectors/Sncf';
+import Zeit from './connectors/Zeit';
 
 /**
  * Periodically check Tgvmax availability
@@ -18,6 +18,39 @@ import { Trainline } from './Trainline';
  *    if NO  -> update lastCheck to current time and continue
  */
 class CronChecks {
+
+  /**
+   * connectors
+   */
+  private readonly connectors: IConnector[];
+
+  constructor() {
+    this.connectors = [
+      {
+        name: 'Zeit',
+        weight: 30,
+        async isTgvmaxAvailable({
+          origin, destination, fromTime, toTime, tgvmaxNumber,
+        }: IConnectorParams): Promise<IAvailability> {
+          console.log(`${moment(new Date()).tz('Europe/Paris').format('DD-MM-YYYY HH:mm:ss')} - using zeit connector`); // tslint:disable-line
+
+          return Zeit.isTgvmaxAvailable({ origin, destination, fromTime, toTime, tgvmaxNumber });
+        },
+      },
+      {
+        name: 'Sncf',
+        weight: 70,
+        async isTgvmaxAvailable({
+          origin, destination, fromTime, toTime, tgvmaxNumber,
+        }: IConnectorParams): Promise<IAvailability> {
+          console.log(`${moment(new Date()).tz('Europe/Paris').format('DD-MM-YYYY HH:mm:ss')} - using sncf connector`); // tslint:disable-line
+
+          return Sncf.isTgvmaxAvailable({ origin, destination, fromTime, toTime, tgvmaxNumber });
+        },
+      },
+    ];
+  }
+
   /**
    * init CronJob
    */
@@ -35,35 +68,20 @@ class CronChecks {
          * Send notification if tgvmax seat is available
          */
         for (const travelAlert of travelAlerts) {
-          let availability: IAvailability;
 
-          /**
-           * split load on trainline and sncf mobile APIs
-           */
-          if (random(0, 1) === Config.disableTrainline) {
-            console.log(`${moment(new Date()).tz('Europe/Paris').format('DD-MM-YYYY HH:mm:ss')} - processing travelAlert ${travelAlert._id} - trainline API`); // tslint:disable-line
-            const trainline: Trainline = new Trainline(
-              travelAlert.origin.trainlineId,
-              travelAlert.destination.trainlineId,
-              travelAlert.fromTime,
-              travelAlert.toTime,
-              travelAlert.tgvmaxNumber,
-            );
-            availability = await trainline.isTgvmaxAvailable();
-          } else {
-            console.log(`${moment(new Date()).tz('Europe/Paris').format('DD-MM-YYYY HH:mm:ss')} - processing travelAlert ${travelAlert._id} - sncf API`); // tslint:disable-line
-            const sncfMobile: SncfMobile = new SncfMobile(
-              travelAlert.origin.sncfId,
-              travelAlert.destination.sncfId,
-              travelAlert.fromTime,
-              travelAlert.toTime,
-              travelAlert.tgvmaxNumber,
-            );
-            availability = await sncfMobile.isTgvmaxAvailable();
-          }
+          const selectedConnector: IConnector = this.getConnector();
+          const availability: IAvailability = await selectedConnector.isTgvmaxAvailable({ // tslint:disable-line
+            origin: travelAlert.origin,
+            destination: travelAlert.destination,
+            fromTime: travelAlert.fromTime,
+            toTime: travelAlert.toTime,
+            tgvmaxNumber: travelAlert.tgvmaxNumber,
+          });
 
           if (!availability.isTgvmaxAvailable) {
-            await Database.updateOne('alerts', {_id: new ObjectId(travelAlert._id)}, {$set: {lastCheck: new Date()}});
+            await Database.updateOne(
+              'alerts', { _id: new ObjectId(travelAlert._id)}, { $set: { lastCheck: new Date() },
+            });
             await this.delay(Config.delay);
             continue;
           }
@@ -93,6 +111,20 @@ class CronChecks {
         console.log(err); // tslint:disable-line
       }
     });
+  }
+
+  /**
+   * select the connector that will process tgvmax availability
+   */
+  private readonly getConnector = (): IConnector => {
+    const MAX_WEIGHT: number = 100;
+    let rand: number = random(0, MAX_WEIGHT);
+    for (const connector of this.connectors) {
+      rand = rand - connector.weight;
+      if (rand <= 0) { return connector; }
+    }
+
+    return this.connectors[this.connectors.length - 1];
   }
 
   /**
