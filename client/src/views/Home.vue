@@ -1,37 +1,40 @@
 <template>
   <v-container>
-    <v-row>
-      <v-col md="6" sm="12" class="pa-10" style="background: white">
-        <h1 class="display-1">
-          Optimisez l'expérience
-          <span>TGVmax</span>
+    <!-- <v-row align="center" justify="center" class="mt-5"> -->
+    <v-row class="mt-5">
+      <v-col cols="12" class="pr-5 pl-5">
+        <h1 class="font-weight-bold text-center">
+          Recevez une alerte quand votre <span class="underline">TGVmax</span> est disponible
         </h1>
-        <br />
-        <h2 class="headline mb-2">C'est quoi le problème ? 🤔</h2>
-        <p>
-          Les billets TGVmax sont libérés aléatoirement dans les 30 jours
-          précédant le trajet. Les braves maxplorateurs sont donc obligés de
-          vérifier plusieurs fois par jour si leur trajet TGVmax est disponible.
+        <p class="text-center mt-3">
+          Maxplorateur analyse <span>sans interruption</span> la disponibilité des TGVmax et vous alerte dès que le votre se libère.
         </p>
-        <h2 class="headline mb-2">La solution ? 💡</h2>
-        <p>
-          Simplifiez vous la vie : recevez une notification dès que votre trajet
-          est disponible !
-        </p>
-        <h2 class="headline mb-2">Le prix ? 💸</h2>
-        <p>
-          C'est gratos ! Le créateur de ce site est lui même maxplorateur. Un
-          vrai maxplorateur fait toujours tourner les bons plans.
-        </p>
-        <br />
-        <div style="text-align:center;">
-          <v-btn color="primary" :to="{ name: 'Alertes' }"
-            >Créer une alerte</v-btn
-          >
+        <div class="mt-8" style="text-align:center;">
+          <v-btn class="text-center" color="primary" :to="{ name: 'Alertes' }">Créer une alerte</v-btn>
         </div>
       </v-col>
-      <v-col md="6" class="hidden-sm-and-down" style="background: #f5f5f5">
-        <v-img src="@/../public/maxplorateur.png" aspect-ratio="1"></v-img>
+    </v-row>
+
+    <v-row>
+      <v-col cols="12" class="pr-5 pl-5 mt-5">
+        <h2 class="font-weight-bold text-center">
+          Comment ça marche ?
+        </h2>
+      </v-col>
+    </v-row>
+
+    <v-row>
+      <v-col cols="12" sm="4" class="pr-5 pl-5 mt-5">
+        <p class="text-center display-1">👌</p>
+        <p class="text-center">Vous créez une alerte pour votre trajet. Simple. Gratuit.</p>
+      </v-col>
+      <v-col cols="12" sm="4" class="pr-5 pl-5 mt-5">
+        <p class="text-center display-1">🤖</p>
+        <p class="text-center">Un robot vérifie <span>toutes les 30 minutes</span> si un billet TGVmax est disponible pour votre trajet.</p>
+      </v-col>
+      <v-col cols="12" sm="4" class="pr-5 pl-5 mt-5">
+        <p class="text-center display-1">🚀</p>
+        <p class="text-center">Une place disponible a été détectée ? Vous recevez une alerte et pouvez aller réserver votre place !</p>
       </v-col>
     </v-row>
   </v-container>
@@ -48,7 +51,11 @@ export default {
   max-width: 100vw;
   padding: 0px;
 }
-span {
+
+.underline {
   text-decoration: underline #009688;
+}
+span {
+  font-weight: bold;
 }
 </style>
