@@ -10,30 +10,7 @@ export interface ITrain {
 }
 
 /**
- * Trainline Train interface
- */
-export interface ITrainlineTrain {
-  id?: string;
-  arrival_date?: string;
-  arrival_station_id?: string;
-  departure_date: string;
-  departure_station_id?: string;
-  cents?: number;
-  currency?: string;
-  local_amount?: {
-    subunit: number;
-    subunit_to_unit: number;
-  };
-  local_currency?: string;
-  digest?: string;
-  segment_ids?: string[];
-  passenger_id?: string;
-  folder_id?: string;
-  short_unsellable_reason?: string;
-}
-
-/**
- * Trainline Train interface
+ * SncfMobile Train interface
  */
 export interface ISncfMobileTrain {
   departureDate: string;

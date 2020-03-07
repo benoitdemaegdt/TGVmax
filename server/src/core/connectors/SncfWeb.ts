@@ -2,8 +2,8 @@ import Axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 import * as httpsProxyAgent from 'https-proxy-agent';
 import { filter, get, isEmpty, isNil, map, pick, random } from 'lodash';
 import * as moment from 'moment-timezone';
-import Config from '../Config';
-import { IAvailability, ITrain } from '../types';
+import Config from '../../Config';
+import { IAvailability, ITrain } from '../../types';
 
 /**
  * Tgvmax Travel
