@@ -62,7 +62,7 @@
     "@types/mongodb": "^3.3.14",
     "@types/nock": "^11.1.0",
     "@types/node": "^13.1.8",
-    "@types/node-cron": "^2.0.2",
+    "@types/node-cron": "^2.0.3",
     "@types/nodemailer": "^6.4.0",
     "@types/supertest": "^2.0.8",
     "@types/uuid": "^7.0.0",
