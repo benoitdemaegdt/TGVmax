@@ -1,8 +1,7 @@
 <template>
   <v-container>
-    <!-- <v-row align="center" justify="center" class="mt-5"> -->
     <v-row class="mt-5">
-      <v-col cols="12" class="pr-5 pl-5">
+      <v-col cols="12">
         <h1 class="font-weight-bold text-center">
           Recevez une alerte quand votre <span class="underline">TGVmax</span> est disponible
         </h1>
@@ -16,7 +15,7 @@
     </v-row>
 
     <v-row>
-      <v-col cols="12" class="pr-5 pl-5 mt-5">
+      <v-col cols="12" class="mt-5">
         <h2 class="font-weight-bold text-center">
           Comment ça marche ?
         </h2>
@@ -24,15 +23,15 @@
     </v-row>
 
     <v-row>
-      <v-col cols="12" sm="4" class="pr-5 pl-5 mt-5">
+      <v-col cols="12" sm="4" class="mt-5">
         <p class="text-center display-1">👌</p>
         <p class="text-center">Vous créez une alerte pour votre trajet. Simple. Gratuit.</p>
       </v-col>
-      <v-col cols="12" sm="4" class="pr-5 pl-5 mt-5">
+      <v-col cols="12" sm="4" class="mt-5">
         <p class="text-center display-1">🤖</p>
         <p class="text-center">Un robot vérifie <span>toutes les 30 minutes</span> si un billet TGVmax est disponible pour votre trajet.</p>
       </v-col>
-      <v-col cols="12" sm="4" class="pr-5 pl-5 mt-5">
+      <v-col cols="12" sm="4" class="mt-5">
         <p class="text-center display-1">🚀</p>
         <p class="text-center">Une place disponible a été détectée ? Vous recevez une alerte et pouvez aller réserver votre place !</p>
       </v-col>
@@ -48,13 +47,15 @@ export default {
 
 <style scoped>
 .container {
-  max-width: 100vw;
+  width: 85%;
+  max-width: 1200px;
   padding: 0px;
 }
 
 .underline {
   text-decoration: underline #009688;
 }
+
 span {
   font-weight: bold;
 }
