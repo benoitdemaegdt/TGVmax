@@ -47,7 +47,7 @@
     "@types/bcryptjs": "^2.4.2",
     "@types/chai": "^4.2.9",
     "@types/config": "0.0.36",
-    "@types/jsonwebtoken": "^8.3.7",
+    "@types/jsonwebtoken": "^8.5.0",
     "@types/koa": "^2.11.0",
     "@types/koa-bodyparser": "^4.3.0",
     "@types/koa-helmet": "^3.1.2",
