@@ -40,7 +40,7 @@
     "moment-timezone": "^0.5.28",
     "mongodb": "^3.5.3",
     "node-cron": "^2.0.3",
-    "nodemailer": "^6.4.2"
+    "nodemailer": "^6.4.10"
   },
   "devDependencies": {
     "@types/ajv": "^1.0.0",
