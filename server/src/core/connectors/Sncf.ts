@@ -41,7 +41,7 @@ class Sncf {
     try {
       while (keepSearching) {
         const config: AxiosRequestConfig = {
-          url: `${Config.baseSncfMobileUrl}/m750/vmd/maq/v3/proposals/train`,
+          url: `${Config.baseSncfMobileUrl}/m760/vmd/maq/v3/proposals/train`,
           method: 'POST',
           headers: {
             Accept: 'application/json',
