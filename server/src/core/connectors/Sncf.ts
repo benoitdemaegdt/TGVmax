@@ -87,7 +87,7 @@ class Sncf {
         /**
          * split load between multiple servers
          */
-        if (process.env.NODE_ENV === 'production' && !isNil(Config.proxyUrl) && random(0, 1) === 0) {
+        if (process.env.NODE_ENV === 'production' && !isNil(Config.proxyUrl)) {
           config.httpsAgent = new httpsProxyAgent(Config.proxyUrl);
         }
 
