@@ -1,6 +1,6 @@
 import Axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 import * as httpsProxyAgent from 'https-proxy-agent';
-import { filter, get, isEmpty, isNil, map, random, uniq } from 'lodash';
+import { filter, get, isEmpty, isNil, map, uniq } from 'lodash';
 import * as moment from 'moment-timezone';
 import Config from '../../Config';
 import { IAvailability, IConnectorParams, ISncfMobileTrain } from '../../types';
