@@ -1,5 +1,8 @@
 <img src='./doc/introduction.png' alt='TGVmax alert'/>
 
+## Fin de maintenance
+⚠ Ce repo n'est plus maintenu ⚠
+
 ## Get the best from your TGVmax subscription
 *If you’re 16-27 years old and travel at least twice a month with TGV and Intercités, TGVmax is for you. For just €79 per month, you can travel as often as you like.*  
 
